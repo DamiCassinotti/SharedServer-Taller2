@@ -1,7 +1,7 @@
 'use strict'
 
 exports.list_all_tasks = function(req, res) {
-	res.json({msg: 'list all tasks edited again'});
+	res.json({msg: 'list all tasks'});
 	/*Task.find({}, function(err, task) {
 		if (err)
 			res.send(err);
