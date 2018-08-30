@@ -1,12 +1,13 @@
 'use strict'
 
-exports.list_all_tasks = function(req, res) {
-	res.json({msg: 'list all tasks'});
-	/*Task.find({}, function(err, task) {
-		if (err)
-			res.send(err);
-		res.json(task);
-	})*/
+exports.list_all_tasks = async function(req, res) {
+	try {
+		var tasks = await client.query('SELECT * FROM envios');
+		res.json(tasks);
+	} catch(err) {
+		console.error(err);
+		res.send(err);
+	}
 };
 
 exports.create_a_task = function(req, res) {
