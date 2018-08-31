@@ -1,41 +1,28 @@
 'use strict'
 
-var pg = require('pg'),
-	connectionString = process.env.DATABASE_URL || 'postgres://damian:password@localhost:5432/damian',
-	client = new pg.Client(connectionString);
-
-client.connect();
-
-exports.list_all_tasks = function(req, res) {
-	client.query('SELECT * FROM test_table')
-		.then(tasks => res.json(tasks.rows))
-		.catch(e => res.json({state: 'ERROR' + e.stack}))
-	/*try {
-		var tasks = client.query('SELECT * FROM envios');
-		res.json({state: 'OK'});
-	} catch(err) {
-		console.error(err);
-		res.send(err);
-	}*/
+exports.obtener_envios = function(req, res) {
+	var query = {
+		text: 'SELECT * FROM envios'
+	}
+	client.query(query)
+		.then(tasks => res.status(200).json(tasks.rows))
+		.catch(e => res.json({state: 'ERROR ' + e.stack}));
 };
 
-exports.create_a_task = function(req, res) {
-	res.json({msg: 'create a task'});
-	/*var new_task = new Task(req.body);
-	new_task.save(function(err, task) {
-		if (err)
-			res.send(err);
-		res.json(task);
-	})*/
+exports.crear_envio = function(req, res) {
+	var query = {
+		text: 'INSERT INTO envios(desde, hasta) values($1, $2)',
+		values: [req.body.desde, req.body.hasta]
+	}
+	client.query(query)
+		.then(tasks => res.status(200).json(tasks.rows))
+		.catch(e => res.json({state: 'ERROR ' + e.stack}));
 };
 
 exports.read_a_task = function(req, res) {
-	res.json({msg: 'read a task'});
-	/*Task.findById(req.params.taskId, function(err, task) {
-		if (err)
-			res.send(err);
-		res.json(task);
-	})*/
+	/*client.query('SELECT * FROM test_table where id = $1', req.params.taskId)
+		.then(tasks => res.json(tasks.rows))
+		.catch(e => res.json({state: 'ERROR ' + e.stack}))*/
 };
 
 exports.update_a_task = function(req, res) {
@@ -54,4 +41,10 @@ exports.delete_a_task = function(req, res) {
 			res.send(err);
 		res.json({message: 'Task deleted'});
 	})*/
+}
+
+function executeSimpleQueryAndReturnRows(query, req, res) {
+	client.query(query)
+		.then(tasks => res.json(tasks.rows))
+		.catch(e => res.json({state: 'ERROR ' + e.stack}));
 }

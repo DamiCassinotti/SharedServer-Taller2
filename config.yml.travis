@@ -1,0 +1,2 @@
+database:
+    default: "postgres://posgres:@localhost:5432/damian"

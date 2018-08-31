@@ -7,6 +7,13 @@ deploy:
     script: "npm test"
     skip_cleanup: true
 
+services:
+    - postgresql
+
+before_script:
+    - cp config.yml.travis config.yml
+    - psql -c 'create database damian;' -U postgres
+
 notifications:
     email:
         recipients:
