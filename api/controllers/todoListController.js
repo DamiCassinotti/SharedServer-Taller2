@@ -1,13 +1,22 @@
 'use strict'
 
-exports.list_all_tasks = async function(req, res) {
-	try {
-		var tasks = await client.query('SELECT * FROM envios');
-		res.json(tasks);
+var pg = require('pg'),
+	connectionString = process.env.DATABASE_URL || 'postgres://damian:password@localhost:5432/damian',
+	client = new pg.Client(connectionString);
+
+client.connect();
+
+exports.list_all_tasks = function(req, res) {
+	client.query('SELECT * FROM test_table')
+		.then(tasks => res.json(tasks.rows))
+		.catch(e => res.json({state: 'ERROR' + e.stack}))
+	/*try {
+		var tasks = client.query('SELECT * FROM envios');
+		res.json({state: 'OK'});
 	} catch(err) {
 		console.error(err);
 		res.send(err);
-	}
+	}*/
 };
 
 exports.create_a_task = function(req, res) {
