@@ -4,7 +4,7 @@
   "description": "Shared Server para Taller II",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "start": "nodemon index.js",
     "start-heroku": "heroku local shared-server",
     "open": "heroku open"
