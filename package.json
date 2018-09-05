@@ -7,6 +7,8 @@
     "test": "exit 0",
     "start": "nodemon index.js",
     "start-heroku": "heroku local shared-server",
+	"reset-db": "heroku pg:reset --confirm shared-server-tallerii",
+	"push-db": "PGUSER=damian PGPASSWORD=password heroku pg:push damian DATABASE_URL --app shared-server-tallerii",
     "open": "heroku open"
   },
   "author": "Damian Cassinotti",

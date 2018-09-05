@@ -1,5 +1,5 @@
 var express = require('express'),
-	routes = require('./api/routes/todoListRoutes'),
+	enviosRoutes = require('./api/routes/enviosRoutes'),
 	bodyParser = require('body-parser'),
 	app = express(),
 	port = process.env.PORT || 5000,
@@ -15,7 +15,7 @@ var pg = require('pg'),
 client = new pg.Client(connectionString);
 client.connect();
 
-routes(app);
+enviosRoutes(app);
 
 app.listen(port);
 
