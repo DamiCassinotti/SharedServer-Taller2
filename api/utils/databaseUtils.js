@@ -1,8 +1,8 @@
 'use strict'
 
 var ajaxUtils = require('./ajaxUtils.js'),
-	pg = require('pg'),
-	connectionString = process.env.DATABASE_URL || config.database.default,
+	// pg = require('pg'),
+	// connectionString = process.env.DATABASE_URL || config.database.default,
 	client = new pg.Client(connectionString);
 client.connect();
 
