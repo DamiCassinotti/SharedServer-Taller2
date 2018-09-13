@@ -10,10 +10,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 config = yaml.safeLoad(fs.readFileSync('./config.yml', 'utf8'));
-var pg = require('pg'),
-	connectionString = process.env.DATABASE_URL || config.database.default;
-client = new pg.Client(connectionString);
-client.connect();
+// var pg = require('pg'),
+// 	connectionString = process.env.DATABASE_URL || config.database.default;
+// client = new pg.Client(connectionString);
+// client.connect();
 
 enviosRoutes(app);
 

@@ -1,9 +1,13 @@
 'use strict'
 
-var ajaxUtils = require('../utils/ajaxUtils.js')
+var ajaxUtils = require('./ajaxUtils.js'),
+	pg = require('pg'),
+	connectionString = process.env.DATABASE_URL || config.database.default,
+	client = new pg.Client(connectionString);
+client.connect();
 
-exports.executeQuery = function(query, res) {
+exports.executeQuery = function(query) {
 	client.query(query)
-		.then(data => res.status(200).json(ajaxUtils.createSimpleResponseOk(data.rows)))
-		.catch(e => res.status(200).json(ajaxUtils.createSimpleResponseError(e.message)));
+		.then(data => ajaxUtils.createSimpleResponseOk(data.rows))
+		.catch(e => ajaxUtils.createSimpleResponseError(e.message));
 }
