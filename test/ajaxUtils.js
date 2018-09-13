@@ -5,30 +5,26 @@ describe('AjaxUtils', function() {
 	describe('#createSimpleResponseOk()', function() {
 		it('should include OK state', function() {
 			var response = ajaxUtils.createSimpleResponseOk();
-			response.should.have.property('state');
-			response.state.should.equal('OK');
+			response.should.have.property('state').equal('OK');
 		});
 
 		it('should include data', function() {
 			var data = {message: 'hello world'};
 			var response = ajaxUtils.createSimpleResponseOk(data);
-			response.should.have.property('data');
-			response.data.should.equal(data);
+			response.should.have.property('data').equal(data);
 		});
 	});
 
 	describe('#createSimpleResponseError()', function() {
 		it('should include ERROR state', function() {
 			var response = ajaxUtils.createSimpleResponseError();
-			response.should.have.property('state');
-			response.state.should.equal('ERROR');
+			response.should.have.property('state').equal('ERROR');
 		});
 
 		it('should include message', function() {
 			var message = 'hello world';
 			var response = ajaxUtils.createSimpleResponseError(message);
-			response.should.have.property('message');
-			response.message.should.equal(message);
+			response.should.have.property('message').equal(message);
 		});
 	});
 });

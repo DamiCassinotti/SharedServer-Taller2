@@ -13,5 +13,5 @@ exports.ping = function(req, res) {
 	}
 	rp(options)
 		.then(data => res.status(200).json(ajaxUtils.createSimpleResponseOk(data)))
-		.catch(err => res.status(200).json(ajaxUtils.createSimpleResponseError(err)))
+		.catch(err => res.status(200).json(ajaxUtils.createSimpleResponseError(err)));
 }
