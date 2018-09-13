@@ -12,4 +12,4 @@ services:
 
 before_script:
     - cp config.yml.travis config.yml
-    - psql -c 'create database shared-server-travis;' -U postgres
+    - psql -c 'create database sharedservertravis;' -U postgres
