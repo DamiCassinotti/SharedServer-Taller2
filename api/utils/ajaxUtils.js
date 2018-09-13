@@ -1,15 +1,15 @@
 'use strict'
 
-exports.createSimpleResponseOk = function(res, data) {
-	res.status(200).json( {
+exports.createSimpleResponseOk = function(data) {
+	return {
 		state: 'OK',
 		data: data
-	});
+	};
 }
 
-exports.createSimpleResponseError = function(res, msg) {
-	res.status(200).json({
+exports.createSimpleResponseError = function(msg) {
+	return {
 		state: 'ERROR',
 		message: msg
-	})
+	};
 }

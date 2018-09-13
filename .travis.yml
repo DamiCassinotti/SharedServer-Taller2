@@ -13,10 +13,3 @@ services:
 before_script:
     - cp config.yml.travis config.yml
     - psql -c 'create database damian;' -U postgres
-
-notifications:
-    email:
-        recipients:
-            - damiancassinotti@gmail.com
-        on_success: always
-        on_failure: always
