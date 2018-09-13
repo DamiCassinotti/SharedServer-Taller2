@@ -9,5 +9,12 @@ describe('RequestUtils', function() {
 			}
 			requestUtils.makeSimpleRequest('http://app-server-taller2.herokuapp.com/ping', callback);
 		});
+
+		it('should get error from random url', function() {
+			var callback = function(response) {
+				response.should.have.property('state').equal('ERROR');
+			}
+			requestUtils.makeSimpleRequest('http://www.example.org/asdasd', callback);
+		});
 	});
 });
