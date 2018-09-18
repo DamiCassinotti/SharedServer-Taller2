@@ -1,9 +1,10 @@
 'use strict'
 
-var ajaxUtils = require('../utils/ajaxUtils.js')
+var ajaxUtils = require('./ajaxUtils.js');
 
-exports.executeQuery = function(query, res) {
+exports.executeQuery = function(query, callback) {
+	client.connect();
 	client.query(query)
-		.then(data => res.status(200).json(ajaxUtils.createSimpleResponseOk(data.rows)))
-		.catch(e => res.status(200).json(ajaxUtils.createSimpleResponseError(e.message)));
+		.then(data => callback(ajaxUtils.createSimpleResponseOk(data.rows)))
+		.catch(e => callback(ajaxUtils.createSimpleResponseError(e.message)));
 }
