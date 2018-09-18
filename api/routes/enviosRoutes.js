@@ -1,13 +1,14 @@
 'use strict'
 module.exports = function(app, client) {
-	var todoList = require('../controllers/enviosController');
+	var tracking = require('../controllers/enviosController');
 
-	app.route('/envios')
-		.get(todoList.obtener_envios)
-		.post(todoList.crear_envio)
+	app.route('/api/tracking')
+		.get(tracking.obtener_envio)
+		.put(tracking.actualizar_envio)
+		.delete(tracking.eliminar_envio)
 
-	app.route('/envios/:envioId')
-		.get(todoList.obtener_envio)
-		.put(todoList.actualizar_envio)
-		.delete(todoList.eliminar_envio)
+	app.route('/api/tracking/:trackingId')
+		.get(tracking.obtener_envio)
+		.put(tracking.actualizar_envio)
+		.delete(tracking.eliminar_envio)
 };
