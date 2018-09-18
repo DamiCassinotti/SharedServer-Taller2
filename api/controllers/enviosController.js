@@ -8,7 +8,10 @@ exports.obtener_envios = function(req, res) {
 	var query = {
 		text: 'SELECT id, estado, desde, hasta FROM envios'
 	}
-	res.status(200).json(dbUtils.executeQuery(query));
+	var callback = function(data) {
+		res.status(200).json(data);
+	}
+	dbUtils.executeQuery(query, callback);
 };
 
 exports.crear_envio = function(req, res) {
@@ -16,7 +19,10 @@ exports.crear_envio = function(req, res) {
 		text: 'INSERT INTO envios(desde, hasta) values($1, $2)',
 		values: [req.body.desde, req.body.hasta]
 	}
-	res.status(200).json(dbUtils.executeQuery(query));
+	var callback = function(data) {
+		res.status(200).json(data);
+	}
+	dbUtils.executeQuery(query, callback);
 };
 
 exports.obtener_envio = function(req, res) {
@@ -24,7 +30,10 @@ exports.obtener_envio = function(req, res) {
 		text: 'SELECT * FROM envios where id = $1',
 		values: [req.params.envioId]
 	}
-	res.status(200).json(dbUtils.executeQuery(query));
+	var callback = function(data) {
+		res.status(200).json(data);
+	}
+	dbUtils.executeQuery(query, callback);
 };
 
 exports.eliminar_envio = function(req, res) {
@@ -32,7 +41,10 @@ exports.eliminar_envio = function(req, res) {
 		text: 'DELETE FROM envios where id = $1',
 		values: [req.params.envioId]
 	}
-	res.status(200).json(dbUtils.executeQuery(query));
+	var callback = function(data) {
+		res.status(200).json(data);
+	}
+	dbUtils.executeQuery(query, callback);
 }
 
 exports.actualizar_envio = function(req, res) {
@@ -40,5 +52,8 @@ exports.actualizar_envio = function(req, res) {
 		text: 'UPDATE envios SET estado = $2 WHERE id = $1',
 		values: [req.params.envioId, req.body.estado]
 	}
-	res.status(200).json(dbUtils.executeQuery(query));
+	var callback = function(data) {
+		res.status(200).json(data);
+	}
+	dbUtils.executeQuery(query, callback);
 }
