@@ -7,7 +7,7 @@ module.exports = function(app, client) {
 		.put(tracking.actualizar_envio)
 		.delete(tracking.eliminar_envio)
 
-	app.route('/api/tracking/:trackingId')
+	app.route('/api/tracking/:envioId')
 		.get(tracking.obtener_envio)
 		.put(tracking.actualizar_envio)
 		.delete(tracking.eliminar_envio)
