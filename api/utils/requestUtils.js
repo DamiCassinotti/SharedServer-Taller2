@@ -1,7 +1,6 @@
 'use strict'
 
-var ajaxUtils = require('../utils/ajaxUtils.js'),
-	rp = require('request-promise');
+var rp = require('request-promise');
 
 exports.makeSimpleRequest = function(url, callback) {
 	var options = {
@@ -12,6 +11,6 @@ exports.makeSimpleRequest = function(url, callback) {
 		json: true
 	}
 	rp(options)
-		.then(data => callback(ajaxUtils.createSimpleResponseOk(data)))
-		.catch(err => callback(ajaxUtils.createSimpleResponseError(err)));
+		.then(data => callback(data))
+		.catch(err => callback(err));
 }
