@@ -1,6 +1,7 @@
 var express = require('express'),
 	loginRoutes = require('./api/routes/loginRoutes'),
 	pingRoutes = require('./api/routes/pingRoutes'),
+	trackingRoutes = require('./api/routes/trackingRoutes'),
 	bodyParser = require('body-parser'),
 	app = express(),
 	port = process.env.PORT || 5000,
@@ -18,6 +19,7 @@ client.connect();
 
 loginRoutes(app);
 pingRoutes(app);
+trackingRoutes(app);
 
 app.listen(port);
 
