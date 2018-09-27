@@ -9,5 +9,6 @@ module.exports = function(app) {
 
 	app.route('/tracking/:trackingId')
 		.get(trackingController.get_tracking)
+		.put(trackingController.update_tracking)
 
 };
