@@ -17,7 +17,20 @@ exports.get_trackings = function(req, res) {
 		text: 'SELECT * FROM tracking;'
 	}
 	client.query(query)
-		.then(data => res.status(201).json(data.rows))
+		.then(data => res.status(200).json(data.rows))
+		.catch(err => res.status(500).json({
+			code: 0,
+			message: err.message
+		}));
+}
+
+exports.get_tracking = function(req, res) {
+	var query = {
+		text: 'SELECT * FROM tracking WHERE id = $1;',
+		values: [req.params.trackingId]
+	}
+	client.query(query)
+		.then(data => res.status(200).json(data.rows))
 		.catch(err => res.status(500).json({
 			code: 0,
 			message: err.message

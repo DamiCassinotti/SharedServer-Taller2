@@ -7,4 +7,7 @@ module.exports = function(app) {
 		.post(trackingController.add_tracking)
 		.get(trackingController.get_trackings)
 
+	app.route('/tracking/:trackingId')
+		.get(trackingController.get_tracking)
+
 };
