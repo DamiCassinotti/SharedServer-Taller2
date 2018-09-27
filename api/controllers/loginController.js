@@ -1,7 +1,5 @@
 'use strict'
 
-var dbUtils = require('../utils/databaseUtils.js');
-
 exports.login = function(req, res) {
 	var response = {
 		metadata: {

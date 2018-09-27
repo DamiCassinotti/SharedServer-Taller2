@@ -5,5 +5,6 @@ module.exports = function(app) {
 
 	app.route('/tracking')
 		.post(trackingController.add_tracking)
+		.get(trackingController.get_trackings)
 
 };
