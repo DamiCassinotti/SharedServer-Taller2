@@ -1,7 +1,9 @@
 'use strict'
 
+var trackingService = require('../services/trackingService')
+
 exports.add_tracking = function(req, res) {
-	var query = {
+	/*var query = {
 		text: 'INSERT INTO tracking DEFAULT VALUES;'
 	}
 	client.query(query)
@@ -9,7 +11,12 @@ exports.add_tracking = function(req, res) {
 		.catch(err => res.status(500).json({
 			code: 0,
 			message: err.message
-		}));
+		}));*/
+	return new Promise(function(resolve, reject) {
+		trackingService.add_tracking()
+			.then(tracking => resolve(tracking))
+			.catch(err => reject(err))
+	});
 }
 
 exports.get_trackings = function(req, res) {
