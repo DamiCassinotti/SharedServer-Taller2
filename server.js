@@ -21,7 +21,6 @@ bootstrapApp = () => {
 	loginRoutes(app);
 	pingRoutes(app);
 	app.use('/tracking', trackingRoutes);
-	//trackingRoutes(app);
 
 	return app;
 };

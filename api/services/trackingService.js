@@ -34,7 +34,7 @@ exports.get_tracking = (id_tracking) => {
 
 exports.update_tracking = (id_tracking, status) => {
 	var query = {
-		text: 'UPDATE tracking SET status = $2, updateAt = current_date WHERE id = $1 RETURNING id, status, updateAt;',
+		text: 'UPDATE tracking SET status = $2, updateAt = current_timestamp WHERE id = $1 RETURNING id, status, updateAt;',
 		values: [id_tracking, status]
 	}
 	return new Promise((resolve, reject) => {
