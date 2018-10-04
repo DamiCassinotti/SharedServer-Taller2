@@ -2,25 +2,21 @@
 
 var trackingService = require('../services/trackingService')
 
-exports.add_tracking = function(req, res) {
-	/*var query = {
-		text: 'INSERT INTO tracking DEFAULT VALUES;'
-	}
-	client.query(query)
-		.then(data => res.status(201).json(data.rows))
-		.catch(err => res.status(500).json({
-			code: 0,
-			message: err.message
-		}));*/
-	return new Promise(function(resolve, reject) {
-		trackingService.add_tracking()
+exports.add_tracking = () => {
+	return new Promise((resolve, reject) => {
+		trackingService.addTracking()
 			.then(tracking => resolve(tracking))
 			.catch(err => reject(err))
 	});
 }
 
-exports.get_trackings = function(req, res) {
-	var query = {
+exports.get_trackings = () => {
+	return new Promise((resolve, reject) => {
+		trackingService.get_trackings()
+			.then(trackings => resolve(trackings))
+			.catch(err => reject(err))
+	});
+	/*var query = {
 		text: 'SELECT * FROM tracking;'
 	}
 	client.query(query)
@@ -28,7 +24,7 @@ exports.get_trackings = function(req, res) {
 		.catch(err => res.status(500).json({
 			code: 0,
 			message: err.message
-		}));
+		}));*/
 }
 
 exports.get_tracking = function(req, res) {

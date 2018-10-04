@@ -1,4 +1,4 @@
-var should = require('chai').should(),
+/*var should = require('chai').should(),
 	requestUtils = require('../api/utils/requestUtils');
 
 describe('RequestUtils', function() {
@@ -18,3 +18,4 @@ describe('RequestUtils', function() {
 		});
 	});
 });
+*/
