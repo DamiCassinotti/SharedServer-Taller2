@@ -11,7 +11,25 @@ router.post('/', async (req, res, then) => {
 router.get('/', async (req, res, then) => {
 	const trackings = await trackingController.get_trackings();
 	res.status(200).send(trackings);
-})
+});
+
+router.get('/:trackingId', async (req, res, then) => {
+	const id_tracking = req.params.trackingId;
+	trackingController.get_tracking(id_tracking)
+		.then(tracking => {
+			if (!tracking)
+				return res.status(200).json({
+					code: 1,
+					message: 'TrackingNotFound'
+				});
+			res.status(200).json(tracking);
+		})
+		.catch(err => res.status(500).json({
+			code: 0,
+			message: err
+		}))
+
+});
 
 module.exports = router;
 

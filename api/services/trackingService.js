@@ -7,7 +7,7 @@ exports.add_tracking = () => {
 	return new Promise(function(resolve, reject) {
 		client.query(query)
 			.then(data => resolve(data.rows))
-			.catch(error => reject(e.message))
+			.catch(error => reject(error.message))
 	});
 }
 
@@ -18,6 +18,18 @@ exports.get_trackings = () => {
 	return new Promise(function(resolve, reject) {
 		client.query(query)
 			.then(data => resolve(data.rows))
-			.catch(error => reject(e.message))
+			.catch(error => reject(error.message))
+	});
+}
+
+exports.get_tracking = (id_tracking) => {
+	var query = {
+		text: 'SELECT * FROM tracking WHERE id = $1;',
+		values: [id_tracking]
+	}
+	return new Promise(function(resolve, reject) {
+		client.query(query)
+			.then(data => resolve(data.rows[0]))
+			.catch(error => reject(error.message))
 	});
 }
