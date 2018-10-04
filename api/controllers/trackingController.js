@@ -2,7 +2,7 @@ const trackingService = require('../services/trackingService')
 
 exports.add_tracking = () => {
 	return new Promise((resolve, reject) => {
-		trackingService.addTracking()
+		trackingService.add_tracking()
 			.then(tracking => resolve(tracking))
 			.catch(err => reject(err))
 	});

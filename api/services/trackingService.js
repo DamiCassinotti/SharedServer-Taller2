@@ -1,10 +1,10 @@
 exports.add_tracking = () => {
 	const query = {
-		text: 'INSERT INTO tracking DEFAULT VALUES;'
+		text: 'INSERT INTO tracking DEFAULT VALUES RETURNING id, status, updateAt;'
 	}
 	return new Promise((resolve, reject) => {
 		client.query(query)
-			.then(data => resolve(data.rows))
+			.then(data => resolve(data.rows[0]))
 			.catch(error => reject(error.message))
 	});
 }
@@ -34,12 +34,12 @@ exports.get_tracking = (id_tracking) => {
 
 exports.update_tracking = (id_tracking, status) => {
 	var query = {
-		text: 'UPDATE tracking SET status = $2, updateAt = current_date WHERE id = $1;',
+		text: 'UPDATE tracking SET status = $2, updateAt = current_date WHERE id = $1 RETURNING id, status, updateAt;',
 		values: [id_tracking, status]
 	}
 	return new Promise((resolve, reject) => {
 		client.query(query)
-			.then(data => resolve({'id': id_tracking, 'status': status, 'updateAt': 0}))
+			.then(data => resolve(data.rows[0]))
 			.catch(error => reject(error.message))
 	});
 }
