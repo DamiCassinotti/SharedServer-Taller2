@@ -1,6 +1,4 @@
-'use strict'
-
-var trackingService = require('../services/trackingService')
+const trackingService = require('../services/trackingService')
 
 exports.add_tracking = () => {
 	return new Promise((resolve, reject) => {
@@ -23,18 +21,13 @@ exports.get_tracking = (id_tracking) => {
 		trackingService.get_tracking(id_tracking)
 			.then(tracking => resolve(tracking))
 			.catch(err => reject(err))
-	})
+	});
 }
 
-exports.update_tracking = function(req, res) {
-	var query = {
-		text: 'UPDATE tracking SET status = $2, updateAt = current_date WHERE id = $1;',
-		values: [req.body.id, req.body.status]
-	}
-	client.query(query)
-		.then(data => res.status(200).json(data.rows))
-		.catch(err => res.status(500).json({
-			code: 0,
-			message: err.message
-		}));
+exports.update_tracking = (id_tracking, status) => {
+	return new Promise((resolve, reject) => {
+		trackingService.update_tracking(id_tracking, status)
+			.then(tracking => resolve(tracking))
+			.catch(err => reject(err))
+	});
 }

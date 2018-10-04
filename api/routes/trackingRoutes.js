@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/', (req, res, then) => {
 	trackingController.add_tracking()
-		.then(tracking => res.status(201).json(tracking));
+		.then(tracking => res.status(201).json(tracking))
 		.catch(err => res.status(500).json({
 			code: 0,
 			message: err
@@ -14,14 +14,14 @@ router.post('/', (req, res, then) => {
 
 router.get('/', (req, res, then) => {
 	trackingController.get_trackings()
-		.then(trackings => res.status(201).json(trackings));
+		.then(trackings => res.status(201).json(trackings))
 		.catch(err => res.status(500).json({
 			code: 0,
 			message: err
 		}));
 });
 
-router.get('/:trackingId', async (req, res) => {
+router.get('/:trackingId', (req, res) => {
 	const id_tracking = req.params.trackingId;
 	trackingController.get_tracking(id_tracking)
 		.then(tracking => {
@@ -36,29 +36,17 @@ router.get('/:trackingId', async (req, res) => {
 			code: 0,
 			message: err
 		}))
-
 });
 
+router.put('/:trackingId', (req, res, then) => {
+	const id_tracking = req.params.trackingId;
+	const new_status = req.body.status;
+	trackingController.update_tracking(id_tracking, new_status)
+		.then(tracking => res.status(200).json(tracking))
+		.catch(err => res.status(500).json({
+			code: 0,
+			message: err
+		}))
+})
+
 module.exports = router;
-
-/*module.exports = function(app) {
-
-
-	app.route('/tracking')
-		.post(async (req, res) => {
-			var tracking = await trackingController.addTracking();
-			res.status(201).json(tracking);
-			trackingController.addTracking()
-				.then(user => res.status(201).json(user))
-				.catch(err => res.status(500).json({
-					code: 0,
-					message: err.message
-				}));
-		})
-		.get(trackingController.get_trackings)
-
-	app.route('/tracking/:trackingId')
-		.get(trackingController.get_tracking)
-		.put(trackingController.update_tracking)
-
-};*/
