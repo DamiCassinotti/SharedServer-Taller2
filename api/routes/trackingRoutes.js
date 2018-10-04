@@ -3,17 +3,25 @@ const trackingController = require('../controllers/trackingController');
 
 const router = express.Router();
 
-router.post('/', async (req, res, then) => {
-	const tracking = await trackingController.add_tracking();
-	res.status(201).send(tracking);
+router.post('/', (req, res, then) => {
+	trackingController.add_tracking()
+		.then(tracking => res.status(201).json(tracking));
+		.catch(err => res.status(500).json({
+			code: 0,
+			message: err
+		}));
 });
 
-router.get('/', async (req, res, then) => {
-	const trackings = await trackingController.get_trackings();
-	res.status(200).send(trackings);
+router.get('/', (req, res, then) => {
+	trackingController.get_trackings()
+		.then(trackings => res.status(201).json(trackings));
+		.catch(err => res.status(500).json({
+			code: 0,
+			message: err
+		}));
 });
 
-router.get('/:trackingId', async (req, res, then) => {
+router.get('/:trackingId', async (req, res) => {
 	const id_tracking = req.params.trackingId;
 	trackingController.get_tracking(id_tracking)
 		.then(tracking => {
