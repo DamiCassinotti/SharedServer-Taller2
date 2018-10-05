@@ -79,19 +79,55 @@ describe('Tracking Controller', () => {
 	});
 
 	it('Get single tracking', (done) => {
-		done();
+		trackingController.get_tracking(1)
+			.then(tracking => {
+				expect(tracking).to.deep.equal(trackingMock);
+				done();
+			})
+			.catch(err => {
+				expect(true).to.equal(false);
+				done();
+			});
 	});
 
 	it('Get single tracking with error', (done) => {
-		done();
+		getTrackingStub.restore();
+		getTrackingStub = sinon.stub(trackingService, 'get_tracking').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
+		trackingController.get_tracking(1)
+			.then(tracking => {
+				expect(true).to.equal(false);
+				done();
+			})
+			.catch(err => {
+				expect(err).to.deep.equal('test error');
+				done();
+			});
 	});
 
 	it('Update single tracking', (done) => {
-		done();
+		trackingController.update_tracking(1)
+			.then(tracking => {
+				expect(tracking).to.deep.equal(trackingMock);
+				done();
+			})
+			.catch(err => {
+				expect(true).to.equal(false);
+				done();
+			});
 	});
 
 	it('Update single tracking with error', (done) => {
-		done();
+		updateTrackingStub.restore();
+		updateTrackingStub = sinon.stub(trackingService, 'update_tracking').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
+		trackingController.update_tracking(1)
+			.then(tracking => {
+				expect(true).to.equal(false);
+				done();
+			})
+			.catch(err => {
+				expect(err).to.deep.equal('test error');
+				done();
+			});
 	});
 
 });
