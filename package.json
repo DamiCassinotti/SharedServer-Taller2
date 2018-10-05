@@ -4,7 +4,7 @@
   "description": "Shared Server para Taller II",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "test": "istanbul cover ./node_modules/mocha/bin/_mocha \"test/**/*.spec.js\" --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "start": "nodemon app.js",
     "start-heroku": "heroku local shared-server",
     "reset-db": "heroku pg:reset --confirm shared-server-tallerii",
