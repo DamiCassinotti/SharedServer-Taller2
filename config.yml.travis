@@ -1,2 +1,2 @@
 database:
-    testing: "postgres://postgres:@localhost:5433/shared_server_travis"
+    testing: "postgres://postgres:@localhost:5432/shared_server_travis"
