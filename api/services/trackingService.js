@@ -5,7 +5,7 @@ exports.add_tracking = () => {
 	return new Promise((resolve, reject) => {
 		client.query(query)
 			.then(data => resolve(data.rows[0]))
-			.catch(error => reject(error.message))
+			.catch(error => reject(error.message));
 	});
 }
 
@@ -16,30 +16,30 @@ exports.get_trackings = () => {
 	return new Promise((resolve, reject) => {
 		client.query(query)
 			.then(data => resolve(data.rows))
-			.catch(error => reject(error.message))
+			.catch(error => reject(error.message));
 	});
 }
 
 exports.get_tracking = (id_tracking) => {
-	var query = {
+	const query = {
 		text: 'SELECT * FROM tracking WHERE id = $1;',
 		values: [id_tracking]
 	}
 	return new Promise((resolve, reject) => {
 		client.query(query)
 			.then(data => resolve(data.rows[0]))
-			.catch(error => reject(error.message))
+			.catch(error => reject(error.message));
 	});
 }
 
 exports.update_tracking = (id_tracking, status) => {
-	var query = {
+	const query = {
 		text: 'UPDATE tracking SET status = $2, updateAt = current_timestamp WHERE id = $1 RETURNING id, status, updateAt;',
 		values: [id_tracking, status]
 	}
 	return new Promise((resolve, reject) => {
 		client.query(query)
 			.then(data => resolve(data.rows[0]))
-			.catch(error => reject(error.message))
+			.catch(error => reject(error.message));
 	});
 }

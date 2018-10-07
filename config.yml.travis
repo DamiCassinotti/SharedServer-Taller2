@@ -1,3 +1,3 @@
 database:
     default: "postgres://posgres:@localhost:5432/shared-server-travis"
-	test: "postgres://posgres:@localhost:5432/shared-server-travis"
+	testing: "postgres://posgres:@localhost:5432/shared-server-travis"
