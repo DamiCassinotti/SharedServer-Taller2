@@ -1,0 +1,140 @@
+swagger: '2.0'
+info:
+  description: API para el shared server de Comprame
+  title: Comprame - Shared Server API
+  version: 1.0.0
+host: shared-server-tallerii.herokuapp.com
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+tags:
+  - name: tracking
+    description: |
+      Llamados relacionados con la administracion del seguimiento de los envios
+paths:
+  /tracking:
+    post:
+      tags:
+      - "tracking"
+      summary: "Crea un nuevo envio para su seguimiento"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Tracking"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+    get:
+      tags:
+      - "tracking"
+      summary: "Obtiene el listado de envios. Cada envio viene en su estado actual."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Tracking"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+  /tracking/{trackingId}:
+    parameters:
+      - description: "Identificador del envío"
+        in: path
+        name: trackingId
+        required: true
+        type: string
+    get:
+      tags:
+        - tracking
+      description: "Devuelve toda la información del viaje. Por cada modificacion que tenga dicho envio se devolvera un objeto tracking."
+      responses:
+        200:
+          description: "Información del envío"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Tracking"
+        404:
+          description: "Viaje inexistente"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Obtener información de un viaje"
+    put:
+      tags:
+        - tracking
+      description: "Devuelve la informacion actualizada del envio."
+      parameters:
+        - description: Nuevo estado del envio
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/NewTrackingStatus"
+      responses:
+        200:
+          description: "Información del envío"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Tracking"
+        404:
+          description: "Viaje inexistente"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Obtener información de un viaje"
+definitions:
+  Timestamp:
+    type: number
+    description: |
+      Tiempo en epoch
+  Error:
+    properties:
+      code:
+        format: int32
+        type: integer
+      message:
+        type: string
+    type: object
+  Tracking:
+    properties:
+      id:
+        description: identificador del envío
+        type: string
+      status:
+        description: estado en el que se encuentra el envío
+        $ref: '#/definitions/TrackingStatus'
+      updateAt:
+        $ref: '#/definitions/Timestamp'
+  TrackingStatus:
+    type: string
+    description: Estados de tracking (PENDIENTE, EN_TRANSITO, ENTREGADO, CANCELADO)
+  NewTrackingStatus:
+    type: object
+    properties:
+      status:
+        $ref: '#/definitions/TrackingStatus'
+    description: Nuevo estado de tracking

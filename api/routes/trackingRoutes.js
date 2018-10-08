@@ -26,7 +26,7 @@ router.get('/:trackingId', (req, res) => {
 	trackingController.get_tracking(id_tracking)
 		.then(tracking => {
 			if (!tracking)
-				return res.status(200).json({
+				return res.status(404).json({
 					code: 1,
 					message: 'TrackingNotFound'
 				});
@@ -46,7 +46,7 @@ router.put('/:trackingId', (req, res, then) => {
 	trackingController.update_tracking(id_tracking, new_status)
 		.then(tracking => {
 			if (!tracking)
-				return res.status(200).json({
+				return res.status(404).json({
 					code: 2,
 					message: 'TrackingNotFound'
 				});

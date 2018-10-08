@@ -101,7 +101,7 @@ describe('Tracking Routes', () => {
 			.get('/tracking/1')
 			.set('Accept', 'applicacion/json')
 			.expect('Content-Type', /json/)
-			.expect(200)
+			.expect(404)
 			.end((err, res) => {
 				expect(err).to.equal(null);
 				expect(res.body).to.deep.equal({code: 1, message: 'TrackingNotFound'});
@@ -159,7 +159,7 @@ describe('Tracking Routes', () => {
 			.set('Accept', 'applicacion/json')
 			.send({status: 'EN_TRANSITO'})
 			.expect('Content-Type', /json/)
-			.expect(200)
+			.expect(404)
 			.end((err, res) => {
 				expect(err).to.equal(null);
 				expect(res.body).to.deep.equal({code: 2, message: 'TrackingNotFound'});
