@@ -40,7 +40,7 @@ describe('Tracking Routes', () => {
 
 	it('Add new tracking with error', (done) => {
 		addTrackingStub.restore();
-		addTrackingStub = sinon.stub(trackingController, 'add_tracking').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
+		addTrackingStub = sinon.stub(trackingController, 'add_tracking').callsFake(() => new Promise((resolve, reject) => {reject({message: 'test error'})}));
 		request(app)
 			.post('/tracking')
 			.set('Accept', 'applicacion/json')
@@ -68,7 +68,7 @@ describe('Tracking Routes', () => {
 
 	it('Get all trackings with error', (done) => {
 		getTrackingsStub.restore();
-		getTrackingsStub = sinon.stub(trackingController, 'get_trackings').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
+		getTrackingsStub = sinon.stub(trackingController, 'get_trackings').callsFake(() => new Promise((resolve, reject) => {reject({message: 'test error'})}));
 		request(app)
 			.get('/tracking')
 			.set('Accept', 'applicacion/json')
@@ -111,7 +111,7 @@ describe('Tracking Routes', () => {
 
 	it('Get single tracking with error', (done) => {
 		getTrackingStub.restore();
-		getTrackingStub = sinon.stub(trackingController, 'get_tracking').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
+		getTrackingStub = sinon.stub(trackingController, 'get_tracking').callsFake(() => new Promise((resolve, reject) => {reject({message: 'test error'})}));
 		request(app)
 			.get('/tracking/1')
 			.set('Accept', 'applicacion/json')
@@ -128,11 +128,25 @@ describe('Tracking Routes', () => {
 		request(app)
 			.put('/tracking/1')
 			.set('Accept', 'applicacion/json')
+			.send({status: 'EN_TRANSITO'})
 			.expect('Content-Type', /json/)
 			.expect(200)
 			.end((err, res) => {
 				expect(err).to.equal(null);
 				expect(res.body).to.deep.equal(trackingMock);
+				done();
+			})
+	});
+
+	it('Update tracking without status', (done) => {
+		request(app)
+			.put('/tracking/1')
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(400)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 1, message: 'Parametros faltantes'});
 				done();
 			})
 	});
@@ -143,21 +157,23 @@ describe('Tracking Routes', () => {
 		request(app)
 			.put('/tracking/1')
 			.set('Accept', 'applicacion/json')
+			.send({status: 'EN_TRANSITO'})
 			.expect('Content-Type', /json/)
 			.expect(200)
 			.end((err, res) => {
 				expect(err).to.equal(null);
-				expect(res.body).to.deep.equal({code: 1, message: 'TrackingNotFound'});
+				expect(res.body).to.deep.equal({code: 2, message: 'TrackingNotFound'});
 				done();
 			})
 	});
 
 	it('Update tracking with error', (done) => {
 		updateTrackingStub.restore();
-		updateTrackingStub = sinon.stub(trackingController, 'update_tracking').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
+		updateTrackingStub = sinon.stub(trackingController, 'update_tracking').callsFake(() => new Promise((resolve, reject) => {reject({message: 'test error'})}));
 		request(app)
 			.put('/tracking/1')
 			.set('Accept', 'applicacion/json')
+			.send({status: 'EN_TRANSITO'})
 			.expect('Content-Type', /json/)
 			.expect(500)
 			.end((err, res) => {

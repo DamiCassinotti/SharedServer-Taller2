@@ -4,8 +4,12 @@ exports.add_tracking = () => {
 	}
 	return new Promise((resolve, reject) => {
 		client.query(query)
-			.then(data => resolve(data.rows[0]))
-			.catch(error => reject(error.message));
+			.then(async (data) => {
+				var tracking = data.rows[0];
+				await add_tracking_to_hist(tracking);
+				resolve(tracking);
+			})
+			.catch(error => reject(error));
 	});
 }
 
@@ -16,19 +20,21 @@ exports.get_trackings = () => {
 	return new Promise((resolve, reject) => {
 		client.query(query)
 			.then(data => resolve(data.rows))
-			.catch(error => reject(error.message));
+			.catch(error => reject(error));
 	});
 }
 
 exports.get_tracking = (id_tracking) => {
 	const query = {
-		text: 'SELECT * FROM tracking WHERE id = $1;',
+		text: 'SELECT t.id, th.status, th.updateat ' +
+		 		'FROM tracking t join tracking_hist th on th.tracking_id = t.id ' +
+				'WHERE t.id = $1;',
 		values: [id_tracking]
 	}
 	return new Promise((resolve, reject) => {
 		client.query(query)
-			.then(data => resolve(data.rows[0]))
-			.catch(error => reject(error.message));
+			.then(data => resolve(data.rows))
+			.catch(error => reject(error));
 	});
 }
 
@@ -39,7 +45,23 @@ exports.update_tracking = (id_tracking, status) => {
 	}
 	return new Promise((resolve, reject) => {
 		client.query(query)
-			.then(data => resolve(data.rows[0]))
-			.catch(error => reject(error.message));
+			.then(async (data) => {
+				var tracking = data.rows[0];
+				await add_tracking_to_hist(tracking);
+				resolve(tracking);
+			})
+			.catch(error => reject(error));
 	});
+}
+
+var add_tracking_to_hist = (tracking) => {
+	const query = {
+		text: 'INSERT INTO tracking_hist (tracking_id, status, updateat) values ($1, $2, $3);',
+		values: [tracking.id, tracking.status, tracking.updateat]
+	};
+	return new Promise((resolve, reject) => {
+		client.query(query)
+			.then(data => resolve(data))
+			.catch(error => reject(error))
+	})
 }

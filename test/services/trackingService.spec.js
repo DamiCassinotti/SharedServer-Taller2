@@ -70,7 +70,9 @@ describe('Tracking Service', () => {
 		var sameTracking = await trackingService.get_tracking(tracking.id);
 
 		expect(sameTracking).to.not.be.undefined;
-		expect(sameTracking).to.deep.equal(tracking);
+		expect(sameTracking).to.be.an('array');
+		expect(sameTracking.length).to.equal(1);
+		expect(sameTracking[0]).to.deep.equal(tracking);
 	});
 
 	it('Select one tracking without id throws error', (done) => {
@@ -94,8 +96,32 @@ describe('Tracking Service', () => {
 			expect(updatedTracking).to.not.be.undefined;
 			expect(updatedTracking.id).to.equal(tracking.id);
 			expect(updatedTracking.status).to.equal('EN_TRANSITO');
-			expect(updatedTracking.updateat).to.not.be.least(tracking.updateat);
+			expect(updatedTracking.updateat).to.be.above(tracking.updateat);
 		}, 1000);
+	});
+
+	it('Update one tracking without parameters throws error', (done) => {
+		trackingService.update_tracking()
+			.then(tracking => {
+				expect(true).to.equal(false);
+				done();
+			})
+			.catch(err => {
+				expect(err).to.not.be.undefined;
+				done();
+			});
+	});
+
+	it('Select all trackings after updating', async () => {
+		var tracking = await trackingService.add_tracking();
+		var updatedTracking = await trackingService.update_tracking(tracking.id);
+
+		var sameTracking = await trackingService.get_tracking(tracking.id);
+
+		expect(sameTracking).to.not.be.undefined;
+		expect(sameTracking).to.be.an('array');
+		expect(sameTracking.length).to.equal(2);
+		expect(sameTracking).to.deep.equal([tracking, updatedTracking]);
 	});
 
 });

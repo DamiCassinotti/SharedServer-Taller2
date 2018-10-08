@@ -8,7 +8,7 @@ router.post('/', (req, res, then) => {
 		.then(tracking => res.status(201).json(tracking))
 		.catch(err => res.status(500).json({
 			code: 0,
-			message: err
+			message: err.message
 		}));
 });
 
@@ -17,7 +17,7 @@ router.get('/', (req, res, then) => {
 		.then(trackings => res.status(200).json(trackings))
 		.catch(err => res.status(500).json({
 			code: 0,
-			message: err
+			message: err.message
 		}));
 });
 
@@ -34,25 +34,27 @@ router.get('/:trackingId', (req, res) => {
 		})
 		.catch(err => res.status(500).json({
 			code: 0,
-			message: err
+			message: err.message
 		}))
 });
 
 router.put('/:trackingId', (req, res, then) => {
 	const id_tracking = req.params.trackingId;
 	const new_status = req.body.status;
+	if (!new_status)
+		return res.status(400).json({code: 1, message: 'Parametros faltantes'});
 	trackingController.update_tracking(id_tracking, new_status)
 		.then(tracking => {
 			if (!tracking)
 				return res.status(200).json({
-					code: 1,
+					code: 2,
 					message: 'TrackingNotFound'
 				});
 			res.status(200).json(tracking)
 		})
 		.catch(err => res.status(500).json({
 			code: 0,
-			message: err
+			message: err.message
 		}))
 })
 
