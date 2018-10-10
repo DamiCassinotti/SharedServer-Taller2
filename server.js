@@ -1,6 +1,7 @@
 var express = require('express'),
 	loginRoutes = require('./api/routes/loginRoutes'),
 	trackingRoutes = require('./api/routes/trackingRoutes'),
+	paymentsRoutes = require('./api/routes/paymentsRoutes'),
 	bodyParser = require('body-parser'),
 	port = process.env.PORT || 5001,
 	yaml = require('js-yaml'),
@@ -19,6 +20,7 @@ bootstrapApp = () => {
 
 	loginRoutes(app);
 	app.use('/tracking', trackingRoutes);
+	app.use('/payments', paymentsRoutes);
 
 	return app;
 };

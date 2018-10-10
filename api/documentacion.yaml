@@ -14,25 +14,11 @@ tags:
   - name: tracking
     description: |
       Llamados relacionados con la administracion del seguimiento de los envios
+  - name: payment
+    description: |
+      Llamados relacionados con la administración de los pagos
 paths:
   /tracking:
-    post:
-      tags:
-      - "tracking"
-      summary: "Crea un nuevo envio para su seguimiento"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      responses:
-        201:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Tracking"
-        500:
-          description: "Unexpected error"
-          schema:
-            $ref: "#/definitions/Error"
     get:
       tags:
       - "tracking"
@@ -49,7 +35,24 @@ paths:
             items:
               $ref: "#/definitions/Tracking"
         500:
-          description: "Unexpected error"
+          description: "Unexpected error. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+      - "tracking"
+      summary: "Crea un nuevo envio para su seguimiento"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Tracking"
+        500:
+          description: "Unexpected error. Code 0"
           schema:
             $ref: "#/definitions/Error"
   /tracking/{trackingId}:
@@ -71,11 +74,11 @@ paths:
             items:
               $ref: "#/definitions/Tracking"
         404:
-          description: "Viaje inexistente"
+          description: "Viaje inexistente. Code 1"
           schema:
             $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error"
+          description: "Unexpected error. Code 0"
           schema:
             $ref: "#/definitions/Error"
       summary: "Obtener información de un viaje"
@@ -97,15 +100,37 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Tracking"
+        400:
+          description: "Parametros faltantes. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
         404:
-          description: "Viaje inexistente"
+          description: "Viaje inexistente. Code 2"
           schema:
             $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error"
+          description: "Unexpected error. Code 0"
           schema:
             $ref: "#/definitions/Error"
       summary: "Obtener información de un viaje"
+  /payments/methods:
+    get:
+      tags:
+      - "payment"
+      summary: "Get available payment methods"
+      description: "Returns all the payment methods availables"
+      operationId: "getPaymethods"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Paymethod"
+        500:
+          description: "Unexpected error. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
 definitions:
   Timestamp:
     type: number
@@ -138,3 +163,10 @@ definitions:
       status:
         $ref: '#/definitions/TrackingStatus'
     description: Nuevo estado de tracking
+  Paymethod:
+    type: "object"
+    properties:
+      id:
+        type: "number"
+      description:
+        type: "string"
