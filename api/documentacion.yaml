@@ -14,6 +14,9 @@ tags:
   - name: tracking
     description: |
       Llamados relacionados con la administracion del seguimiento de los envios
+  - name: payment
+    description: |
+      Llamados relacionados con la administración de los pagos
 paths:
   /tracking:
     get:
@@ -110,6 +113,24 @@ paths:
           schema:
             $ref: "#/definitions/Error"
       summary: "Obtener información de un viaje"
+  /payments/methods:
+    get:
+      tags:
+      - "payment"
+      summary: "Get available payment methods"
+      description: "Returns all the payment methods availables"
+      operationId: "getPaymethods"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Paymethod"
+        500:
+          description: "Unexpected error. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
 definitions:
   Timestamp:
     type: number
@@ -142,3 +163,10 @@ definitions:
       status:
         $ref: '#/definitions/TrackingStatus'
     description: Nuevo estado de tracking
+  Paymethod:
+    type: "object"
+    properties:
+      id:
+        type: "number"
+      description:
+        type: "string"
