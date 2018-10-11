@@ -100,6 +100,40 @@ describe('Payment Service', () => {
 		expect(samePayment).to.be.an('array').that.is.empty;;
 	});
 
+	it('Update one payment after inserting', async () => {
+		var payment = await paymentsService.addPayment(paymentMocks.debito);
+
+		var updatedPayment = await paymentsService.updatePayment(payment.transaction_id, 'CONFIRMADO');
+
+		expect(updatedPayment).to.not.be.undefined;
+		expect(updatedPayment.transaction_id).to.equal(payment.transaction_id);
+		expect(updatedPayment.status).to.equal('CONFIRMADO');
+	});
+
+	it('Update one payment without parameters throws error', (done) => {
+		paymentsService.updatePayment()
+			.then(tracking => {
+				expect(true).to.equal(false);
+				done();
+			})
+			.catch(err => {
+				expect(err).to.not.be.undefined;
+				done();
+			});
+	});
+
+	it('Select payment after updating', async () => {
+		var payment = await paymentsService.addPayment(paymentMocks.debito);
+		var updatedPayment = await paymentsService.updatePayment(payment.transaction_id, 'CONFIRMADO');
+
+		var samePayment = await paymentsService.getPayment(payment.transaction_id);
+
+		expect(samePayment).to.not.be.undefined;
+		expect(samePayment).to.be.an('array');
+		expect(samePayment.length).to.equal(1);
+		expect(samePayment).to.deep.equal([updatedPayment]);
+	});
+
 	it('Get Payments Methods', () => {
 		var methods = paymentsService.getPaymentsMethods();
 

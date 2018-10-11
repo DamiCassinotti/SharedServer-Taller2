@@ -27,7 +27,7 @@ exports.addPayment = (payment) => {
 	})
 }
 
-exports.getPayment = (idPayment) => {
+var getPayment = (idPayment) => {
 	return new Promise((resolve, reject) => {
 		var query = {
 			text: 'select p.*, pm.expiration_month, pm.expiration_year, pm.number from payment p left join payment_method pm on p.transaction_id = pm.transaction_id ' +
@@ -36,6 +36,23 @@ exports.getPayment = (idPayment) => {
 		}
 		client.query(query)
 			.then(data => resolve(data.rows))
+			.catch(error => reject(error));
+	});
+}
+
+exports.getPayment = getPayment; 
+
+exports.updatePayment = (idPayment, status) => {
+	return new Promise((resolve, reject) => {
+		var query = {
+			text: 'update payment set status = $2 where transaction_id = $1;',
+			values: [idPayment, status]
+		}
+		client.query(query)
+			.then(async data => {
+				var updatedPayment = await getPayment(idPayment);
+				resolve(updatedPayment[0]);
+			})
 			.catch(error => reject(error));
 	});
 }

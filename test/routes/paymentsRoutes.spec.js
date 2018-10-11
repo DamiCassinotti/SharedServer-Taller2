@@ -10,12 +10,14 @@ describe('Tracking Routes', () => {
 	let addPaymentStub = null;
 	let getPaymentsStub = null;
 	let getPaymentStub = null;
+	let updatePaymentStub = null;
 	let getPaymentMethodsStub = null;
 
 	beforeEach(() => {
 		addPaymentStub = sinon.stub(paymentsController, 'addPayment').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMocks.efectivo)}));
 		getPaymentsStub = sinon.stub(paymentsController, 'getPayments').callsFake(() => new Promise((resolve, reject) => {resolve([paymentMocks.efectivo])}));
 		getPaymentStub = sinon.stub(paymentsController, 'getPayment').callsFake(() => new Promise((resolve, reject) => {resolve([paymentMocks.efectivo])}));
+		updatePaymentStub = sinon.stub(paymentsController, 'updatePayment').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMocks.efectivo)}));
 		getPaymentMethodsStub = sinon.stub(paymentsController, 'getPaymentsMethods').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMethodsMock)}));
 	});
 
@@ -23,6 +25,7 @@ describe('Tracking Routes', () => {
 		addPaymentStub.restore();
 		getPaymentsStub.restore();
 		getPaymentStub.restore();
+		updatePaymentStub.restore();
 		getPaymentMethodsStub.restore();
 	});
 
@@ -102,7 +105,7 @@ describe('Tracking Routes', () => {
 			});
 	});
 
-	it('Get payment tracking', (done) => {
+	it('Get single payment', (done) => {
 		request(app)
 			.get('/payments/id/1')
 			.set('Accept', 'applicacion/json')
@@ -135,6 +138,65 @@ describe('Tracking Routes', () => {
 		getPaymentStub = sinon.stub(paymentsController, 'getPayment').callsFake(() => new Promise((resolve, reject) => {reject({message: 'test error'})}));
 		request(app)
 			.get('/payments/id/1')
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(500)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 0, message: 'test error'});
+				done();
+			})
+	});
+
+	it('Update payment', (done) => {
+		request(app)
+			.put('/payments/id/1')
+			.send({status: 'CANCELADO'})
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(200)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal(paymentMocks.efectivo);
+				done();
+			})
+	});
+
+	it('Update single payment without status', (done) => {
+		request(app)
+			.put('/payments/id/1')
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(400)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 2, message: 'Parametros erroneos'});
+				done();
+			})
+	});
+
+	it('Update single payment Not found', (done) => {
+		updatePaymentStub.restore();
+		updatePaymentStub = sinon.stub(paymentsController, 'updatePayment').callsFake(() => new Promise((resolve, reject) => {resolve(null)}));
+		request(app)
+			.put('/payments/id/1')
+			.send({status: 'CANCELADO'})
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(404)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 1, message: 'Payment not found'});
+				done();
+			})
+	});
+
+	it('Update single payment with error', (done) => {
+		updatePaymentStub.restore();
+		updatePaymentStub = sinon.stub(paymentsController, 'updatePayment').callsFake(() => new Promise((resolve, reject) => {reject({message: 'test error'})}));
+		request(app)
+			.put('/payments/id/1')
+			.send({status: 'CANCELADO'})
 			.set('Accept', 'applicacion/json')
 			.expect('Content-Type', /json/)
 			.expect(500)

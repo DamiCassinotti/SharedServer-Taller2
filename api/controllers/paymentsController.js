@@ -20,7 +20,15 @@ exports.addPayment = (payment) => {
 exports.getPayment = (idPayment) => {
 	return new Promise((resolve, reject) => {
 		paymentsService.getPayment(idPayment)
-			.then(payment => resolve(paymentUtils.convertPaymentsToModel(payment))) 
+			.then(payment => resolve(paymentUtils.convertPaymentsToModel(payment)))
+			.catch(error => reject(error));
+	});
+}
+
+exports.updatePayment = (idPayment, status) => {
+	return new Promise((resolve, reject) => {
+		paymentsService.updatePayment(idPayment, status)
+			.then(payment => resolve(paymentUtils.convertPaymentToModel(payment))) 
 			.catch(error => reject(error));
 	});
 }
