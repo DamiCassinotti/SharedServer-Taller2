@@ -5,7 +5,7 @@ const serverRequestMock = require('../mocks/serverRequestMock');
 const app = require('../../server.js').bootstrapApp();
 const pg = require('pg');
 
-describe('Payment Service', () => {
+describe('App Server Service', () => {
 
 	beforeEach((done) => {
 		client = new pg.Client(config.database.testing);
@@ -42,7 +42,7 @@ describe('Payment Service', () => {
 		expect(server.createdtime).to.be.a('date');
 	});
 
-	it('Add new Server without parameters throws error', () => {
+	it('Add new Server without parameters throws error', (done) => {
 		appServerService.addServer()
 			.then(tracking => {
 				expect(true).to.equal(false);

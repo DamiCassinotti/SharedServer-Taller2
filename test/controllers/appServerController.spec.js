@@ -5,7 +5,7 @@ const appServerController = require('../../api/controllers/appServerController')
 const serverResponseMock = require('../mocks/serverResponseMock');
 const serverRequestMock = require('../mocks/serverRequestMock');
 
-describe('Payment  Controller', () => {
+describe('App Server Controller', () => {
 	let addServerStub = null;
 
 	beforeEach(() => {

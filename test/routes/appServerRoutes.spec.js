@@ -6,7 +6,7 @@ const appServerController = require('../../api/controllers/appServerController')
 const serverRequestMock = require('../mocks/serverRequestMock');
 const serverResponseMock = require('../mocks/serverResponseMock');
 
-describe('Tracking Routes', () => {
+describe('App Server Routes', () => {
 	let addServerStub = null;
 
 	beforeEach(() => {
