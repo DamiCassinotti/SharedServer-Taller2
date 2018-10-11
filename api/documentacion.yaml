@@ -113,6 +113,37 @@ paths:
           schema:
             $ref: "#/definitions/Error"
       summary: "Obtener información de un viaje"
+  /payments:
+    post:
+      tags:
+      - "payment"
+      summary: "Create a new payment"
+      description: ""
+      operationId: "addPayment"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Payment's information"
+        required: true
+        schema:
+          $ref: "#/definitions/PaymentRequest"
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/PaymentResponse"
+        500:
+          description: "Unexpected error. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+        400:
+          description: "Parametros erroneos. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
   /payments/methods:
     get:
       tags:
@@ -150,7 +181,6 @@ definitions:
         description: identificador del envío
         type: string
       status:
-        description: estado en el que se encuentra el envío
         $ref: '#/definitions/TrackingStatus'
       updateAt:
         $ref: '#/definitions/Timestamp'
@@ -170,3 +200,43 @@ definitions:
         type: "number"
       description:
         type: "string"
+  Payment_Paymethod:
+    type: "object"
+    properties:
+      epiration_month:
+        type: "string"
+      expiration_year:
+        type: "string"
+      method:
+        type: "string"
+      number:
+        type: "string"
+  PaymentRequest:
+    type: "object"
+    properties:
+      transaction_id:
+        type: "string"
+      currency:
+        type: "string"
+      value:
+        type: "number"
+        format: "float"
+      paymentMethod:
+        $ref:  "#/definitions/Payment_Paymethod"
+  PaymentResponse:
+    type: "object"
+    properties:
+      transaction_id:
+        type: "string"
+      currency:
+        type: "string"
+      value:
+        type: "number"
+        format: "float"
+      paymentMethod:
+        $ref:  "#/definitions/Payment_Paymethod"
+      status:
+        $ref:  "#/definitions/PaymentStatus"
+  PaymentStatus:
+    type: string
+    description: Estados de Payment (PENDIENTE, CONFIRMADO, CANCELADO)

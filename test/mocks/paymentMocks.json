@@ -1,0 +1,32 @@
+{
+	"efectivo": {
+  		"transaction_id": "123",
+  		"currency": "PESOS",
+  		"value": 123,
+  		"paymentMethod": {
+    		"method": "EFECTIVO"
+  		}
+	},
+	"debito": {
+  		"transaction_id": "123",
+  		"currency": "PESOS",
+  		"value": 123,
+  		"paymentMethod": {
+    		"expiration_month": "10",
+    		"expiration_year": "2018",
+    		"method": "T_DEBITO",
+    		"number": "1234123412341234"
+  		}
+	},
+	"credito": {
+		"transaction_id": "123",
+  		"currency": "PESOS",
+  		"value": 123,
+  		"paymentMethod": {
+    		"expiration_month": "10",
+    		"expiration_year": "2018",
+    		"method": "T_CREDITO",
+    		"number": "1234123412341234"
+  		}
+	}
+}

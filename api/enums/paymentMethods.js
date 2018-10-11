@@ -1,6 +1,6 @@
 var Enum = require('enum');
 
-var paymentMethods = new Enum({'Efectivo': 0, 'Tarjeta de Credito': 1, 'Tarjeta de Debito': 2});
+var paymentMethods = new Enum({'EFECTIVO': 'Efectivo', 'T_CREDITO': 'Tarjeta de Credito', 'T_DEBITO': 'Tarjeta de Debito'});
 
 exports.getPaymentsMethods = () => {
 	return paymentMethods.enums.map(function(enumItem) {
@@ -9,4 +9,10 @@ exports.getPaymentsMethods = () => {
 			description: enumItem.key
 		}
 	});
+}
+
+exports.methods = paymentMethods;
+
+exports.isTarjeta = (method) => {
+	return paymentMethods.T_CREDITO.is(method) || paymentMethods.T_DEBITO.is(method);
 }
