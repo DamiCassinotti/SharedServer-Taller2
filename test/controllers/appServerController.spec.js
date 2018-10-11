@@ -7,13 +7,29 @@ const serverRequestMock = require('../mocks/serverRequestMock');
 
 describe('App Server Controller', () => {
 	let addServerStub = null;
+	let getServersStub = null;
 
 	beforeEach(() => {
 		addServerStub = sinon.stub(appServerService, 'addServer').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.serviceResponse)}));
+		getServersStub = sinon.stub(appServerService, 'getServers').callsFake(() => new Promise((resolve, reject) => {resolve([serverResponseMock.serviceResponse])}));
 	});
 
 	afterEach(() => {
 		addServerStub.restore();
+		getServersStub.restore();
+	});
+
+	it('Get Servers', (done) => {
+		appServerController.getServers()
+			.then(servers => {
+				expect(servers).not.to.be.undefined;
+				expect(servers).to.deep.equal(serverResponseMock.controllerResponseGetServers);
+				done();
+			})
+			.catch(err => {
+				expect(true).to.equal(false);
+				done();
+			});
 	});
 
 	it('Add Server', (done) => {

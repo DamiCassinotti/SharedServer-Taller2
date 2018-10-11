@@ -8,13 +8,44 @@ const serverResponseMock = require('../mocks/serverResponseMock');
 
 describe('App Server Routes', () => {
 	let addServerStub = null;
+	let getServersStub = null;
 
 	beforeEach(() => {
 		addServerStub = sinon.stub(appServerController, 'addServer').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.controllerResponse)}));
+		getServersStub = sinon.stub(appServerController, 'getServers').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.controllerResponseGetServers)}));
 	});
 
 	afterEach(() => {
 		addServerStub.restore();
+		getServersStub.restore();
+	});
+
+	it('Get Servers', (done) => {
+		request(app)
+			.get('/servers')
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(200)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal(serverResponseMock.controllerResponseGetServers);
+				done();
+			});
+	});
+
+	it('Get Servers with error', (done) => {
+		getServersStub.restore();
+		getServersStub = sinon.stub(appServerController, 'getServers').callsFake(() => new Promise((resolve, reject) => {reject({message: 'Test error'})}));
+		request(app)
+			.get('/servers')
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(500)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 0, message: 'Test error'});
+				done();
+			});
 	});
 
 	it('Add Server', (done) => {

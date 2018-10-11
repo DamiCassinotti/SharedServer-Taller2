@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', (req, res, then) => {
 	appServerController.getServers()
-		.then(servers => res.status(201).json(servers))
+		.then(servers => res.status(200).json(servers))
 		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
 });
 

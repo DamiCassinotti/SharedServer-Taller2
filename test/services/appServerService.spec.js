@@ -54,4 +54,30 @@ describe('App Server Service', () => {
 			});
 	});
 
+	it('Select all servers', async () => {
+		var servers = await appServerService.getServers();
+
+		expect(servers).to.not.be.undefined;
+		expect(servers).to.be.an('array').that.is.empty;
+	});
+
+	it('Select all server after inserting', async () => {
+		var server = await appServerService.addServer(serverRequestMock.alta);
+
+		var servers = await appServerService.getServers();
+
+		expect(servers).to.not.be.undefined;
+		expect(servers).to.be.an('array');
+		expect(servers.length).to.equal(1);
+		expect(servers[0]).to.deep.equal(server);
+	});
+
+	it('Add two servers, id autoincrement', async () => {
+		var server = await appServerService.addServer(serverRequestMock.alta);
+
+		var newServer = await appServerService.addServer(serverRequestMock.alta);
+
+		expect(newServer.id).to.equal(server.id + 1);
+	});
+
 });

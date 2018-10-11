@@ -5,7 +5,7 @@ exports.createServersReponse = (servers) => {
 			total: servers.length
 		}
 	}
-	response.server = servers.map(mapServer);
+	response.servers = servers.map(mapServer);
 	return response;
 }
 

@@ -1,5 +1,5 @@
 {
-	"controllerResponse" :{
+	"controllerResponse": {
 	    "metadata": {
 	        "version": 1
 	    },
@@ -17,6 +17,20 @@
 	            "token": "12345678"
 	        }
 	    }
+	},
+	"controllerResponseGetServers": {
+	    "metadata": {
+	        "version": 1,
+			"total": 1
+	    },
+	    "servers": [{
+	        "id": 3,
+	        "_rev": "0",
+	        "createdBy": "Damian",
+	        "createdTime": "2018-10-11T19:17:34.156Z",
+	        "name": "server1",
+	        "lastConnection": null
+	     }]
 	},
 	"serviceResponse": {
 		"id": 3,
