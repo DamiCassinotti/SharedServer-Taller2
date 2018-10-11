@@ -114,7 +114,7 @@ describe('Tracking Service', () => {
 
 	it('Select all trackings after updating', async () => {
 		var tracking = await trackingService.add_tracking();
-		var updatedTracking = await trackingService.update_tracking(tracking.id);
+		var updatedTracking = await trackingService.update_tracking(tracking.id, 'EN_TRANSITO');
 
 		var sameTracking = await trackingService.get_tracking(tracking.id);
 
