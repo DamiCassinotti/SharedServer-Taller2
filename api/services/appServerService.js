@@ -1,3 +1,14 @@
+exports.getServers = () => {
+	return new Promise((resolve, reject) => {
+		var query = {
+			text: 'select * from server;'
+		}
+		client.query(query)
+			.then(data => resolve(data.rows))
+			.catch(error => reject(error));
+	});
+}
+
 exports.addServer = (server) => {
 	return new Promise((resolve, reject) => {
 		var query = {
