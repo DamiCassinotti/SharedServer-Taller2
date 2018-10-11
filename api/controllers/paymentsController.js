@@ -17,10 +17,10 @@ exports.addPayment = (payment) => {
 	})
 }
 
-exports.getPayment = () => {
+exports.getPayment = (idPayment) => {
 	return new Promise((resolve, reject) => {
-		paymentsService.getPayment()
-			.then(payment => resolve(paymentUtils.convertPaymentsToModel(payment)))
+		paymentsService.getPayment(idPayment)
+			.then(payment => resolve(paymentUtils.convertPaymentsToModel(payment))) 
 			.catch(error => reject(error));
 	});
 }
