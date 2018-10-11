@@ -1,4 +1,4 @@
-exports.createServersReponse = (servers) => {
+exports.createGetServersReponse = (servers) => {
 	var response = {
 		metadata: {
 			version: config.version,
@@ -9,7 +9,7 @@ exports.createServersReponse = (servers) => {
 	return response;
 }
 
-exports.createServerReponse = (server) => {
+exports.createAddServerReponse = (server) => {
 	var response = {
 		metadata: {
 			version: config.version
@@ -25,7 +25,18 @@ exports.createServerReponse = (server) => {
 	return response;
 }
 
+exports.createGetServerReponse = (server) => {
+	var response = {
+		metadata: {
+			version: config.version
+		}
+	}
+	response.server = mapServer(server);
+	return response;
+}
+
 var mapServer = (server) => {
+	if (!server) return;
 	return {
 		id: server.id,
 		_rev: server._rev,

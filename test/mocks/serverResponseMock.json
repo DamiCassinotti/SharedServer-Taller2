@@ -18,6 +18,19 @@
 	        }
 	    }
 	},
+	"controllerResponseGetServer": {
+	    "metadata": {
+	        "version": 1
+	    },
+        "server": {
+            "id": 3,
+            "_rev": "0",
+            "createdBy": "Damian",
+            "createdTime": "2018-10-11T19:17:34.156Z",
+            "name": "server1",
+            "lastConnection": null
+        }
+	},
 	"controllerResponseGetServers": {
 	    "metadata": {
 	        "version": 1,

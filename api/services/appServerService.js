@@ -20,3 +20,15 @@ exports.addServer = (server) => {
 			.catch(error => reject(error));
 	})
 }
+
+exports.getServer = (idServer) => {
+	return new Promise((resolve, reject) => {
+		var query = {
+			text: 'select * from server where id = $1;',
+			values: [idServer]
+		}
+		client.query(query)
+			.then(data => resolve(data.rows[0]))
+			.catch(error => reject(error));
+	});
+}

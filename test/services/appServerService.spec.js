@@ -80,4 +80,31 @@ describe('App Server Service', () => {
 		expect(newServer.id).to.equal(server.id + 1);
 	});
 
+	it('Select one server after inserting', async () => {
+		var server = await appServerService.addServer(serverRequestMock.alta);
+
+		var sameServer = await appServerService.getServer(server.id);
+
+		expect(sameServer).to.not.be.undefined;
+		expect(sameServer).to.deep.equal(server);
+	});
+
+	it('Select one server without id throws error', (done) => {
+		appServerService.getServer()
+			.then(server => {
+				expect(true).to.equal(false);
+				done();
+			})
+			.catch(err => {
+				expect(err).to.not.be.undefined;
+				done();
+			});
+	});
+
+	it('Select one server without inserting return empty json', async () => {
+		var sameServer = await appServerService.getServer(serverRequestMock.alta.id);
+
+		expect(sameServer).to.be.undefined;
+	});
+
 });
