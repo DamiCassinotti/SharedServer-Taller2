@@ -18,3 +18,4 @@ before_script:
     - cp config.yml.travis config.yml
     - psql -c 'create database shared_server_travis;' -U postgres
     - psql -U postgres -d shared_server_travis -a -f db/scripts/tracking.sql
+    - psql -U postgres -d shared_server_travis -a -f db/scripts/payments.sql
