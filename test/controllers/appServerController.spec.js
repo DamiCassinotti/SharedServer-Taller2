@@ -23,7 +23,6 @@ describe('App Server Controller', () => {
 				done();
 			})
 			.catch(err => {
-				console.log(err);
 				expect(true).to.equal(false);
 				done();
 			});
