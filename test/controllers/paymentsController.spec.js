@@ -9,12 +9,14 @@ describe('Payment  Controller', () => {
 	let addPaymentStub = null;
 	let getPaymentsStub = null;
 	let getPaymentStub = null;
+	let updatePaymentStub = null;
 	let getPaymentsMethodsStub = null;
 
 	beforeEach(() => {
 		addPaymentStub = sinon.stub(paymentsService, 'addPayment').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMocks.efectivo)}));
 		getPaymentsStub = sinon.stub(paymentsService, 'getPayments').callsFake(() => new Promise((resolve, reject) => {resolve([paymentMocks.serviceResponseDebito, paymentMocks.serviceResponseEfectivo, paymentMocks.serviceResponseCredito])}));
 		getPaymentStub = sinon.stub(paymentsService, 'getPayment').callsFake(() => new Promise((resolve, reject) => {resolve([paymentMocks.serviceResponseEfectivo])}));
+		updatePaymentStub = sinon.stub(paymentsService, 'updatePayment').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMocks.serviceResponseEfectivo)}));
 		getPaymentsMethodsStub = sinon.stub(paymentsService, 'getPaymentsMethods').callsFake(() => paymentMethodsMock);
 	});
 
@@ -22,6 +24,7 @@ describe('Payment  Controller', () => {
 		addPaymentStub.restore();
 		getPaymentsStub.restore();
 		getPaymentStub.restore();
+		updatePaymentStub.restore();
 		getPaymentsMethodsStub.restore();
 	});
 
@@ -102,6 +105,33 @@ describe('Payment  Controller', () => {
 		getPaymentStub.restore();
 		getPaymentStub = sinon.stub(paymentsService, 'getPayment').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
 		paymentsController.getPayment(1)
+			.then(payment => {
+				expect(true).to.equal(false);
+				done();
+			})
+			.catch(err => {
+				expect(err).to.deep.equal('test error');
+				done();
+			});
+	});
+
+	it('Update single payment', (done) => {
+		paymentsController.updatePayment(1, 'CANCELADO')
+			.then(payment => {
+				expect(payment).to.deep.equal(paymentMocks.efectivo);
+				done();
+			})
+			.catch(err => {
+				console.log(err);
+				expect(true).to.equal(false);
+				done();
+			});
+	});
+
+	it('Update single payment with error', (done) => {
+		updatePaymentStub.restore();
+		updatePaymentStub = sinon.stub(paymentsService, 'updatePayment').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
+		paymentsController.updatePayment(1, 'CANCELADO')
 			.then(payment => {
 				expect(true).to.equal(false);
 				done();

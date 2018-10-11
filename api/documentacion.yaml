@@ -205,6 +205,41 @@ paths:
           schema:
             $ref: "#/definitions/Error"
       summary: "Obtener información de un viaje"
+    put:
+      tags:
+        - payment
+      description: "Actualiza el estado de un pago."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Nuevo estado"
+        required: true
+        schema:
+          $ref: "#/definitions/NewPaymentStatus"
+      responses:
+        200:
+          description: "Información del pago"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/PaymentResponse'
+        400:
+          description: "Parametros erroneos. Code 2"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Pago inexistente. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Obtener información de un viaje"
 definitions:
   Timestamp:
     type: number
@@ -283,3 +318,9 @@ definitions:
   PaymentStatus:
     type: string
     description: Estados de Payment (PENDIENTE, CONFIRMADO, CANCELADO)
+  NewPaymentStatus:
+    type: object
+    properties:
+      status:
+        $ref: '#/definitions/PaymentStatus'
+    description: Nuevo estado de payment
