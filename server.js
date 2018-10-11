@@ -22,7 +22,7 @@ bootstrapApp = () => {
 	loginRoutes(app);
 	app.use('/tracking', trackingRoutes);
 	app.use('/payments', paymentsRoutes);
-	app.use('/server', appServerRoutes);
+	app.use('/servers', appServerRoutes);
 
 	return app;
 };

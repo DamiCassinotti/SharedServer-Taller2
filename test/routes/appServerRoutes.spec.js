@@ -19,7 +19,7 @@ describe('Tracking Routes', () => {
 
 	it('Add Server', (done) => {
 		request(app)
-			.post('/server')
+			.post('/servers')
 			.set('Accept', 'applicacion/json')
 			.send(serverRequestMock.alta)
 			.expect('Content-Type', /json/)
@@ -35,7 +35,7 @@ describe('Tracking Routes', () => {
 		var server = JSON.parse(JSON.stringify(serverRequestMock.alta));
 		server.name = undefined;
 		request(app)
-			.post('/server')
+			.post('/servers')
 			.set('Accept', 'applicacion/json')
 			.send(server)
 			.expect('Content-Type', /json/)
@@ -51,7 +51,7 @@ describe('Tracking Routes', () => {
 		addServerStub.restore();
 		addServerStub = sinon.stub(appServerController, 'addServer').callsFake(() => new Promise((resolve, reject) => {reject({message: 'Test error'})}));
 		request(app)
-			.post('/server')
+			.post('/servers')
 			.set('Accept', 'applicacion/json')
 			.send(serverRequestMock.alta)
 			.expect('Content-Type', /json/)
