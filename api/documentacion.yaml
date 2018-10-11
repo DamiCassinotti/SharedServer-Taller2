@@ -114,6 +114,22 @@ paths:
             $ref: "#/definitions/Error"
       summary: "Obtener información de un viaje"
   /payments:
+    get:
+      tags:
+      - "payment"
+      summary: "Get my payments"
+      operationId: "getPayments"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/PaymentResponse"
+        500:
+          description: "Unexpected error. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
     post:
       tags:
       - "payment"
@@ -162,6 +178,33 @@ paths:
           description: "Unexpected error. Code 0"
           schema:
             $ref: "#/definitions/Error"
+  /payments/id/{paymentId}:
+    parameters:
+      - description: "Identificador del pago"
+        in: path
+        name: paymentId
+        required: true
+        type: string
+    get:
+      tags:
+        - payment
+      description: "Devuelve toda la información del pago."
+      responses:
+        200:
+          description: "Información del pago"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/PaymentResponse'
+        404:
+          description: "Pago inexistente. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Obtener información de un viaje"
 definitions:
   Timestamp:
     type: number

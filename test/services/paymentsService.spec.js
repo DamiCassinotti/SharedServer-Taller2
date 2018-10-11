@@ -70,6 +70,36 @@ describe('Payment Service', () => {
 		expect(payments[0]).to.deep.equal(paymentMocks.serviceResponseDebito);
 	});
 
+	it('Select one payment after inserting', async () => {
+		var payment = await paymentsService.addPayment(paymentMocks.debito);
+
+		var samePayment = await paymentsService.getPayment(paymentMocks.debito.transaction_id);
+
+		expect(samePayment).to.not.be.undefined;
+		expect(samePayment).to.be.an('array');
+		expect(samePayment.length).to.equal(1);
+		expect(samePayment[0]).to.deep.equal(paymentMocks.serviceResponseDebito);
+	});
+
+	it('Select one payment without id throws error', (done) => {
+		paymentsService.getPayment()
+			.then(payment => {
+				expect(true).to.equal(false);
+				done();
+			})
+			.catch(err => {
+				expect(err).to.not.be.undefined;
+				done();
+			});
+	});
+
+	it('Select one payment without inserting return empty array', async () => {
+		var samePayment = await paymentsService.getPayment(paymentMocks.debito.transaction_id);
+
+		expect(samePayment).to.not.be.undefined;
+		expect(samePayment).to.be.an('array').that.is.empty;;
+	});
+
 	it('Get Payments Methods', () => {
 		var methods = paymentsService.getPaymentsMethods();
 

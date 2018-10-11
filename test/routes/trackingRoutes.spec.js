@@ -14,7 +14,7 @@ describe('Tracking Routes', () => {
 	beforeEach(() => {
 		addTrackingStub = sinon.stub(trackingController, 'add_tracking').callsFake(() => new Promise((resolve, reject) => {resolve(trackingMock)}));
 		getTrackingsStub = sinon.stub(trackingController, 'get_trackings').callsFake(() => new Promise((resolve, reject) => {resolve([trackingMock])}));
-		getTrackingStub = sinon.stub(trackingController, 'get_tracking').callsFake(() => new Promise((resolve, reject) => {resolve(trackingMock)}));
+		getTrackingStub = sinon.stub(trackingController, 'get_tracking').callsFake(() => new Promise((resolve, reject) => {resolve([trackingMock])}));
 		updateTrackingStub = sinon.stub(trackingController, 'update_tracking').callsFake(() => new Promise((resolve, reject) => {resolve(trackingMock)}));
 	});
 
@@ -89,14 +89,14 @@ describe('Tracking Routes', () => {
 			.expect(200)
 			.end((err, res) => {
 				expect(err).to.equal(null);
-				expect(res.body).to.deep.equal(trackingMock);
+				expect(res.body).to.deep.equal([trackingMock]);
 				done();
 			})
 	});
 
 	it('Get single tracking Not found', (done) => {
 		getTrackingStub.restore();
-		getTrackingStub = sinon.stub(trackingController, 'get_tracking').callsFake(() => new Promise((resolve, reject) => {resolve(null)}));
+		getTrackingStub = sinon.stub(trackingController, 'get_tracking').callsFake(() => new Promise((resolve, reject) => {resolve([])}));
 		request(app)
 			.get('/tracking/1')
 			.set('Accept', 'applicacion/json')

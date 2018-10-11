@@ -27,6 +27,19 @@ exports.addPayment = (payment) => {
 	})
 }
 
+exports.getPayment = (idPayment) => {
+	return new Promise((resolve, reject) => {
+		var query = {
+			text: 'select p.*, pm.expiration_month, pm.expiration_year, pm.number from payment p left join payment_method pm on p.transaction_id = pm.transaction_id ' +
+				'where p.transaction_id = $1;',
+			values: [idPayment]
+		}
+		client.query(query)
+			.then(data => resolve(data.rows))
+			.catch(error => reject(error));
+	});
+}
+
 exports.getPaymentsMethods = () => {
 	return paymentMethods.getPaymentsMethods();
 }
