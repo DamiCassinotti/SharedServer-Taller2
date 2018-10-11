@@ -10,7 +10,7 @@ router.post('/', (req, res, then) => {
 	if (!paymentValidator.isValidPayment(payment))
 		return res.status(400).json(errorModel.newError(1, 'Parametros erroneos'));
 	paymentsController.addPayment(payment)
-		.then(payment => res.status(200).json(payment))
+		.then(payment => res.status(201).json(payment))
 		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
 })
 

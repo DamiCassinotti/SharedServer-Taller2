@@ -26,7 +26,7 @@ describe('Tracking Routes', () => {
 			.set('Accept', 'applicacion/json')
 			.send(paymentMocks.efectivo)
 			.expect('Content-Type', /json/)
-			.expect(200)
+			.expect(201)
 			.end((err, res) => {
 				expect(err).to.equal(null);
 				expect(res.body).to.deep.equal(paymentMocks.efectivo);
