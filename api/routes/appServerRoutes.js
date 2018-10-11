@@ -5,6 +5,12 @@ const appServerValidator = require('../validators/appServerValidator');
 
 const router = express.Router();
 
+router.get('/', (req, res, then) => {
+	appServerController.getServers()
+		.then(servers => res.status(201).json(servers))
+		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
+});
+
 router.post('/', (req, res, then) => {
 	var server = req.body;
 	if (!appServerValidator.isValidServerForAdding(server))
