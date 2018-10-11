@@ -20,9 +20,11 @@ describe('Payment  Controller', () => {
 	});
 
 	it('Add Payment', (done) => {
+		var newPayment = JSON.parse(JSON.stringify(paymentMocks.efectivo));
+		newPayment.status = 'PENDIENTE';
 		paymentsController.addPayment(paymentMocks.efectivo)
 			.then(payment => {
-				expect(payment).to.deep.equal(paymentMocks.efectivo);
+				expect(payment).to.deep.equal(newPayment);
 				done();
 			})
 			.catch(err => {
