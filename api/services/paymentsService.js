@@ -1,5 +1,16 @@
 const paymentMethods = require('../enums/paymentMethods');
 
+exports.getPayments = () => {
+	return new Promise((resolve, reject) => {
+		var query = {
+			text: 'select p.*, pm.expiration_month, pm.expiration_year, pm.number from payment p left join payment_method pm on p.transaction_id = pm.transaction_id;',
+		}
+		client.query(query)
+			.then(data => resolve(data.rows))
+			.catch(error => reject(error));
+	});
+}
+
 exports.addPayment = (payment) => {
 	return new Promise((resolve, reject) => {
 		var query = {
@@ -28,6 +39,6 @@ var addPaymentMethodOfPayment = (payment) => {
 	return new Promise((resolve, reject) => {
 		client.query(query)
 			.then(data => resolve(data))
-			.catch(error => reject(error))
+			.catch(error => reject(error));
 	});
 }

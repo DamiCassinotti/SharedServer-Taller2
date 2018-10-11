@@ -8,16 +8,49 @@ const app = require('../../server.js').bootstrapApp();
 
 describe('Tracking Routes', () => {
 	let addPaymentStub = null;
+	let getPaymentsStub = null;
 	let getPaymentMethodsStub = null;
 
 	beforeEach(() => {
 		addPaymentStub = sinon.stub(paymentsController, 'addPayment').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMocks.efectivo)}));
+		getPaymentsStub = sinon.stub(paymentsController, 'getPayments').callsFake(() => new Promise((resolve, reject) => {resolve([paymentMocks.efectivo])}));
 		getPaymentMethodsStub = sinon.stub(paymentsController, 'getPaymentsMethods').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMethodsMock)}));
 	});
 
 	afterEach(() => {
 		addPaymentStub.restore();
+		getPaymentsStub.restore();
 		getPaymentMethodsStub.restore();
+	});
+
+	it('Get Payments', (done) => {
+		request(app)
+			.get('/payments')
+			.set('Accept', 'applicacion/json')
+			.send(paymentMocks.efectivo)
+			.expect('Content-Type', /json/)
+			.expect(200)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal([paymentMocks.efectivo]);
+				done();
+			});
+	});
+
+	it('Get Payments with error', (done) => {
+		getPaymentsStub.restore();
+		getPaymentsStub = sinon.stub(paymentsController, 'getPayments').callsFake(() => new Promise((resolve, reject) => {reject({message: 'Test error'})}));
+		request(app)
+			.get('/payments')
+			.set('Accept', 'applicacion/json')
+			.send(paymentMocks.debito)
+			.expect('Content-Type', /json/)
+			.expect(500)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 0, message: 'Test error'});
+				done();
+			});
 	});
 
 	it('Add Payment', (done) => {

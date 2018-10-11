@@ -5,7 +5,8 @@
   		"value": 123,
   		"paymentMethod": {
     		"method": "EFECTIVO"
-  		}
+  		},
+		"status": "PENDIENTE"
 	},
 	"debito": {
   		"transaction_id": "123",
@@ -16,7 +17,8 @@
     		"expiration_year": "2018",
     		"method": "T_DEBITO",
     		"number": "1234123412341234"
-  		}
+  		},
+		"status": "PENDIENTE"
 	},
 	"credito": {
 		"transaction_id": "123",
@@ -27,6 +29,34 @@
     		"expiration_year": "2018",
     		"method": "T_CREDITO",
     		"number": "1234123412341234"
-  		}
+  		},
+		"status": "PENDIENTE"
+	},
+	"serviceResponseCredito" : {
+		"transaction_id": "123",
+  		"currency": "PESOS",
+  		"value": 123,
+		"payment_method": "T_CREDITO",
+		"expiration_month": "10",
+		"expiration_year": "2018",
+		"number": "1234123412341234",
+		"status": "PENDIENTE"
+	},
+	"serviceResponseDebito" : {
+		"transaction_id": "123",
+  		"currency": "PESOS",
+  		"value": 123,
+		"expiration_month": "10",
+		"expiration_year": "2018",
+		"payment_method": "T_DEBITO",
+		"number": "1234123412341234",
+		"status": "PENDIENTE"
+	},
+	"serviceResponseEfectivo" : {
+		"transaction_id": "123",
+  		"currency": "PESOS",
+  		"value": 123,
+		"payment_method": "EFECTIVO",
+		"status": "PENDIENTE"
 	}
 }

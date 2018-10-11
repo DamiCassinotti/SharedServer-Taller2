@@ -52,6 +52,24 @@ describe('Payment Service', () => {
 		expect(payment).to.deep.equal(paymentMocks.debito);
 	});
 
+	it('Select all Payments', async () => {
+		var payments = await paymentsService.getPayments();
+
+		expect(payments).to.not.be.undefined;
+		expect(payments).to.be.an('array').that.is.empty;
+	});
+
+	it('Select all payments after inserting', async () => {
+		var payment = await paymentsService.addPayment(paymentMocks.debito);
+
+		var payments = await paymentsService.getPayments();
+
+		expect(payments).to.not.be.undefined;
+		expect(payments).to.be.an('array');
+		expect(payments.length).to.equal(1);
+		expect(payments[0]).to.deep.equal(paymentMocks.serviceResponseDebito);
+	});
+
 	it('Get Payments Methods', () => {
 		var methods = paymentsService.getPaymentsMethods();
 
