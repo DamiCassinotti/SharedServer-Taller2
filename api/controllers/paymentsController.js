@@ -1,4 +1,13 @@
-const paymentsService = require('../services/paymentsService')
+const paymentsService = require('../services/paymentsService');
+const paymentUtils = require('../utils/paymentUtils');
+
+exports.getPayments = () => {
+	return new Promise((resolve, reject) => {
+		paymentsService.getPayments()
+			.then(payments => resolve(paymentUtils.convertPaymentsToModel(payments)))
+			.catch(error => reject(error));
+	});
+}
 
 exports.addPayment = (payment) => {
 	return new Promise((resolve, reject) => {
