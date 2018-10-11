@@ -5,6 +5,7 @@ exports.convertPaymentsToModel = (payments) => {
 }
 
 var convertPaymentToModel = (payment) => {
+	if (!payment) return;
 	var convertedPayment = {
 		transaction_id : payment.transaction_id,
 		currency: payment.currency,
@@ -21,3 +22,5 @@ var convertPaymentToModel = (payment) => {
 	}
 	return convertedPayment;
 }
+
+exports.convertPaymentToModel = convertPaymentToModel;

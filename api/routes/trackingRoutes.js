@@ -25,7 +25,7 @@ router.get('/:trackingId', (req, res) => {
 	const id_tracking = req.params.trackingId;
 	trackingController.get_tracking(id_tracking)
 		.then(tracking => {
-			if (!tracking)
+			if (!tracking || !tracking.length)
 				return res.status(404).json({
 					code: 1,
 					message: 'TrackingNotFound'
