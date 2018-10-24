@@ -31,4 +31,15 @@ router.get('/:idServer', (req, res, then) => {
 		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
 });
 
+router.delete('/:idServer', (req, res, then) => {
+	var idServer = req.params.idServer;
+	appServerController.deleteServer(idServer)
+		.then(server => {
+			if (!server)
+				return res.status(404).json(errorModel.newError(1, "Server not found"));
+			res.status(204).send();
+		})
+		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
+});
+
 module.exports = router;
