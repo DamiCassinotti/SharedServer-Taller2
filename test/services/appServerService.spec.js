@@ -107,4 +107,32 @@ describe('App Server Service', () => {
 		expect(sameServer).to.be.undefined;
 	});
 
+	it('Delete one server without inserting', async () => {
+		var deleted = await appServerService.deleteServer(serverRequestMock.alta.id);
+
+		expect(deleted).to.not.be.undefined;
+		expect(deleted).to.equal(0);
+	});
+
+	it('Delete one server after inserting', async () => {
+		var server = await appServerService.addServer(serverRequestMock.alta);
+
+		var deleted = await appServerService.deleteServer(server.id);
+
+		expect(deleted).to.not.be.undefined;
+		expect(deleted).to.equal(1);
+	});
+
+	it('Delete one server without id throws error', (done) => {
+		appServerService.deleteServer()
+			.then(server => {
+				expect(true).to.equal(false);
+				done();
+			})
+			.catch(err => {
+				expect(err).to.not.be.undefined;
+				done();
+			});
+	});
+
 });

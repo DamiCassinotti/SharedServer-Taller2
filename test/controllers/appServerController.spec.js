@@ -9,10 +9,12 @@ describe('App Server Controller', () => {
 	let addServerStub = null;
 	let getServersStub = null;
 	let getServerStub = null;
+	let deleteServerStub = null;
 
 	beforeEach(() => {
 		addServerStub = sinon.stub(appServerService, 'addServer').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.serviceResponse)}));
 		getServersStub = sinon.stub(appServerService, 'getServers').callsFake(() => new Promise((resolve, reject) => {resolve([serverResponseMock.serviceResponse])}));
+		deleteServerStub = sinon.stub(appServerService, 'deleteServer').callsFake(() => new Promise((resolve, reject) => {resolve(1)}));
 		getServerStub = sinon.stub(appServerService, 'getServer').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.serviceResponse)}));
 	});
 
@@ -20,6 +22,7 @@ describe('App Server Controller', () => {
 		addServerStub.restore();
 		getServersStub.restore();
 		getServerStub.restore();
+		deleteServerStub.restore();
 	});
 
 	it('Get Servers', (done) => {
@@ -62,7 +65,7 @@ describe('App Server Controller', () => {
 			});
 	});
 
-	it('Get single payment', (done) => {
+	it('Get single server', (done) => {
 		appServerController.getServer(1)
 			.then(server => {
 				expect(server).to.deep.equal(serverResponseMock.controllerResponseGetServer);
@@ -75,10 +78,37 @@ describe('App Server Controller', () => {
 			});
 	});
 
-	it('Get single payment with error', (done) => {
+	it('Get single server with error', (done) => {
 		getServerStub.restore();
 		getServerStub = sinon.stub(appServerService, 'getServer').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
 		appServerController.getServer(1)
+			.then(server => {
+				expect(true).to.equal(false);
+				done();
+			})
+			.catch(err => {
+				expect(err).to.deep.equal('test error');
+				done();
+			});
+	});
+
+	it('Delete server', (done) => {
+		appServerController.deleteServer(1)
+			.then(deleted => {
+				expect(deleted).to.equal(1);
+				done();
+			})
+			.catch(err => {
+				console.log(err);
+				expect(true).to.equal(false);
+				done();
+			});
+	});
+
+	it('Delete server with error', (done) => {
+		deleteServerStub.restore();
+		deleteServerStub = sinon.stub(appServerService, 'deleteServer').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
+		appServerController.deleteServer(1)
 			.then(server => {
 				expect(true).to.equal(false);
 				done();

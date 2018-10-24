@@ -24,3 +24,11 @@ exports.getServer = (idServer) => {
 			.catch(error => reject(error));
 	})
 }
+
+exports.deleteServer = (idServer) => {
+	return new Promise((resolve, reject) => {
+		appServerService.deleteServer(idServer)
+			.then(deletedServers => resolve(deletedServers))
+			.catch(error => reject(error))
+	})
+}

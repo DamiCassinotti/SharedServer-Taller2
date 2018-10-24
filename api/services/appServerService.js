@@ -32,3 +32,15 @@ exports.getServer = (idServer) => {
 			.catch(error => reject(error));
 	});
 }
+
+exports.deleteServer = (idServer) => {
+	return new Promise((resolve, reject) => {
+		var query = {
+			text: 'delete from server where id = $1;',
+			values: [idServer]
+		}
+		client.query(query)
+			.then(data => resolve(data.rowCount))
+			.catch(error => reject(error));
+	});
+}
