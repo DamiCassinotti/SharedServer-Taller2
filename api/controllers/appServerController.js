@@ -4,7 +4,7 @@ const appServerUtils = require('../utils/appServerUtils');
 exports.getServers = () => {
 	return new Promise((resolve, reject) => {
 		appServerService.getServers()
-			.then(servers => resolve(appServerUtils.createGetServersReponse(servers)))
+			.then(servers => resolve(appServerUtils.createServersReponseWithMetadata(servers)))
 			.catch(error => reject(error));
 	})
 }
@@ -12,7 +12,7 @@ exports.getServers = () => {
 exports.addServer = (server) => {
 	return new Promise((resolve, reject) => {
 		appServerService.addServer(server)
-			.then(newServer => resolve(appServerUtils.createAddServerReponse(newServer)))
+			.then(newServer => resolve(appServerUtils.createServerReponseWithMetadataAndToken(newServer)))
 			.catch(error => reject(error));
 	})
 }
@@ -20,7 +20,15 @@ exports.addServer = (server) => {
 exports.getServer = (idServer) => {
 	return new Promise((resolve, reject) => {
 		appServerService.getServer(idServer)
-			.then(newServer => resolve(appServerUtils.createGetServerReponse(newServer)))
+			.then(newServer => resolve(appServerUtils.createServerReponseWithMetadata(newServer)))
+			.catch(error => reject(error));
+	})
+}
+
+exports.updateServer = (idServer, server) => {
+	return new Promise((resolve, reject) => {
+		appServerService.updateServer(idServer, server)
+			.then(newServer => resolve(appServerUtils.createServerReponseWithMetadata(newServer)))
 			.catch(error => reject(error));
 	})
 }
