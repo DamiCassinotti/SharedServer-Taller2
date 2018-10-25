@@ -17,6 +17,9 @@ tags:
   - name: payment
     description: |
       Llamados relacionados con la administración de los pagos
+  - name: app server
+    description: |
+      Llamados relacionados con la administración de los App Servers
 paths:
   /tracking:
     get:
@@ -112,7 +115,7 @@ paths:
           description: "Unexpected error. Code 0"
           schema:
             $ref: "#/definitions/Error"
-      summary: "Obtener información de un viaje"
+      summary: "Actualizar información de un viaje"
   /payments:
     get:
       tags:
@@ -204,7 +207,7 @@ paths:
           description: "Unexpected error. Code 0"
           schema:
             $ref: "#/definitions/Error"
-      summary: "Obtener información de un viaje"
+      summary: "Obtener información de un pago"
     put:
       tags:
         - payment
@@ -239,8 +242,153 @@ paths:
           description: "Unexpected error. Code 0"
           schema:
             $ref: "#/definitions/Error"
-      summary: "Obtener información de un viaje"
+      summary: "Actualizar información de un pago"
+  /servers:
+    get:
+      tags:
+        - app server
+      description: |
+          Devuelve toda la información acerca de todos los application servers indicados.
+      responses:
+        200:
+          description: "Todos los application servers indicados"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/CollectionMetadata"
+              servers:
+                items:
+                  $ref: '#/definitions/Server'
+        500:
+          description: "Unexpected error. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Listado de application servers"
+    post:
+      tags:
+        - app server
+      description: |
+        Endpoint para dar de alta un servidor.
+      parameters:
+        - description: "Datos para dar de alta un servidor"
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/AddServerRequest"
+      responses:
+        201:
+          description: "Alta correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              server:
+                $ref: '#/definitions/CreateServerResponse'
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes). Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Dar de un application server"
+  /servers/{serverId}:
+    parameters:
+      - description: "Identificador del servidor"
+        in: path
+        name: serverId
+        required: true
+        type: string
+    get:
+      tags:
+        - app server
+      description: "Devuelve toda la información del servidor"
+      responses:
+        200:
+          description: "Información del servidor"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/EntityMetadata"
+              server:
+                $ref: "#/definitions/Server"
+        404:
+          description: "Servidor inexistente. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Obtener información de un servidor"
+    put:
+      tags:
+        - app server
+      description: |
+        Modificación de los datos de un servidor. Se ignorarán los campos de `id`, `createdBy`, `createdTime` y `lastConnection`
+      parameters:
+        - description: Datos para modificar a del servidor
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateServerRequest"
+      responses:
+        200:
+          description: "Modificación correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              server:
+                $ref: "#/definitions/Server"
+        400:
+          description: "Incumplimiento de precondiciones (parámetros faltantes). Code 2"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "No existe el recurso solicitado. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Actualización de información de un servidor"
+    delete:
+      tags:
+        - app server
+      description: "Endpoint para dar de baja un servidor"
+      responses:
+        204:
+          description: "Baja correcta"
+        404:
+          description: "No existe el recurso solicitado. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Eliminar un servidor"
 definitions:
+  Version:
+    type: string
+    description: Versión de la api
+  Id:
+    type: string
+    description: |
+      Se guarda como un string, pero podría ser un número
+      es dependiente de la implementación.
+  Ref:
+    type: string
+    description: |
+      Hash que es utilizado para prevenir colosiones.
+      Cuando se crea un elemento, se debe pasar un valor de undefined (o no debe estar).
+      Al actualizar, el servidor chequeará que este valor sea igual al guardado, de no coincidir,
+      significa que otro actualizó el recurso, por ende, la actualización debe fallar.
   Timestamp:
     type: number
     description: |
@@ -324,3 +472,57 @@ definitions:
       status:
         $ref: '#/definitions/PaymentStatus'
     description: Nuevo estado de payment
+  CollectionMetadata:
+    properties:
+      total:
+        description: Cantidad de elementos existentes
+        type: integer
+      version:
+        $ref: '#/definitions/Version'
+    type: object
+  Server:
+    properties:
+      id:
+        $ref: '#/definitions/Id'
+      _rev:
+        $ref: '#/definitions/Ref'
+      createdBy:
+        $ref: '#/definitions/Id'
+      createdTime:
+        $ref: '#/definitions/Timestamp'
+      name:
+        type: string
+        description: Nombre del application server
+      lastConnection:
+        $ref: '#/definitions/Timestamp'
+  AddServerRequest:
+    properties:
+      createdBy:
+        $ref: '#/definitions/Id'
+      name:
+        type: string
+        description: Nombre del application server
+  UpdateServerRequest:
+    properties:
+      _rev:
+        $ref: '#/definitions/Ref'
+      name:
+        type: string
+        description: Nombre del application server
+  EntityMetadata:
+    properties:
+      version:
+        $ref: '#/definitions/Version'
+  CreateServerResponse:
+    properties:
+      server:
+        $ref: '#/definitions/Server'
+      token:
+        $ref: '#/definitions/Token'
+  Token:
+    properties:
+      expiresAt:
+        $ref: '#/definitions/Timestamp'
+      token:
+        type: string
+        description: Token de autenticación
