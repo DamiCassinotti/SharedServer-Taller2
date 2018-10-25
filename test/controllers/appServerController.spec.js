@@ -9,6 +9,7 @@ describe('App Server Controller', () => {
 	let addServerStub = null;
 	let getServersStub = null;
 	let getServerStub = null;
+	let updateServerStub = null;
 	let deleteServerStub = null;
 
 	beforeEach(() => {
@@ -16,6 +17,7 @@ describe('App Server Controller', () => {
 		getServersStub = sinon.stub(appServerService, 'getServers').callsFake(() => new Promise((resolve, reject) => {resolve([serverResponseMock.serviceResponse])}));
 		deleteServerStub = sinon.stub(appServerService, 'deleteServer').callsFake(() => new Promise((resolve, reject) => {resolve(1)}));
 		getServerStub = sinon.stub(appServerService, 'getServer').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.serviceResponse)}));
+		updateServerStub = sinon.stub(appServerService, 'updateServer').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.serviceResponse)}));
 	});
 
 	afterEach(() => {
@@ -23,6 +25,7 @@ describe('App Server Controller', () => {
 		getServersStub.restore();
 		getServerStub.restore();
 		deleteServerStub.restore();
+		updateServerStub.restore();
 	});
 
 	it('Get Servers', (done) => {
@@ -83,6 +86,33 @@ describe('App Server Controller', () => {
 		getServerStub = sinon.stub(appServerService, 'getServer').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
 		appServerController.getServer(1)
 			.then(server => {
+				expect(true).to.equal(false);
+				done();
+			})
+			.catch(err => {
+				expect(err).to.deep.equal('test error');
+				done();
+			});
+	});
+
+	it('Update single server', (done) => {
+		appServerController.updateServer(1, {name: 'updatedServer', _rev: "0"})
+			.then(server => {
+				expect(server).to.deep.equal(serverResponseMock.controllerResponseGetServer);
+				done();
+			})
+			.catch(err => {
+				console.log(err);
+				expect(true).to.equal(false);
+				done();
+			});
+	});
+
+	it('Update single server with error', (done) => {
+		updateServerStub.restore();
+		updateServerStub = sinon.stub(appServerService, 'updateServer').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
+		appServerController.updateServer(1, {name: 'updatedServer', _rev: "0"})
+			.then(payment => {
 				expect(true).to.equal(false);
 				done();
 			})

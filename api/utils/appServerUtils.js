@@ -1,4 +1,4 @@
-exports.createGetServersReponse = (servers) => {
+exports.createServersReponseWithMetadata = (servers) => {
 	var response = {
 		metadata: {
 			version: config.version,
@@ -9,7 +9,7 @@ exports.createGetServersReponse = (servers) => {
 	return response;
 }
 
-exports.createAddServerReponse = (server) => {
+exports.createServerReponseWithMetadataAndToken = (server) => {
 	var response = {
 		metadata: {
 			version: config.version
@@ -25,7 +25,7 @@ exports.createAddServerReponse = (server) => {
 	return response;
 }
 
-exports.createGetServerReponse = (server) => {
+exports.createServerReponseWithMetadata = (server) => {
 	var response = {
 		metadata: {
 			version: config.version

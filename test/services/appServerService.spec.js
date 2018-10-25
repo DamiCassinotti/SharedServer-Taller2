@@ -135,4 +135,41 @@ describe('App Server Service', () => {
 			});
 	});
 
+	it('Update one server after inserting', async () => {
+		var server = await appServerService.addServer(serverRequestMock.alta);
+
+		var update = {
+			name: 'updated',
+			_rev: '1'
+		}
+		var updatedServer = await appServerService.updateServer(server.id, update);
+
+		expect(updatedServer).to.not.be.undefined;
+		expect(updatedServer.id).to.equal(server.id);
+		expect(updatedServer.name).to.equal(update.name);
+		expect(updatedServer._rev).to.equal(update._rev);
+	});
+
+	it('Update one server without inserting', async () => {
+		var update = {
+			name: 'updated',
+			_rev: 1
+		}
+		var updatedServer = await appServerService.updateServer('123', update);
+
+		expect(updatedServer).to.be.undefined;
+	});
+
+	it('Update one server without parameters throws error', (done) => {
+		appServerService.updateServer()
+			.then(tracking => {
+				expect(true).to.equal(false);
+				done();
+			})
+			.catch(err => {
+				expect(err).to.not.be.undefined;
+				done();
+			});
+	});
+
 });

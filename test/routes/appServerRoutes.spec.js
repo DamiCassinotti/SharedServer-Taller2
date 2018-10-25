@@ -11,12 +11,14 @@ describe('App Server Routes', () => {
 	let getServersStub = null;
 	let getServerStub = null;
 	let deleteServerStub = null;
+	let updateServerStub = null;
 
 	beforeEach(() => {
 		addServerStub = sinon.stub(appServerController, 'addServer').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.controllerResponse)}));
 		getServersStub = sinon.stub(appServerController, 'getServers').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.controllerResponseGetServers)}));
 		getServerStub = sinon.stub(appServerController, 'getServer').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.controllerResponseGetServer)}));
 		deleteServerStub = sinon.stub(appServerController, 'deleteServer').callsFake(() => new Promise((resolve, reject) => {resolve(1)}));
+		updateServerStub = sinon.stub(appServerController, 'updateServer').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.controllerResponseGetServer)}));
 	});
 
 	afterEach(() => {
@@ -24,6 +26,7 @@ describe('App Server Routes', () => {
 		getServersStub.restore();
 		getServerStub.restore();
 		deleteServerStub.restore();
+		updateServerStub.restore();
 	});
 
 	it('Get Servers', (done) => {
@@ -180,6 +183,93 @@ describe('App Server Routes', () => {
 			.expect(500)
 			.end((err, res) => {
 				expect(err).to.be.null;
+				expect(res.body).to.deep.equal({code: 0, message: 'test error'});
+				done();
+			})
+	});
+
+	it('Update server', (done) => {
+		request(app)
+			.put('/servers/1')
+			.send({name: 'updatedServer', _rev: "0"})
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(200)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal(serverResponseMock.controllerResponseGetServer);
+				done();
+			})
+	});
+
+	it('Update single server without parameters', (done) => {
+		request(app)
+			.put('/servers/1')
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(400)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 2, message: 'Parametros erroneos'});
+				done();
+			})
+	});
+
+	it('Update single server without name', (done) => {
+		request(app)
+			.put('/servers/1')
+			.send({_rev: "0"})
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(400)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 2, message: 'Parametros erroneos'});
+				done();
+			})
+	});
+
+	it('Update single server without _rev', (done) => {
+		request(app)
+			.put('/servers/1')
+			.send({name: 'updatedServer'})
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(400)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 2, message: 'Parametros erroneos'});
+				done();
+			})
+	});
+
+	it('Update single server Not found', (done) => {
+		updateServerStub.restore();
+		updateServerStub = sinon.stub(appServerController, 'updateServer').callsFake(() => new Promise((resolve, reject) => {resolve({})}));
+		request(app)
+			.put('/servers/1')
+			.send({name: 'updatedServer', _rev: "0"})
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(404)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 1, message: 'Server not found'});
+				done();
+			})
+	});
+
+	it('Update single server with error', (done) => {
+		updateServerStub.restore();
+		updateServerStub = sinon.stub(appServerController, 'updateServer').callsFake(() => new Promise((resolve, reject) => {reject({message: 'test error'})}));
+		request(app)
+			.put('/servers/1')
+			.send({name: 'updatedServer', _rev: "0"})
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(500)
+			.end((err, res) => {
+				expect(err).to.equal(null);
 				expect(res.body).to.deep.equal({code: 0, message: 'test error'});
 				done();
 			})
