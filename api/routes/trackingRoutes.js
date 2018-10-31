@@ -6,22 +6,16 @@ const router = express.Router();
 router.post('/', (req, res, then) => {
 	trackingController.add_tracking()
 		.then(tracking => res.status(201).json(tracking))
-		.catch(err => res.status(500).json({
-			code: 0,
-			message: err.message
-		}));
+		.catch(error => then({name: 'UnexpectedError'}));
 });
 
 router.get('/', (req, res, then) => {
 	trackingController.get_trackings()
 		.then(trackings => res.status(200).json(trackings))
-		.catch(err => res.status(500).json({
-			code: 0,
-			message: err.message
-		}));
+		.catch(error => then({name: 'UnexpectedError'}));
 });
 
-router.get('/:trackingId', (req, res) => {
+router.get('/:trackingId', (req, res, then) => {
 	const id_tracking = req.params.trackingId;
 	trackingController.get_tracking(id_tracking)
 		.then(tracking => {
@@ -32,10 +26,7 @@ router.get('/:trackingId', (req, res) => {
 				});
 			res.status(200).json(tracking);
 		})
-		.catch(err => res.status(500).json({
-			code: 0,
-			message: err.message
-		}))
+		.catch(error => then({name: 'UnexpectedError'}));
 });
 
 router.put('/:trackingId', (req, res, then) => {
@@ -52,10 +43,7 @@ router.put('/:trackingId', (req, res, then) => {
 				});
 			res.status(200).json(tracking)
 		})
-		.catch(err => res.status(500).json({
-			code: 0,
-			message: err.message
-		}))
+		.catch(error => then({name: 'UnexpectedError'}));
 })
 
 module.exports = router;
