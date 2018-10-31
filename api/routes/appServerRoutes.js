@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', (req, res, then) => {
 	appServerController.getServers()
 		.then(servers => res.status(200).json(servers))
-		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
+		.catch(error => then({name: 'UnexpectedError'}));
 });
 
 router.post('/', (req, res, then) => {
@@ -17,7 +17,7 @@ router.post('/', (req, res, then) => {
 		return res.status(400).json(errorModel.newError(1, 'Parametros erroneos'));
 	appServerController.addServer(server)
 		.then(server => res.status(201).json(server))
-		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
+		.catch(error => then({name: 'UnexpectedError'}));
 });
 
 router.get('/:idServer', (req, res, then) => {
@@ -28,7 +28,7 @@ router.get('/:idServer', (req, res, then) => {
 				return res.status(404).json(errorModel.newError(1, "Server not found"));
 			res.status(200).json(server)
 		})
-		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
+		.catch(error => then({name: 'UnexpectedError'}));
 });
 
 router.put('/:idServer', (req, res, then) => {
@@ -42,7 +42,7 @@ router.put('/:idServer', (req, res, then) => {
 				return res.status(404).json(errorModel.newError(1, "Server not found"));
 			res.status(200).json(server)
 		})
-		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
+		.catch(error => then({name: 'UnexpectedError'}));
 });
 
 router.delete('/:idServer', (req, res, then) => {
@@ -53,7 +53,7 @@ router.delete('/:idServer', (req, res, then) => {
 				return res.status(404).json(errorModel.newError(1, "Server not found"));
 			res.status(204).send();
 		})
-		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
+		.catch(error => then({name: 'UnexpectedError'}));
 });
 
 module.exports = router;

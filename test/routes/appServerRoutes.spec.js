@@ -52,7 +52,7 @@ describe('App Server Routes', () => {
 			.expect(500)
 			.end((err, res) => {
 				expect(err).to.equal(null);
-				expect(res.body).to.deep.equal({code: 0, message: 'Test error'});
+				expect(res.body).to.deep.equal({code: 1, message: 'Unexpected Error'});
 				done();
 			});
 	});
@@ -98,7 +98,7 @@ describe('App Server Routes', () => {
 			.expect(500)
 			.end((err, res) => {
 				expect(err).to.equal(null);
-				expect(res.body).to.deep.equal({code: 0, message: 'Test error'});
+				expect(res.body).to.deep.equal({code: 1, message: 'Unexpected Error'});
 				done();
 			});
 	});
@@ -141,7 +141,7 @@ describe('App Server Routes', () => {
 			.expect(500)
 			.end((err, res) => {
 				expect(err).to.equal(null);
-				expect(res.body).to.deep.equal({code: 0, message: 'test error'});
+				expect(res.body).to.deep.equal({code: 1, message: 'Unexpected Error'});
 				done();
 			})
 	});
@@ -183,7 +183,7 @@ describe('App Server Routes', () => {
 			.expect(500)
 			.end((err, res) => {
 				expect(err).to.be.null;
-				expect(res.body).to.deep.equal({code: 0, message: 'test error'});
+				expect(res.body).to.deep.equal({code: 1, message: 'Unexpected Error'});
 				done();
 			})
 	});
@@ -270,7 +270,7 @@ describe('App Server Routes', () => {
 			.expect(500)
 			.end((err, res) => {
 				expect(err).to.equal(null);
-				expect(res.body).to.deep.equal({code: 0, message: 'test error'});
+				expect(res.body).to.deep.equal({code: 1, message: 'Unexpected Error'});
 				done();
 			})
 	});
