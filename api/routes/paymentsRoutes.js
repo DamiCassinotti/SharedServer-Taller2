@@ -2,13 +2,14 @@ const express = require('express');
 const paymentsController = require('../controllers/paymentsController');
 const errorModel = require('../models/error');
 const paymentValidator = require('../validators/paymentValidator');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
 router.get('/', (req, res, then) => {
 	paymentsController.getPayments()
 		.then(payments => res.status(200).json(payments))
-		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
+		.catch(error => then({name: 'UnexpectedError'}));
 });
 
 router.post('/', (req, res, then) => {
@@ -17,7 +18,7 @@ router.post('/', (req, res, then) => {
 		return res.status(400).json(errorModel.newError(1, 'Parametros erroneos'));
 	paymentsController.addPayment(payment)
 		.then(payment => res.status(201).json(payment))
-		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
+		.catch(error => then({name: 'UnexpectedError'}));
 });
 
 router.get('/id/:idPayment', (req, res, then) => {
@@ -28,7 +29,7 @@ router.get('/id/:idPayment', (req, res, then) => {
 				return res.status(404).json(errorModel.newError(1, 'Payment not found'));
 			res.status(200).json(payment)
 		})
-		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
+		.catch(error => then({name: 'UnexpectedError'}));
 });
 
 router.put('/id/:idPayment', (req, res, then) => {
@@ -42,13 +43,13 @@ router.put('/id/:idPayment', (req, res, then) => {
 				return res.status(404).json(errorModel.newError(1, 'Payment not found'));
 			res.status(200).json(payment)
 		})
-		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
+		.catch(error => then({name: 'UnexpectedError'}));
 });
 
 router.get('/methods', (req, res, then) => {
 	paymentsController.getPaymentsMethods()
 		.then(methods => res.status(200).json(methods))
-		.catch(error => res.status(500).json(errorModel.newError(0, error.message)));
+		.catch(error => then({name: 'UnexpectedError'}));
 });
 
 module.exports = router;
