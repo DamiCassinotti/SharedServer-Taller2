@@ -1,6 +1,7 @@
 'use strict'
 
 const jwt = require('jsonwebtoken');
+const config = require('../../config.json');
 
 exports.login = function(req, res, then) {
 	var response = {
@@ -9,8 +10,8 @@ exports.login = function(req, res, then) {
 		},
 		token: jwt.sign(
             { fullName: 'admin', email: 'admin@admin.com' },
-            'secret',
-            { expiresIn: '30m' }
+            config.tokens.secret,
+            { expiresIn: config.tokens.expiresIn }
 		)
 	}
 	if (!req.body.username || !req.body.password)

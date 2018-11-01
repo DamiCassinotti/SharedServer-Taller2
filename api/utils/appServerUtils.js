@@ -1,3 +1,5 @@
+const config = require('../../config.json');
+
 exports.createServersReponseWithMetadata = (servers) => {
 	var response = {
 		metadata: {

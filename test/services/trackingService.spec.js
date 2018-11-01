@@ -2,6 +2,7 @@ const expect = require('chai').expect;
 const trackingService = require('../../api/services/trackingService');
 const app = require('../../server.js').bootstrapApp();
 const pg = require('pg');
+const config = require('../../config.json');
 
 describe('Tracking Service', () => {
 

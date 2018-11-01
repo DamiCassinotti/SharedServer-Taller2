@@ -8,9 +8,9 @@ var express = require('express'),
 	yaml = require('js-yaml'),
 	fs = require('fs'),
 	jwt = require('express-jwt'),
-	errorModel = require('./api/models/error');
+	errorModel = require('./api/models/error'),
+	config = require('./config.json');
 
-config = yaml.safeLoad(fs.readFileSync('./config.yml', 'utf8'));
 var pg = require('pg'),
 	connectionString = process.env.DATABASE_URL || config.database.default;
 client = new pg.Client(connectionString);
@@ -18,7 +18,7 @@ client = new pg.Client(connectionString);
 bootstrapApp = () => {
 	var app = express();
 
-	app.use(jwt({secret: 'secret'}).unless({
+	app.use(jwt({secret: config.tokens.secret}).unless({
 		path: ['/user/token', /\/payments\/*/, /\/servers\/*/, /\/tracking\/*/]
 	}));
 

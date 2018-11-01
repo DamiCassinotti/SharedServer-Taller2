@@ -4,6 +4,7 @@ const serverResponseMock = require('../mocks/serverResponseMock');
 const serverRequestMock = require('../mocks/serverRequestMock');
 const app = require('../../server.js').bootstrapApp();
 const pg = require('pg');
+const config = require('../../config.json');
 
 describe('App Server Service', () => {
 
