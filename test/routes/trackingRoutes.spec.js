@@ -10,12 +10,20 @@ describe('Tracking Routes', () => {
 	let getTrackingsStub = null;
 	let getTrackingStub = null;
 	let updateTrackingStub = null;
+	let token = null;
 
-	beforeEach(() => {
+	beforeEach((done) => {
 		addTrackingStub = sinon.stub(trackingController, 'add_tracking').callsFake(() => new Promise((resolve, reject) => {resolve(trackingMock)}));
 		getTrackingsStub = sinon.stub(trackingController, 'get_trackings').callsFake(() => new Promise((resolve, reject) => {resolve([trackingMock])}));
 		getTrackingStub = sinon.stub(trackingController, 'get_tracking').callsFake(() => new Promise((resolve, reject) => {resolve([trackingMock])}));
 		updateTrackingStub = sinon.stub(trackingController, 'update_tracking').callsFake(() => new Promise((resolve, reject) => {resolve(trackingMock)}));
+		request(app)
+			.post('/login')
+			.send({username: 'administrator', password: 'password'})
+			.end((err, res) => {
+				token = res.body.token;
+				done();
+			})
 	});
 
 	afterEach(() => {
@@ -29,6 +37,7 @@ describe('Tracking Routes', () => {
 		request(app)
 			.post('/tracking')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ${token}')
 			.expect('Content-Type', /json/)
 			.expect(201)
 			.end((err, res) => {

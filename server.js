@@ -18,8 +18,8 @@ client = new pg.Client(connectionString);
 bootstrapApp = () => {
 	var app = express();
 
-	app.use(jwt({secret: 'SECRET'}).unless({
-		path: [/\/tracking\/*/, /\/payments\/*/, /\/servers\/*/]
+	app.use(jwt({secret: 'secret'}).unless({
+		path: ['/user/token', /\/payments\/*/, /\/servers\/*/, /\/tracking\/*/]
 	}));
 
 	app.use(bodyParser.urlencoded({extended: true}));
