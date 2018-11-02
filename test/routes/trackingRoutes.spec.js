@@ -18,7 +18,7 @@ describe('Tracking Routes', () => {
 		getTrackingStub = sinon.stub(trackingController, 'get_tracking').callsFake(() => new Promise((resolve, reject) => {resolve([trackingMock])}));
 		updateTrackingStub = sinon.stub(trackingController, 'update_tracking').callsFake(() => new Promise((resolve, reject) => {resolve(trackingMock)}));
 		request(app)
-			.post('/login')
+			.post('/user/token')
 			.send({username: 'administrator', password: 'password'})
 			.end((err, res) => {
 				token = res.body.token;
@@ -37,7 +37,7 @@ describe('Tracking Routes', () => {
 		request(app)
 			.post('/tracking')
 			.set('Accept', 'applicacion/json')
-			.set('Authorization', 'Bearer ${token}')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(201)
 			.end((err, res) => {
@@ -53,6 +53,7 @@ describe('Tracking Routes', () => {
 		request(app)
 			.post('/tracking')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(500)
 			.end((err, res) => {
@@ -62,10 +63,24 @@ describe('Tracking Routes', () => {
 			});
 	});
 
+	it('Add new tracking without token get Unauthorized', (done) => {
+		request(app)
+			.post('/tracking')
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(401)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 0, message: 'Unauthorized Access'});
+				done();
+			});
+	});
+
 	it('Get all trackings', (done) => {
 		request(app)
 			.get('/tracking')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(200)
 			.end((err, res) => {
@@ -81,6 +96,7 @@ describe('Tracking Routes', () => {
 		request(app)
 			.get('/tracking')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(500)
 			.end((err, res) => {
@@ -90,10 +106,24 @@ describe('Tracking Routes', () => {
 			})
 	});
 
+	it('Get all trackings without token get Unauthorized', (done) => {
+		request(app)
+			.get('/tracking')
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(401)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 0, message: 'Unauthorized Access'});
+				done();
+			})
+	});
+
 	it('Get single tracking', (done) => {
 		request(app)
 			.get('/tracking/1')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(200)
 			.end((err, res) => {
@@ -109,6 +139,7 @@ describe('Tracking Routes', () => {
 		request(app)
 			.get('/tracking/1')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(404)
 			.end((err, res) => {
@@ -124,6 +155,7 @@ describe('Tracking Routes', () => {
 		request(app)
 			.get('/tracking/1')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(500)
 			.end((err, res) => {
@@ -133,10 +165,24 @@ describe('Tracking Routes', () => {
 			})
 	});
 
+	it('Get single tracking without token gets unauthorized', (done) => {
+		request(app)
+			.get('/tracking/1')
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(401)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 0, message: 'Unauthorized Access'});
+				done();
+			})
+	});
+
 	it('Update tracking', (done) => {
 		request(app)
 			.put('/tracking/1')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.send({status: 'EN_TRANSITO'})
 			.expect('Content-Type', /json/)
 			.expect(200)
@@ -147,10 +193,25 @@ describe('Tracking Routes', () => {
 			})
 	});
 
+	it('Update tracking without token gets unauthorized', (done) => {
+		request(app)
+			.put('/tracking/1')
+			.set('Accept', 'applicacion/json')
+			.send({status: 'EN_TRANSITO'})
+			.expect('Content-Type', /json/)
+			.expect(401)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 0, message: 'Unauthorized Access'});
+				done();
+			})
+	});
+
 	it('Update tracking without status', (done) => {
 		request(app)
 			.put('/tracking/1')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(400)
 			.end((err, res) => {
@@ -166,6 +227,7 @@ describe('Tracking Routes', () => {
 		request(app)
 			.put('/tracking/1')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.send({status: 'EN_TRANSITO'})
 			.expect('Content-Type', /json/)
 			.expect(404)
@@ -182,6 +244,7 @@ describe('Tracking Routes', () => {
 		request(app)
 			.put('/tracking/1')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.send({status: 'EN_TRANSITO'})
 			.expect('Content-Type', /json/)
 			.expect(500)
