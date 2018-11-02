@@ -21,7 +21,7 @@ describe('Tracking Routes', () => {
 			.post('/user/token')
 			.send({username: 'administrator', password: 'password'})
 			.end((err, res) => {
-				token = res.body.token;
+				token = res.body.token.token;
 				done();
 			})
 	});

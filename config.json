@@ -6,6 +6,6 @@
 	"version": 1.0,
 	"tokens": {
 		"secret": "shhhh its a secret",
-		"expiresIn": "30m"
+		"expiresIn": 1800
 	}
 }
