@@ -216,7 +216,7 @@ describe('Tracking Routes', () => {
 			.expect(400)
 			.end((err, res) => {
 				expect(err).to.equal(null);
-				expect(res.body).to.deep.equal({code: 1, message: 'Parametros faltantes'});
+				expect(res.body).to.deep.equal({code: 2, message: 'Parametros erroneos'});
 				done();
 			})
 	});

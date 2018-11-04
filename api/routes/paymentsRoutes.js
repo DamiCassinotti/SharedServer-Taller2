@@ -15,7 +15,7 @@ router.get('/', (req, res, then) => {
 router.post('/', (req, res, then) => {
 	var payment = req.body;
 	if (!paymentValidator.isValidPayment(payment))
-		return res.status(400).json(errorModel.newError(1, 'Parametros erroneos'));
+		return then({name: 'ParametersError'});
 	paymentsController.addPayment(payment)
 		.then(payment => res.status(201).json(payment))
 		.catch(error => then({name: 'UnexpectedError'}));

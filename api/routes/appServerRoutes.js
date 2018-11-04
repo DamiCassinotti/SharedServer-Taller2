@@ -14,7 +14,7 @@ router.get('/', (req, res, then) => {
 router.post('/', (req, res, then) => {
 	var server = req.body;
 	if (!appServerValidator.isValidServerForAdding(server))
-		return res.status(400).json(errorModel.newError(1, 'Parametros erroneos'));
+		return then({name: 'ParametersError'});
 	appServerController.addServer(server)
 		.then(server => res.status(201).json(server))
 		.catch(error => then({name: 'UnexpectedError'}));
@@ -35,7 +35,7 @@ router.put('/:idServer', (req, res, then) => {
 	var idServer = req.params.idServer;
 	var newServer = req.body;
 	if (!appServerValidator.isValidServerForUpdating(newServer))
-		return res.status(400).json(errorModel.newError(2, 'Parametros erroneos'));
+		return then({name: 'ParametersError'});
 	appServerController.updateServer(idServer, newServer)
 		.then(server => {
 			if (!server.server)

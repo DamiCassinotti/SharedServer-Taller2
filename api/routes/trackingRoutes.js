@@ -34,7 +34,7 @@ router.put('/:trackingId', (req, res, then) => {
 	const id_tracking = req.params.trackingId;
 	const new_status = req.body.status;
 	if (!new_status)
-		return res.status(400).json({code: 1, message: 'Parametros faltantes'});
+		return then({name: 'ParametersError'});
 	trackingController.update_tracking(id_tracking, new_status)
 		.then(tracking => {
 			if (!tracking)

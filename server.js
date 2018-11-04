@@ -40,6 +40,10 @@ bootstrapApp = () => {
 				res.status(500).send(errorModel.newError(1, 'Unexpected Error'));
         		break;
 			}
+			case 'ParametersError': {
+				res.status(400).send(errorModel.newError(2, 'Parametros erroneos'));
+        		break;
+			}
 		}
 	});
 
