@@ -19,7 +19,7 @@ bootstrapApp = () => {
 	var app = express();
 
 	app.use(jwt({secret: config.tokens.secret}).unless({
-		path: ['/user/token', /\/payments\/*/, /\/servers\/*/]
+		path: ['/user/token', /\/servers\/*/]
 	}));
 
 	app.use(bodyParser.urlencoded({extended: true}));

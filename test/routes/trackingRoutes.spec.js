@@ -23,7 +23,7 @@ describe('Tracking Routes', () => {
 			.end((err, res) => {
 				token = res.body.token.token;
 				done();
-			})
+			});
 	});
 
 	afterEach(() => {

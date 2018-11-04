@@ -6,19 +6,27 @@ const paymentMethodsMock = require('../mocks/paymentMethodsMock');
 const paymentMocks = require('../mocks/paymentMocks');
 const app = require('../../server.js').bootstrapApp();
 
-describe('Tracking Routes', () => {
+describe('Payment Routes', () => {
 	let addPaymentStub = null;
 	let getPaymentsStub = null;
 	let getPaymentStub = null;
 	let updatePaymentStub = null;
 	let getPaymentMethodsStub = null;
+	let token = null;
 
-	beforeEach(() => {
+	beforeEach((done) => {
 		addPaymentStub = sinon.stub(paymentsController, 'addPayment').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMocks.efectivo)}));
 		getPaymentsStub = sinon.stub(paymentsController, 'getPayments').callsFake(() => new Promise((resolve, reject) => {resolve([paymentMocks.efectivo])}));
 		getPaymentStub = sinon.stub(paymentsController, 'getPayment').callsFake(() => new Promise((resolve, reject) => {resolve([paymentMocks.efectivo])}));
 		updatePaymentStub = sinon.stub(paymentsController, 'updatePayment').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMocks.efectivo)}));
 		getPaymentMethodsStub = sinon.stub(paymentsController, 'getPaymentsMethods').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMethodsMock)}));
+		request(app)
+			.post('/user/token')
+			.send({username: 'administrator', password: 'password'})
+			.end((err, res) => {
+				token = res.body.token.token;
+				done();
+			});
 	});
 
 	afterEach(() => {
@@ -33,6 +41,7 @@ describe('Tracking Routes', () => {
 		request(app)
 			.get('/payments')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.send(paymentMocks.efectivo)
 			.expect('Content-Type', /json/)
 			.expect(200)
@@ -49,6 +58,7 @@ describe('Tracking Routes', () => {
 		request(app)
 			.get('/payments')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.send(paymentMocks.debito)
 			.expect('Content-Type', /json/)
 			.expect(500)
@@ -59,10 +69,25 @@ describe('Tracking Routes', () => {
 			});
 	});
 
+	it('Get Payments without token gets 401', (done) => {
+		request(app)
+			.get('/payments')
+			.set('Accept', 'applicacion/json')
+			.send(paymentMocks.efectivo)
+			.expect('Content-Type', /json/)
+			.expect(401)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 0, message: 'Unauthorized Access'});
+				done();
+			});
+	});
+
 	it('Add Payment', (done) => {
 		request(app)
 			.post('/payments')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.send(paymentMocks.efectivo)
 			.expect('Content-Type', /json/)
 			.expect(201)
@@ -73,12 +98,27 @@ describe('Tracking Routes', () => {
 			});
 	});
 
+	it('Add Payment without token gets 401', (done) => {
+		request(app)
+			.post('/payments')
+			.set('Accept', 'applicacion/json')
+			.send(paymentMocks.efectivo)
+			.expect('Content-Type', /json/)
+			.expect(401)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 0, message: 'Unauthorized Access'});
+				done();
+			});
+	});
+
 	it('Add invalid Payment', (done) => {
 		var payment = JSON.parse(JSON.stringify(paymentMocks.credito));
 		payment.value = undefined;
 		request(app)
 			.post('/payments')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.send(payment)
 			.expect('Content-Type', /json/)
 			.expect(400)
@@ -95,6 +135,7 @@ describe('Tracking Routes', () => {
 		request(app)
 			.post('/payments')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.send(paymentMocks.debito)
 			.expect('Content-Type', /json/)
 			.expect(500)
@@ -109,6 +150,7 @@ describe('Tracking Routes', () => {
 		request(app)
 			.get('/payments/id/1')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(200)
 			.end((err, res) => {
@@ -118,12 +160,26 @@ describe('Tracking Routes', () => {
 			})
 	});
 
+	it('Get single payment without token gets 401', (done) => {
+		request(app)
+			.get('/payments/id/1')
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(401)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 0, message: 'Unauthorized Access'});
+				done();
+			});
+	});
+
 	it('Get single payment Not found', (done) => {
 		getPaymentStub.restore();
 		getPaymentStub = sinon.stub(paymentsController, 'getPayment').callsFake(() => new Promise((resolve, reject) => {resolve([])}));
 		request(app)
 			.get('/payments/id/1')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(404)
 			.end((err, res) => {
@@ -139,6 +195,7 @@ describe('Tracking Routes', () => {
 		request(app)
 			.get('/payments/id/1')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(500)
 			.end((err, res) => {
@@ -153,6 +210,7 @@ describe('Tracking Routes', () => {
 			.put('/payments/id/1')
 			.send({status: 'CANCELADO'})
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(200)
 			.end((err, res) => {
@@ -162,10 +220,25 @@ describe('Tracking Routes', () => {
 			})
 	});
 
+	it('Update payment without token gets 401', (done) => {
+		request(app)
+			.put('/payments/id/1')
+			.send({status: 'CANCELADO'})
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(401)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 0, message: 'Unauthorized Access'});
+				done();
+			});
+	});
+
 	it('Update single payment without status', (done) => {
 		request(app)
 			.put('/payments/id/1')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(400)
 			.end((err, res) => {
@@ -182,6 +255,7 @@ describe('Tracking Routes', () => {
 			.put('/payments/id/1')
 			.send({status: 'CANCELADO'})
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(404)
 			.end((err, res) => {
@@ -198,6 +272,7 @@ describe('Tracking Routes', () => {
 			.put('/payments/id/1')
 			.send({status: 'CANCELADO'})
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(500)
 			.end((err, res) => {
@@ -211,11 +286,25 @@ describe('Tracking Routes', () => {
 		request(app)
 			.get('/payments/methods')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(200)
 			.end((err, res) => {
 				expect(err).to.equal(null);
 				expect(res.body).to.deep.equal(paymentMethodsMock);
+				done();
+			});
+	});
+
+	it('Get Payment Methods without token gets 401', (done) => {
+		request(app)
+			.get('/payments/methods')
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(401)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 0, message: 'Unauthorized Access'});
 				done();
 			});
 	});
@@ -227,6 +316,7 @@ describe('Tracking Routes', () => {
 		request(app)
 			.get('/payments/methods')
 			.set('Accept', 'applicacion/json')
+			.set('Authorization', 'Bearer ' + token)
 			.expect('Content-Type', /json/)
 			.expect(500)
 			.end((err, res) => {
