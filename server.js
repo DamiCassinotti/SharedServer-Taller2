@@ -25,7 +25,7 @@ bootstrapApp = () => {
 	app.use(bodyParser.urlencoded({extended: true}));
 	app.use(bodyParser.json());
 
-	loginRoutes(app);
+	app.use('/user', loginRoutes);
 	app.use('/tracking', trackingRoutes);
 	app.use('/payments', paymentsRoutes);
 	app.use('/servers', appServerRoutes);
