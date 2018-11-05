@@ -43,5 +43,37 @@ describe('Login Routes', () => {
 			});
 	});
 
+	it('Login with invalid credentials', (done) => {
+		loginStub.restore();
+		loginStub = sinon.stub(loginController, 'login').callsFake(() => new Promise((resolve, reject) => {resolve(null)}));
+		request(app)
+			.post('/user/token')
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(401)
+			.send(loginMocks.correctLogin)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 3, message: 'Invalid credentials'});
+				done();
+			});
+	});
+
+	it('Login with error', (done) => {
+		loginStub.restore();
+		loginStub = sinon.stub(loginController, 'login').callsFake(() => new Promise((resolve, reject) => {reject('testError')}));
+		request(app)
+			.post('/user/token')
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(500)
+			.send(loginMocks.correctLogin)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 1, message: 'Unexpected Error'});
+				done();
+			});
+	});
+
 
 });
