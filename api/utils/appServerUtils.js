@@ -1,4 +1,5 @@
 const config = require('../../config.json');
+const jwt = require('jsonwebtoken');
 
 exports.createServersReponseWithMetadata = (servers) => {
 	var response = {
@@ -18,8 +19,12 @@ exports.createServerReponseWithMetadataAndToken = (server) => {
 		},
 		server: {
 			token: {
-				expiresAt: 0,
-				token: "12345678"
+				expiresAt: new Date(new Date().getTime() + config.tokens.expiresIn*1000),
+				token: jwt.sign(
+					{ id: server.id, name: server.name },
+					config.tokens.secret,
+					{ expiresIn: config.tokens.expiresIn }
+				)
 			}
 		}
 	}
