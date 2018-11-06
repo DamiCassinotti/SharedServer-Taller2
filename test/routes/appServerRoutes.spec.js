@@ -3,6 +3,7 @@ const request = require('supertest');
 const sinon = require('sinon');
 const app = require('../../server.js').bootstrapApp();
 const appServerController = require('../../api/controllers/appServerController');
+const loginService = require('../../api/services/loginService');
 const serverRequestMock = require('../mocks/serverRequestMock');
 const serverResponseMock = require('../mocks/serverResponseMock');
 
@@ -12,6 +13,7 @@ describe('App Server Routes', () => {
 	let getServerStub = null;
 	let deleteServerStub = null;
 	let updateServerStub = null;
+	let loginStub = null;
 	let token = null;
 
 	beforeEach((done) => {
@@ -20,6 +22,7 @@ describe('App Server Routes', () => {
 		getServerStub = sinon.stub(appServerController, 'getServer').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.controllerResponseGetServer)}));
 		deleteServerStub = sinon.stub(appServerController, 'deleteServer').callsFake(() => new Promise((resolve, reject) => {resolve(1)}));
 		updateServerStub = sinon.stub(appServerController, 'updateServer').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.controllerResponseGetServer)}));
+		loginStub = sinon.stub(loginService, 'isValidLogin').callsFake(() => new Promise((resolve, reject) => {resolve(true)}));
 		request(app)
 			.post('/user/token')
 			.send({username: 'administrator', password: 'password'})
@@ -35,6 +38,7 @@ describe('App Server Routes', () => {
 		getServerStub.restore();
 		deleteServerStub.restore();
 		updateServerStub.restore();
+		loginStub.restore();
 	});
 
 	it('Get Servers', (done) => {

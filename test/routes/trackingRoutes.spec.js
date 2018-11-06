@@ -4,12 +4,14 @@ const request = require('supertest');
 const sinon = require('sinon');
 const trackingMock = require('../mocks/trackingMock');
 const app = require('../../server.js').bootstrapApp();
+const loginService = require('../../api/services/loginService');
 
 describe('Tracking Routes', () => {
 	let addTrackingStub = null;
 	let getTrackingsStub = null;
 	let getTrackingStub = null;
 	let updateTrackingStub = null;
+	let loginStub = null;
 	let token = null;
 
 	beforeEach((done) => {
@@ -17,6 +19,7 @@ describe('Tracking Routes', () => {
 		getTrackingsStub = sinon.stub(trackingController, 'get_trackings').callsFake(() => new Promise((resolve, reject) => {resolve([trackingMock])}));
 		getTrackingStub = sinon.stub(trackingController, 'get_tracking').callsFake(() => new Promise((resolve, reject) => {resolve([trackingMock])}));
 		updateTrackingStub = sinon.stub(trackingController, 'update_tracking').callsFake(() => new Promise((resolve, reject) => {resolve(trackingMock)}));
+		loginStub = sinon.stub(loginService, 'isValidLogin').callsFake(() => new Promise((resolve, reject) => {resolve(true)}));
 		request(app)
 			.post('/user/token')
 			.send({username: 'administrator', password: 'password'})
@@ -31,6 +34,7 @@ describe('Tracking Routes', () => {
 		getTrackingsStub.restore();
 		getTrackingStub.restore();
 		updateTrackingStub.restore();
+		loginStub.restore();
 	});
 
 	it('Add new tracking', (done) => {

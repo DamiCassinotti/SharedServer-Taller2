@@ -5,6 +5,7 @@ const paymentsController = require('../../api/controllers/paymentsController');
 const paymentMethodsMock = require('../mocks/paymentMethodsMock');
 const paymentMocks = require('../mocks/paymentMocks');
 const app = require('../../server.js').bootstrapApp();
+const loginService = require('../../api/services/loginService');
 
 describe('Payment Routes', () => {
 	let addPaymentStub = null;
@@ -12,6 +13,7 @@ describe('Payment Routes', () => {
 	let getPaymentStub = null;
 	let updatePaymentStub = null;
 	let getPaymentMethodsStub = null;
+	let loginStub = null;
 	let token = null;
 
 	beforeEach((done) => {
@@ -20,6 +22,7 @@ describe('Payment Routes', () => {
 		getPaymentStub = sinon.stub(paymentsController, 'getPayment').callsFake(() => new Promise((resolve, reject) => {resolve([paymentMocks.efectivo])}));
 		updatePaymentStub = sinon.stub(paymentsController, 'updatePayment').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMocks.efectivo)}));
 		getPaymentMethodsStub = sinon.stub(paymentsController, 'getPaymentsMethods').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMethodsMock)}));
+		loginStub = sinon.stub(loginService, 'isValidLogin').callsFake(() => new Promise((resolve, reject) => {resolve(true)}));
 		request(app)
 			.post('/user/token')
 			.send({username: 'administrator', password: 'password'})
@@ -35,6 +38,7 @@ describe('Payment Routes', () => {
 		getPaymentStub.restore();
 		updatePaymentStub.restore();
 		getPaymentMethodsStub.restore();
+		loginStub.restore();
 	});
 
 	it('Get Payments', (done) => {
