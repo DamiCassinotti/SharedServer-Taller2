@@ -16,7 +16,6 @@ exports.login = (username, password) => {
 					return resolve(null);
 				resolve(loginUtils.generateLoginResponse(token));
 			})
-			.catch(err => reject(err))
-
+			.catch(err => reject(err));
 	})
 };
