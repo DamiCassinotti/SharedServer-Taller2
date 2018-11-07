@@ -13,6 +13,7 @@ describe('App Server Routes', () => {
 	let getServerStub = null;
 	let deleteServerStub = null;
 	let updateServerStub = null;
+	let resetTokenServerStub = null;
 	let loginStub = null;
 	let token = null;
 
@@ -22,6 +23,7 @@ describe('App Server Routes', () => {
 		getServerStub = sinon.stub(appServerController, 'getServer').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.controllerResponseGetServer)}));
 		deleteServerStub = sinon.stub(appServerController, 'deleteServer').callsFake(() => new Promise((resolve, reject) => {resolve(1)}));
 		updateServerStub = sinon.stub(appServerController, 'updateServer').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.controllerResponseGetServer)}));
+		resetTokenServerStub = sinon.stub(appServerController, 'resetToken').callsFake(() => new Promise((resolve, reject) => {resolve(serverResponseMock.controllerResponse)}));
 		loginStub = sinon.stub(loginService, 'isValidLogin').callsFake(() => new Promise((resolve, reject) => {resolve(true)}));
 		request(app)
 			.post('/user/token')
@@ -38,6 +40,7 @@ describe('App Server Routes', () => {
 		getServerStub.restore();
 		deleteServerStub.restore();
 		updateServerStub.restore();
+		resetTokenServerStub.restore();
 		loginStub.restore();
 	});
 
@@ -369,5 +372,49 @@ describe('App Server Routes', () => {
 				done();
 			})
 	});
+
+	it('Reset server token', (done) => {
+		request(app)
+			.post('/servers/1')
+			.set('Authorization', 'Bearer ' + token)
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(201)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal(serverResponseMock.controllerResponse);
+				done();
+			})
+	});
+
+	it('Reset server token without token gets 401 ???????', (done) => {
+		request(app)
+			.post('/servers/1')
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(401)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 0, message: 'Unauthorized Access'});
+				done();
+			});
+	});
+
+	it('Reset server token not found', (done) => {
+		resetTokenServerStub.restore();
+		resetTokenServerStub = sinon.stub(appServerController, 'resetToken').callsFake(() => new Promise((resolve, reject) => {resolve({server:{}})}));
+		request(app)
+			.post('/servers/1')
+			.set('Authorization', 'Bearer ' + token)
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(404)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 1, message: 'Server not found'});
+				done();
+			})
+	});
+
 
 });

@@ -60,7 +60,7 @@ router.post('/:idServer', (req, res, then) => {
 	var idServer = req.params.idServer;
 	appServerController.resetToken(idServer)
 		.then(server => {
-			if (!server.server)
+			if (!server.server.server)
 				return res.status(404).json(errorModel.newError(1, "Server not found"));
 			res.status(201).json(server)
 		})

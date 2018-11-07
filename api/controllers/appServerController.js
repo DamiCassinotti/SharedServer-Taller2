@@ -44,7 +44,7 @@ exports.deleteServer = (idServer) => {
 exports.resetToken = (idServer) => {
 	return new Promise((resolve, reject) => {
 		appServerService.getServer(idServer)
-			.then(newServer => resolve(appServerUtils.createServerReponseWithMetadataAndToken(newServer)))
+			.then(server => resolve(appServerUtils.createServerReponseWithMetadataAndToken(server)))
 			.catch(error => reject(error));
 	})
 }

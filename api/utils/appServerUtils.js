@@ -20,11 +20,7 @@ exports.createServerReponseWithMetadataAndToken = (server) => {
 		server: {
 			token: {
 				expiresAt: new Date(new Date().getTime() + config.tokens.expiresIn*1000),
-				token: jwt.sign(
-					{ id: server.id, name: server.name },
-					config.tokens.secret,
-					{ expiresIn: config.tokens.expiresIn }
-				)
+				token: generateToken(server)
 			}
 		}
 	}
@@ -52,4 +48,13 @@ var mapServer = (server) => {
 		name: server.name,
 		lastConnection: server.lastconnection
 	}
+}
+
+var generateToken = (server) => {
+	if (!server) return;
+	return jwt.sign(
+		{ id: server.id, name: server.name },
+		config.tokens.secret,
+		{ expiresIn: config.tokens.expiresIn }
+	)
 }
