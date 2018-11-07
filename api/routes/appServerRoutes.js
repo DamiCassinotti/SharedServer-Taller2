@@ -56,4 +56,15 @@ router.delete('/:idServer', (req, res, then) => {
 		.catch(error => then({name: 'UnexpectedError'}));
 });
 
+router.post('/:idServer', (req, res, then) => {
+	var idServer = req.params.idServer;
+	appServerController.resetToken(idServer)
+		.then(server => {
+			if (!server.server)
+				return res.status(404).json(errorModel.newError(1, "Server not found"));
+			res.status(201).json(server)
+		})
+		.catch(error => then({name: 'UnexpectedError'}));
+});
+
 module.exports = router;
