@@ -1,0 +1,19 @@
+{
+	"correctLogin": {
+		"username": "administrator",
+		"password": "password"
+	},
+	"incorrectLogin": {
+		"username": "incorrectUsername",
+		"password": "incorrectPassword"
+	},
+	"controllerResponse": {
+		"metadata": {
+			"version": 1.0
+		},
+		"token": {
+			"token": "AABBCC123",
+			"expiresAt": "2018-10-11T19:17:34.156Z"
+		}
+	}
+}

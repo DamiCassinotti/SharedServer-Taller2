@@ -44,7 +44,10 @@ describe('App Server Controller', () => {
 	it('Add Server', (done) => {
 		appServerController.addServer(serverRequestMock.alta)
 			.then(server => {
-				expect(server).to.deep.equal(serverResponseMock.controllerResponse);
+				expect(server.metadata).to.deep.equal(serverResponseMock.controllerResponse.metadata);
+				expect(server.server.server).to.deep.equal(serverResponseMock.controllerResponse.server.server);
+				expect(server.server.token.expiresAt).to.be.a('date');
+				expect(server.server.token.token).to.be.a('string');
 				done();
 			})
 			.catch(err => {
@@ -139,6 +142,36 @@ describe('App Server Controller', () => {
 		deleteServerStub.restore();
 		deleteServerStub = sinon.stub(appServerService, 'deleteServer').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
 		appServerController.deleteServer(1)
+			.then(server => {
+				expect(true).to.equal(false);
+				done();
+			})
+			.catch(err => {
+				expect(err).to.deep.equal('test error');
+				done();
+			});
+	});
+
+	it('Reset server token', (done) => {
+		appServerController.resetToken(1)
+			.then(server => {
+				expect(server.metadata).to.deep.equal(serverResponseMock.controllerResponse.metadata);
+				expect(server.server.server).to.deep.equal(serverResponseMock.controllerResponse.server.server);
+				expect(server.server.token.expiresAt).to.be.a('date');
+				expect(server.server.token.token).to.be.a('string');
+				done();
+			})
+			.catch(err => {
+				console.log(err);
+				expect(true).to.equal(false);
+				done();
+			});
+	});
+
+	it('Reset server token with error', (done) => {
+		getServerStub.restore();
+		getServerStub = sinon.stub(appServerService, 'getServer').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
+		appServerController.resetToken(1)
 			.then(server => {
 				expect(true).to.equal(false);
 				done();
