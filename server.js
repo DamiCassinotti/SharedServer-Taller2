@@ -44,6 +44,10 @@ bootstrapApp = () => {
 				res.status(400).send(errorModel.newError(2, 'Parametros erroneos'));
         		break;
 			}
+			case 'BadRev': {
+				res.status(409).send(errorModel.newError(3, 'Update conflict'));
+        		break;
+			}
 		}
 	});
 

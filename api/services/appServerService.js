@@ -34,7 +34,11 @@ exports.getServer = (idServer) => {
 }
 
 exports.updateServer = (idServer, server) => {
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
+		var isAbleToUpdate = await client.query('select count(1) where id = $1 and _rev = $2', [idServer, server._rev]);
+		if (isAbleToUpdate.rows[0].count == 0)
+			return reject({name: 'BadRev'})
+		server._rev = server._rev + 1;
 		var query = {
 			text: 'update server set name = $2, _rev = $3 where id = $1 returning id, _rev, createdBy, createdTime, name, lastConnection;',
 			values: [idServer, server.name, server._rev]
