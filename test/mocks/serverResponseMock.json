@@ -6,7 +6,7 @@
 	    "server": {
 	        "server": {
 	            "id": 3,
-	            "_rev": "0",
+	            "_rev": 0,
 	            "createdBy": "Damian",
 	            "createdTime": "2018-10-11T19:17:34.156Z",
 	            "name": "server1",
@@ -24,7 +24,7 @@
 	    },
         "server": {
             "id": 3,
-            "_rev": "0",
+            "_rev": 0,
             "createdBy": "Damian",
             "createdTime": "2018-10-11T19:17:34.156Z",
             "name": "server1",
@@ -38,7 +38,7 @@
 	    },
 	    "servers": [{
 	        "id": 3,
-	        "_rev": "0",
+	        "_rev": 0,
 	        "createdBy": "Damian",
 	        "createdTime": "2018-10-11T19:17:34.156Z",
 	        "name": "server1",
@@ -47,7 +47,7 @@
 	},
 	"serviceResponse": {
 		"id": 3,
-		"_rev": "0",
+		"_rev": 0,
 		"createdby": "Damian",
 		"createdtime": "2018-10-11T19:17:34.156Z",
 		"name": "server1",

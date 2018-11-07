@@ -281,6 +281,23 @@ describe('App Server Routes', () => {
 			})
 	});
 
+	it('Update server with rev error', (done) => {
+		updateServerStub.restore();
+		updateServerStub = sinon.stub(appServerController, 'updateServer').callsFake(() => new Promise((resolve, reject) => {reject({name: 'BadRev'})}));
+		request(app)
+			.put('/servers/1')
+			.send({name: 'updatedServer', _rev: "0"})
+			.set('Authorization', 'Bearer ' + token)
+			.set('Accept', 'applicacion/json')
+			.expect('Content-Type', /json/)
+			.expect(409)
+			.end((err, res) => {
+				expect(err).to.equal(null);
+				expect(res.body).to.deep.equal({code: 3, message: 'Update conflict'});
+				done();
+			})
+	});
+
 	it('Update server without token gets 401', (done) => {
 		request(app)
 			.put('/servers/1')

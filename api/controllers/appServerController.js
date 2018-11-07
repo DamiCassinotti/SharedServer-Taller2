@@ -26,7 +26,7 @@ exports.getServer = (idServer) => {
 }
 
 exports.updateServer = (idServer, server) => {
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve, reject, then) => {
 		appServerService.updateServer(idServer, server)
 			.then(newServer => resolve(appServerUtils.createServerReponseWithMetadata(newServer)))
 			.catch(error => reject(error));

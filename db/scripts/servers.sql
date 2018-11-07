@@ -6,3 +6,5 @@ create table if not exists server (
 	name text,
 	lastConnection timestamp
 );
+
+alter table server alter column _rev type integer using (_rev::integer);

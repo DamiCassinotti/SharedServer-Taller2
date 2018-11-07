@@ -42,7 +42,11 @@ router.put('/:idServer', (req, res, then) => {
 				return res.status(404).json(errorModel.newError(1, "Server not found"));
 			res.status(200).json(server)
 		})
-		.catch(error => then({name: 'UnexpectedError'}));
+		.catch(error => {
+			if (error.name == 'BadRev')
+				return then(error);
+			then({name: 'UnexpectedError'})
+		});
 });
 
 router.delete('/:idServer', (req, res, then) => {

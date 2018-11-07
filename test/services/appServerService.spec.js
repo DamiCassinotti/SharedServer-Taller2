@@ -37,7 +37,7 @@ describe('App Server Service', () => {
 		var server = await appServerService.addServer(serverRequestMock.alta);
 
 		expect(server).not.to.be.undefined;
-		expect(server._rev).to.equal('0');
+		expect(server._rev).to.equal(0);
 		expect(server.createdby).to.equal(serverRequestMock.alta.createdBy);
 		expect(server.name).to.equal(serverRequestMock.alta.name);
 		expect(server.createdtime).to.be.a('date');
@@ -141,14 +141,33 @@ describe('App Server Service', () => {
 
 		var update = {
 			name: 'updated',
-			_rev: '1'
+			_rev: server._rev
 		}
 		var updatedServer = await appServerService.updateServer(server.id, update);
 
 		expect(updatedServer).to.not.be.undefined;
 		expect(updatedServer.id).to.equal(server.id);
 		expect(updatedServer.name).to.equal(update.name);
-		expect(updatedServer._rev).to.equal(update._rev);
+		expect(updatedServer._rev).to.equal(update._rev + 1);
+	});
+
+	it('Update one server with wrong _rev', (done) => {
+		appServerService.addServer(serverRequestMock.alta)
+			.then(server => {
+				var update = {
+					name: 'updated',
+					_rev: '1234'
+				}
+				appServerService.updateServer(server.id, update)
+					.then(server => {
+						expect(true).to.equal(false);
+						done();
+					})
+					.catch(error => {
+						expect(error).to.deep.equal({name: 'BadRev'});
+						done();
+					});
+			});
 	});
 
 	it('Update one server without inserting', async () => {
@@ -163,7 +182,7 @@ describe('App Server Service', () => {
 
 	it('Update one server without parameters throws error', (done) => {
 		appServerService.updateServer()
-			.then(tracking => {
+			.then(server => {
 				expect(true).to.equal(false);
 				done();
 			})
