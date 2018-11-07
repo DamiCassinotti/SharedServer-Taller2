@@ -148,7 +148,14 @@ describe('App Server Service', () => {
 		expect(updatedServer).to.not.be.undefined;
 		expect(updatedServer.id).to.equal(server.id);
 		expect(updatedServer.name).to.equal(update.name);
-		expect(updatedServer._rev).to.equal(update._rev + 1);
+		expect(updatedServer._rev).to.equal(1);
+
+		update = {
+			name: 'updated',
+			_rev: 1
+		}
+		updatedServer = await appServerService.updateServer(server.id, update);
+		expect(updatedServer._rev).to.equal(2);
 	});
 
 	it('Update one server with wrong _rev', (done) => {
@@ -156,7 +163,7 @@ describe('App Server Service', () => {
 			.then(server => {
 				var update = {
 					name: 'updated',
-					_rev: '1234'
+					_rev: 1234
 				}
 				appServerService.updateServer(server.id, update)
 					.then(server => {
