@@ -4,7 +4,7 @@ var express = require('express'),
 	paymentsRoutes = require('./api/routes/paymentsRoutes'),
 	appServerRoutes = require('./api/routes/appServerRoutes'),
 	bodyParser = require('body-parser'),
-	port = process.env.PORT || 5001,
+	port = process.env.PORT || 5003,
 	yaml = require('js-yaml'),
 	fs = require('fs'),
 	jwt = require('express-jwt'),
@@ -17,6 +17,12 @@ client = new pg.Client(connectionString);
 
 bootstrapApp = () => {
 	var app = express();
+
+	app.use(function(req, res, next) {
+	  res.header("Access-Control-Allow-Origin", "*");
+	  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+	  next();
+	});
 
 	app.use(jwt({secret: config.tokens.secret}).unless({
 		path: ['/user/token']
