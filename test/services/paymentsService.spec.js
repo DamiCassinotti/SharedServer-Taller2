@@ -3,6 +3,7 @@ const paymentsService = require('../../api/services/paymentsService');
 const paymentMocks = require('../mocks/paymentMocks');
 const app = require('../../server.js').bootstrapApp();
 const pg = require('pg');
+const config = require('../../config.json');
 
 describe('Payment Service', () => {
 

@@ -1,3 +1,0 @@
-database:
-    testing: "postgres://postgres:@localhost:5432/shared_server_travis"
-version: 1.0

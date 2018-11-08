@@ -1,4 +1,0 @@
-database:
-    default: "postgres://damian:password@localhost:5432/damian"
-    testing: "postgres://damian:password@localhost:5432/shared_server_test"
-version: 1.0
