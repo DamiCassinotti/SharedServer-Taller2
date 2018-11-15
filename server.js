@@ -3,6 +3,7 @@ var express = require('express'),
 	trackingRoutes = require('./api/routes/trackingRoutes'),
 	paymentsRoutes = require('./api/routes/paymentsRoutes'),
 	appServerRoutes = require('./api/routes/appServerRoutes'),
+	deliveriesRoutes = require('./api/routes/deliveriesRoutes'),
 	bodyParser = require('body-parser'),
 	port = process.env.PORT || 5003,
 	jwt = require('express-jwt'),
@@ -37,6 +38,7 @@ bootstrapApp = () => {
 	app.use('/tracking', trackingRoutes);
 	app.use('/payments', paymentsRoutes);
 	app.use('/servers', appServerRoutes);
+	app.use('/deliveries', deliveriesRoutes);
 
 	app.use((err, req, res, next) => {
 		switch (err.name) {

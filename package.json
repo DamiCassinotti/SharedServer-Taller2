@@ -19,6 +19,7 @@
     "express": "^4.16.3",
     "express-jwt": "^5.3.1",
     "jsonwebtoken": "^8.3.0",
+    "nools": "^0.4.4",
     "pg": "^7.4.3",
     "request": "^2.88.0",
     "request-promise": "^4.2.2"
