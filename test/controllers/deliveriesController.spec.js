@@ -134,4 +134,22 @@ describe('Login Controller', () => {
 			})
 	});
 
+	it('Costs cant be below 0', (done) => {
+		deliveryRequestMock.distance = 5; // Cost = 75
+		deliveryResponseMock.distance = deliveryRequestMock.distance;
+		deliveryRequestMock.user.deliveries = 0; // 100ARS off
+		deliveryResponseMock.user.deliveries = deliveryRequestMock.user.deliveries;
+		deliveryResponseMock.cost = 0
+		deliveriesController.estimate(deliveryRequestMock)
+			.then(delivery => {
+				expect(delivery).to.deep.equal(deliveryResponseMock);
+				done();
+			})
+			.catch(error => {
+				console.log(error);
+				expect(false).to.be.true;
+				done();
+			})
+	});
+
 });
