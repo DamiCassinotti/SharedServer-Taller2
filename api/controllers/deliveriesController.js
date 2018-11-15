@@ -34,7 +34,7 @@ const flow = nools.flow("Delivery cost estimation", (flow) => {
 		facts.result.isAbleToDeliver = false;
 	});
 
-	flow.rule("Descuento de 5% a partir del 10mo viaje", [[Delivery, "delivery", "delivery.deliveries > 10"], [Result, "result"]], (facts) => {
+	flow.rule("Descuento de 5% a partir del 10mo viaje", [[Delivery, "delivery", "delivery.deliveries >= 10"], [Result, "result"]], (facts) => {
 		facts.result.cost *= 0.95;
 	});
 });

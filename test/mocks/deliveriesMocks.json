@@ -1,0 +1,22 @@
+{
+	"request": {
+		"ammount": 1000,
+		"distance": 10,
+		"user": {
+			"email": "damiancassinotti@gmail.com",
+			"points": 10,
+			"deliveries": 5
+		}
+	},
+	"response": {
+		"ammount": 1000,
+		"distance": 10,
+		"user": {
+			"email": "damiancassinotti@gmail.com",
+			"points": 10,
+			"deliveries": 5
+		},
+		"isAbleToDeliver": true,
+		"cost": 150
+	}
+}
