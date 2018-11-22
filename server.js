@@ -4,6 +4,7 @@ var express = require('express'),
 	paymentsRoutes = require('./api/routes/paymentsRoutes'),
 	appServerRoutes = require('./api/routes/appServerRoutes'),
 	deliveriesRoutes = require('./api/routes/deliveriesRoutes'),
+	requestsController = require('./api/controllers/requestsController'),
 	bodyParser = require('body-parser'),
 	port = process.env.PORT || 5003,
 	jwt = require('express-jwt'),
@@ -25,6 +26,14 @@ bootstrapApp = () => {
 	  		res.send(200)
 		else
 			next();
+	});
+
+	app.use((req, res, next) => {
+		var startTime = Date.now()
+		res.on('finish', () => {
+			requestsController.reportRequest(res.req.originalUrl, res.statusCode, Date.now() - startTime);
+		});
+		next();
 	});
 
 	app.use(jwt({secret: config.tokens.secret}).unless({
