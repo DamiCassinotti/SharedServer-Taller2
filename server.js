@@ -4,6 +4,7 @@ var express = require('express'),
 	paymentsRoutes = require('./api/routes/paymentsRoutes'),
 	appServerRoutes = require('./api/routes/appServerRoutes'),
 	deliveriesRoutes = require('./api/routes/deliveriesRoutes'),
+	reportsRoutes = require('./api/routes/reportsRoutes'),
 	requestsController = require('./api/controllers/requestsController'),
 	bodyParser = require('body-parser'),
 	port = process.env.PORT || 5003,
@@ -29,9 +30,11 @@ bootstrapApp = () => {
 	});
 
 	app.use((req, res, next) => {
-		var startTime = Date.now()
+		var startTime = Date.now();
+		// console.log(req);
 		res.on('finish', () => {
-			requestsController.reportRequest(res.req.originalUrl, res.statusCode, Date.now() - startTime);
+			console.log([res.req.baseUrl, res.req.route.path]);
+			requestsController.reportRequest(res.req.baseUrl + res.req.route.path, req.method, res.statusCode, Date.now() - startTime);
 		});
 		next();
 	});
@@ -48,6 +51,7 @@ bootstrapApp = () => {
 	app.use('/payments', paymentsRoutes);
 	app.use('/servers', appServerRoutes);
 	app.use('/deliveries', deliveriesRoutes);
+	app.use('/report', reportsRoutes);
 
 	app.use((err, req, res, next) => {
 		switch (err.name) {
