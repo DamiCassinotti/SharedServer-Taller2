@@ -4,6 +4,8 @@ var express = require('express'),
 	paymentsRoutes = require('./api/routes/paymentsRoutes'),
 	appServerRoutes = require('./api/routes/appServerRoutes'),
 	deliveriesRoutes = require('./api/routes/deliveriesRoutes'),
+	reportsRoutes = require('./api/routes/reportsRoutes'),
+	requestsController = require('./api/controllers/requestsController'),
 	bodyParser = require('body-parser'),
 	port = process.env.PORT || 5003,
 	jwt = require('express-jwt'),
@@ -31,6 +33,14 @@ bootstrapApp = () => {
 		path: ['/user/token']
 	}));
 
+	app.use((req, res, next) => {
+		var startTime = Date.now();
+		res.on('finish', () => {
+			requestsController.reportRequest(res.req.baseUrl + res.req.route.path, req.method, res.statusCode, Date.now() - startTime);
+		});
+		next();
+	});
+
 	app.use(bodyParser.urlencoded({extended: true}));
 	app.use(bodyParser.json());
 
@@ -39,6 +49,7 @@ bootstrapApp = () => {
 	app.use('/payments', paymentsRoutes);
 	app.use('/servers', appServerRoutes);
 	app.use('/deliveries', deliveriesRoutes);
+	app.use('/report', reportsRoutes);
 
 	app.use((err, req, res, next) => {
 		switch (err.name) {
