@@ -5,7 +5,7 @@ exports.isValidServerForAdding = (server) => {
 }
 
 exports.isValidServerForUpdating = (server) => {
-	if (!server || !server.name || !server._rev)
+	if (!server || !server.name || isNaN(server._rev))
 		return false;
 	return true;
 }
