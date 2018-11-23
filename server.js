@@ -29,6 +29,10 @@ bootstrapApp = () => {
 			next();
 	});
 
+	app.use(jwt({secret: config.tokens.secret}).unless({
+		path: ['/user/token']
+	}));
+
 	app.use((req, res, next) => {
 		var startTime = Date.now();
 		res.on('finish', () => {
@@ -36,10 +40,6 @@ bootstrapApp = () => {
 		});
 		next();
 	});
-
-	app.use(jwt({secret: config.tokens.secret}).unless({
-		path: ['/user/token']
-	}));
 
 	app.use(bodyParser.urlencoded({extended: true}));
 	app.use(bodyParser.json());
