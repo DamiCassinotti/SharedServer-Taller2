@@ -55,7 +55,7 @@ router.delete('/:idServer', (req, res, then) => {
 		.then(server => {
 			if (!server)
 				return res.status(404).json(errorModel.newError(1, "Server not found"));
-			res.status(204).send();
+			res.status(204).json();
 		})
 		.catch(error => then({name: 'UnexpectedError'}));
 });
