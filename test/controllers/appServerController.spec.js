@@ -46,7 +46,6 @@ describe('App Server Controller', () => {
 			.then(server => {
 				expect(server.metadata).to.deep.equal(serverResponseMock.controllerResponse.metadata);
 				expect(server.server.server).to.deep.equal(serverResponseMock.controllerResponse.server.server);
-				expect(server.server.token.expiresAt).to.be.a('date');
 				expect(server.server.token.token).to.be.a('string');
 				done();
 			})

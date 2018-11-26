@@ -12,6 +12,21 @@ exports.createServersReponseWithMetadata = (servers) => {
 	return response;
 }
 
+exports.createServerReponseWithMetadataAndUnexpiringToken = (server) => {
+	var response = {
+		metadata: {
+			version: config.version
+		},
+		server: {
+			token: {
+				token: generateUnexpiringToken(server)
+			}
+		}
+	}
+	response.server.server = mapServer(server);
+	return response;
+}
+
 exports.createServerReponseWithMetadataAndToken = (server) => {
 	var response = {
 		metadata: {
@@ -48,6 +63,14 @@ var mapServer = (server) => {
 		name: server.name,
 		lastConnection: server.lastconnection
 	}
+}
+
+var generateUnexpiringToken = (server) => {
+	if (!server) return;
+	return jwt.sign(
+		{ id: server.id, name: server.name },
+		config.tokens.secret
+	)
 }
 
 var generateToken = (server) => {

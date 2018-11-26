@@ -12,7 +12,7 @@ exports.getServers = () => {
 exports.addServer = (server) => {
 	return new Promise((resolve, reject) => {
 		appServerService.addServer(server)
-			.then(newServer => resolve(appServerUtils.createServerReponseWithMetadataAndToken(newServer)))
+			.then(newServer => resolve(appServerUtils.createServerReponseWithMetadataAndUnexpiringToken(newServer)))
 			.catch(error => reject(error));
 	})
 }

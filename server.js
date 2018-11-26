@@ -30,7 +30,7 @@ bootstrapApp = () => {
 	});
 
 	app.use(jwt({secret: config.tokens.secret}).unless({
-		path: ['/user/token']
+		path: ['/user/token', { url: '/servers', methods: ['POST'] }]
 	}));
 
 	app.use((req, res, next) => {

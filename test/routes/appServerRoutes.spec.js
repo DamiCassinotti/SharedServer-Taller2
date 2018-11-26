@@ -91,7 +91,6 @@ describe('App Server Routes', () => {
 		request(app)
 			.post('/servers')
 			.set('Accept', 'applicacion/json')
-			.set('Authorization', 'Bearer ' + token)
 			.send(serverRequestMock.alta)
 			.expect('Content-Type', /json/)
 			.expect(201)
@@ -102,27 +101,12 @@ describe('App Server Routes', () => {
 			});
 	});
 
-	it('Add Server without token gets 401', (done) => {
-		request(app)
-			.post('/servers')
-			.set('Accept', 'applicacion/json')
-			.send(serverRequestMock.alta)
-			.expect('Content-Type', /json/)
-			.expect(401)
-			.end((err, res) => {
-				expect(err).to.equal(null);
-				expect(res.body).to.deep.equal({code: 0, message: 'Unauthorized Access'});
-				done();
-			});
-	});
-
 	it('Add invalid Server', (done) => {
 		var server = JSON.parse(JSON.stringify(serverRequestMock.alta));
 		server.name = undefined;
 		request(app)
 			.post('/servers')
 			.set('Accept', 'applicacion/json')
-			.set('Authorization', 'Bearer ' + token)
 			.send(server)
 			.expect('Content-Type', /json/)
 			.expect(400)
@@ -139,7 +123,6 @@ describe('App Server Routes', () => {
 		request(app)
 			.post('/servers')
 			.set('Accept', 'applicacion/json')
-			.set('Authorization', 'Bearer ' + token)
 			.send(serverRequestMock.alta)
 			.expect('Content-Type', /json/)
 			.expect(500)
