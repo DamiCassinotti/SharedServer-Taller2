@@ -40,7 +40,7 @@ var getPayment = (idPayment) => {
 	});
 }
 
-exports.getPayment = getPayment; 
+exports.getPayment = getPayment;
 
 exports.updatePayment = (idPayment, status) => {
 	return new Promise((resolve, reject) => {
@@ -58,7 +58,14 @@ exports.updatePayment = (idPayment, status) => {
 }
 
 exports.getPaymentsMethods = () => {
-	return paymentMethods.getPaymentsMethods();
+	var query = {
+		text: 'select * from payment_methods;'
+	}
+	return new Promise((resolve, reject) => {
+		client.query(query)
+			.then(data => resolve(data.rows))
+			.catch(error => reject(error));
+	});
 }
 
 var addPaymentMethodOfPayment = (payment) => {

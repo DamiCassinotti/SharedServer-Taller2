@@ -1,6 +1,7 @@
 const expect = require('chai').expect;
 const paymentsService = require('../../api/services/paymentsService');
 const paymentMocks = require('../mocks/paymentMocks');
+const paymentMethodsMock = require('../mocks/paymentMethodsMock');
 const app = require('../../server.js').bootstrapApp();
 const pg = require('pg');
 const config = require('../../config.json');
@@ -135,12 +136,10 @@ describe('Payment Service', () => {
 		expect(samePayment).to.deep.equal([updatedPayment]);
 	});
 
-	it('Get Payments Methods', () => {
-		var methods = paymentsService.getPaymentsMethods();
+	it('Get Payments Methods', async () => {
+		var methods = await paymentsService.getPaymentsMethods();
 
-		expect(methods).not.to.be.undefined;
-		expect(methods).to.be.an('array');
-		expect(methods.length).to.equal(3);
+		expect(methods).to.deep.equal(paymentMethodsMock);
 	});
 
 });

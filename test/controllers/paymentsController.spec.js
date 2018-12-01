@@ -17,7 +17,7 @@ describe('Payment  Controller', () => {
 		getPaymentsStub = sinon.stub(paymentsService, 'getPayments').callsFake(() => new Promise((resolve, reject) => {resolve([paymentMocks.serviceResponseDebito, paymentMocks.serviceResponseEfectivo, paymentMocks.serviceResponseCredito])}));
 		getPaymentStub = sinon.stub(paymentsService, 'getPayment').callsFake(() => new Promise((resolve, reject) => {resolve([paymentMocks.serviceResponseEfectivo])}));
 		updatePaymentStub = sinon.stub(paymentsService, 'updatePayment').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMocks.serviceResponseEfectivo)}));
-		getPaymentsMethodsStub = sinon.stub(paymentsService, 'getPaymentsMethods').callsFake(() => paymentMethodsMock);
+		getPaymentsMethodsStub = sinon.stub(paymentsService, 'getPaymentsMethods').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMethodsMock)}));
 	});
 
 	afterEach(() => {

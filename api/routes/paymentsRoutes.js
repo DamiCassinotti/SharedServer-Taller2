@@ -36,7 +36,7 @@ router.put('/id/:idPayment', (req, res, then) => {
 	var idPayment = req.params.idPayment;
 	var status = req.body.status;
 	if (!status)
-		return res.status(400).json(errorModel.newError(2, 'Parametros erroneos'));
+		return then({name: 'ParametersError'});
 	paymentsController.updatePayment(idPayment, status)
 		.then(payment => {
 			if (!payment)

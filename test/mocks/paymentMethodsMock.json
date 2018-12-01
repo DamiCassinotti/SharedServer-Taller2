@@ -1,10 +1,21 @@
 [{
-	"description": "EFECTIVO",
-	"id": "Efectivo"
+	"_id": 1,
+	"name": "Efectivo",
+	"type": 0,
+	"image": "http://icons.iconarchive.com/icons/custom-icon-design/flatastic-11/256/Cash-icon.png"
 }, {
-	"description": "T_CREDITO",
-	"id": "Tarjeta de Credito"
+	"_id": 2,
+	"name": "VISA Crédito",
+	"type": 1,
+	"image": "https://cdn1.iconfinder.com/data/icons/credit-card-icons/512/visa.png"
 }, {
-	"description": "T_DEBITO",
-	"id": "Tarjeta de Debito"
+	"_id": 3,
+	"name": "VISA Débito",
+	"type": 1,
+	"image": "http://downloadicons.net/sites/default/files/visa-icon-65187.png"
+}, {
+	"_id": 4,
+	"name": "AMEX",
+	"type": 1,
+	"image": "https://cdn2.iconfinder.com/data/icons/credit-cards-6/156/american_express-512.png"
 }]

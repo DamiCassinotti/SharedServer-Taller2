@@ -584,13 +584,15 @@ definitions:
   Payment_Paymethod:
     type: "object"
     properties:
-      epiration_month:
+      epiration_date:
         type: "string"
-      expiration_year:
+      payment_method:
         type: "string"
-      method:
+      card_number:
         type: "string"
-      number:
+      security_code:
+        type: "string"
+      cardholder_name:
         type: "string"
   PaymentRequest:
     type: "object"

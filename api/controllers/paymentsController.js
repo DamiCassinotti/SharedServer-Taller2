@@ -28,13 +28,15 @@ exports.getPayment = (idPayment) => {
 exports.updatePayment = (idPayment, status) => {
 	return new Promise((resolve, reject) => {
 		paymentsService.updatePayment(idPayment, status)
-			.then(payment => resolve(paymentUtils.convertPaymentToModel(payment))) 
+			.then(payment => resolve(paymentUtils.convertPaymentToModel(payment)))
 			.catch(error => reject(error));
 	});
 }
 
 exports.getPaymentsMethods = () => {
 	return new Promise((resolve, reject) => {
-		resolve(paymentsService.getPaymentsMethods());
+		paymentsService.getPaymentsMethods()
+			.then(methods => resolve(methods))
+			.catch(error => reject(error));
 	})
 }
