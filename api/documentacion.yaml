@@ -20,7 +20,42 @@ tags:
   - name: app server
     description: |
       Llamados relacionados con la administración de los App Servers
+  - name: user
+    description: |
+      Llamados relacionados con la administración de los Usuarios
+  - name: delivery
+    description: |
+      Llamados relacionados con la administración de la estimacion de los envios
 paths:
+  /deliveries/estimate:
+    post:
+      tags: 
+        - delivery
+      description: Estimar el valor de un envío
+      parameters: 
+        - in: body
+          name: body
+          required: true
+          schema: 
+            $ref: "#/definitions/Trip"
+      responses: 
+        200: 
+          description: "Estimación correcta"
+          schema:
+            $ref: '#/definitions/TripWithCost'
+        400: 
+          description: "Parametros erroneos (Code 2)"
+          schema: 
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access (Code 1)"
+          schema:
+              $ref: '#/definitions/Error'
+        500: 
+          description: "Unexpected error (Code 0)"
+          schema: 
+            $ref: "#/definitions/Error"
+      summary: "Estimar costo de envio"
   /tracking:
     get:
       tags:
@@ -37,8 +72,12 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Tracking"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error. Code 0"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
     post:
@@ -54,8 +93,12 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Tracking"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error. Code 0"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
   /tracking/{trackingId}:
@@ -80,8 +123,12 @@ paths:
           description: "Viaje inexistente. Code 1"
           schema:
             $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error. Code 0"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
       summary: "Obtener información de un viaje"
@@ -104,15 +151,19 @@ paths:
             items:
               $ref: "#/definitions/Tracking"
         400:
-          description: "Parametros faltantes. Code 1"
+          description: "Parametros faltantes. Code 2"
           schema:
             $ref: "#/definitions/Error"
         404:
           description: "Viaje inexistente. Code 2"
           schema:
             $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error. Code 0"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
       summary: "Actualizar información de un viaje"
@@ -129,8 +180,12 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/PaymentResponse"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error. Code 0"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
     post:
@@ -155,12 +210,16 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/PaymentResponse"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error. Code 0"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
         400:
-          description: "Parametros erroneos. Code 1"
+          description: "Parametros erroneos. Code 2"
           schema:
             $ref: "#/definitions/Error"
   /payments/methods:
@@ -177,8 +236,12 @@ paths:
           description: "successful operation"
           schema:
             $ref: "#/definitions/Paymethod"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error. Code 0"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
   /payments/id/{paymentId}:
@@ -203,8 +266,12 @@ paths:
           description: "Pago inexistente. Code 1"
           schema:
             $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error. Code 0"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
       summary: "Obtener información de un pago"
@@ -238,8 +305,12 @@ paths:
           description: "Pago inexistente. Code 1"
           schema:
             $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error. Code 0"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
       summary: "Actualizar información de un pago"
@@ -259,8 +330,12 @@ paths:
               servers:
                 items:
                   $ref: '#/definitions/Server'
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error. Code 0"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
       summary: "Listado de application servers"
@@ -286,11 +361,15 @@ paths:
               server:
                 $ref: '#/definitions/CreateServerResponse'
         400:
-          description: "Incumplimiento de precondiciones (parámetros faltantes). Code 1"
+          description: "Parametros erroneos. Code 2"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
           schema:
             $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error. Code 0"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
       summary: "Dar de un application server"
@@ -318,8 +397,12 @@ paths:
           description: "Servidor inexistente. Code 1"
           schema:
             $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error. Code 0"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
       summary: "Obtener información de un servidor"
@@ -345,18 +428,49 @@ paths:
               server:
                 $ref: "#/definitions/Server"
         400:
-          description: "Incumplimiento de precondiciones (parámetros faltantes). Code 2"
+          description: "Parámetros erroneos. Code 2"
           schema:
             $ref: "#/definitions/Error"
         404:
           description: "No existe el recurso solicitado. Code 1"
           schema:
             $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error. Code 0"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
       summary: "Actualización de información de un servidor"
+    post:
+      tags:
+        - app server
+      description: |
+        Modificación de token de un servidor.
+      responses:
+        200:
+          description: "Modificación correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              server:
+                $ref: "#/definitions/CreateServerResponse"
+        404:
+          description: "No existe el recurso solicitado. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Actualización de token de un servidor"
     delete:
       tags:
         - app server
@@ -368,11 +482,45 @@ paths:
           description: "No existe el recurso solicitado. Code 1"
           schema:
             $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error. Code 0"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
       summary: "Eliminar un servidor"
+  /user/token:
+    post:
+      tags:
+        - user
+      description: "Endpoint para generar un token para utilizar en los servicios del sistema (login)"
+      parameters: 
+        - description: "Datos para generar token"
+          in: body
+          name: body
+          required: true
+          schema: 
+            $ref: '#/definitions/BusinessUserCredentials'
+      responses: 
+        201: 
+          description: "Token generado correctamente"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              token:
+                $ref: "#/definitions/Token"
+        400: 
+          description: "Parametros erroneos (Code 2)"
+          schema: 
+            $ref: "#/definitions/Error"
+        500: 
+          description: "Unexpected error (Code 0)"
+          schema: 
+            $ref: "#/definitions/Error"
+      summary: "Generar token de usuario de negocio"
 definitions:
   Version:
     type: string
@@ -401,6 +549,13 @@ definitions:
       message:
         type: string
     type: object
+  BusinessUserCredentials:
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+        format: password
   Tracking:
     properties:
       id:
@@ -423,7 +578,7 @@ definitions:
     type: "object"
     properties:
       id:
-        type: "number"
+        type: "string"
       description:
         type: "string"
   Payment_Paymethod:
@@ -526,3 +681,34 @@ definitions:
       token:
         type: string
         description: Token de autenticación
+  Trip:
+    type: "object"
+    properties:
+      ammount:
+        type: "number"
+      distance:
+        type: "number"
+      user:
+        $ref: '#/definitions/TripUser'
+  TripUser:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      points:
+        type: "number"
+      deliveries:
+        type: "number"
+  TripWithCost:
+    type: "object"
+    properties:
+      ammount:
+        type: "number"
+      distance:
+        type: "number"
+      user:
+        $ref: '#/definitions/TripUser'
+      isAbleToDeliver:
+        type: "boolean"
+      cost:
+        type: "number"
