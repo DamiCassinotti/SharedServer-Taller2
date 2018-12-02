@@ -1,4 +1,4 @@
-create type if not exists payment_status as enum('PENDIENTE', 'CONFIRMADO', 'CANCELADO');
+create type payment_status as enum('PENDIENTE', 'CONFIRMADO', 'CANCELADO');
 
 create table if not exists payment (
 	transaction_id text primary key,
