@@ -3,252 +3,170 @@ info:
   description: API para el shared server de Comprame
   title: Comprame - Shared Server API
   version: 1.0.0
-host: Comprame.7552.fi.uba.ar
+host: shared-server-tallerii.herokuapp.com
 schemes:
   - http
-basePath: /api
 consumes:
   - application/json
 produces:
   - application/json
-securityDefinitions:
-  BusinessToken:
-    type: apiKey
-    in: query
-    name: token
-  ApplicationToken:
-    type: apiKey
-    in: query
-    name: token
 tags:
-  - name: delivery
-    description: |
-      Llamados relacionados con consultas acerca de envios
   - name: tracking
     description: |
       Llamados relacionados con la administracion del seguimiento de los envios
-  - name: app server
-    description: |
-      Llamados relacionados con la administración de app severs
   - name: payment
     description: |
       Llamados relacionados con la administración de los pagos
+  - name: app server
+    description: |
+      Llamados relacionados con la administración de los App Servers
+  - name: user
+    description: |
+      Llamados relacionados con la administración de los Usuarios
+  - name: delivery
+    description: |
+      Llamados relacionados con la administración de la estimacion de los envios
 paths:
-  /token:
+  /deliveries/estimate:
     post:
-      tags:
-        - user
-      description: "Endpoint para generar un token para utilizar en los servicios del sistema (login)"
-      parameters:
-        - description: "Datos para generar token"
-          in: body
+      tags: 
+        - delivery
+      description: Estimar el valor de un envío
+      parameters: 
+        - in: body
           name: body
           required: true
+          schema: 
+            $ref: "#/definitions/Trip"
+      responses: 
+        200: 
+          description: "Estimación correcta"
           schema:
-            $ref: '#/definitions/BusinessUserCredentials'
-      responses:
-        201:
-          description: "Token generado correctamente"
-          schema:
-            properties:
-              metadata:
-                $ref: '#/definitions/EntityMetadata'
-              token:
-                $ref: "#/definitions/Token"
-        400:
-          description: "Incumplimiento de precondiciones (parámetros faltantes)"
-          schema:
+            $ref: '#/definitions/TripWithCost'
+        400: 
+          description: "Parametros erroneos (Code 2)"
+          schema: 
             $ref: "#/definitions/Error"
         401:
-          description: Unauthorized
+          description: "Unauthorized access (Code 1)"
           schema:
               $ref: '#/definitions/Error'
-        500:
-          description: "Unexpected error"
-          schema:
+        500: 
+          description: "Unexpected error (Code 0)"
+          schema: 
             $ref: "#/definitions/Error"
-      summary: "Generar token de usuario de negocio"
-  /servers:
+      summary: "Estimar costo de envio"
+  /tracking:
     get:
       tags:
-        - app server
-      security:
-        - BusinessToken: []
-      description: |
-          Devuelve toda la información acerca de todos los application servers indicados.
-      responses:
-        200:
-          description: "Todos los application servers indicados"
-          schema:
-            properties:
-              metadata:
-                $ref: "#/definitions/CollectionMetadata"
-              servers:
-                items:
-                  $ref: '#/definitions/Server'
-        401:
-          description: Unauthorized
-          schema:
-              $ref: '#/definitions/Error'
-        500:
-          description: "Unexpected error"
-          schema:
-            $ref: "#/definitions/Error"
-      summary: "Listado de application servers"
-    post:
-      tags:
-        - app server
-      security:
-        - BusinessToken: []
-      description: |
-        Endpoint para dar de alta un servidor. Se ignorarán los campos de id, _rev y lastConnection
-      parameters:
-        - description: "Datos para dar de alta un servidor"
-          in: body
-          name: body
-          required: true
-          schema:
-            $ref: "#/definitions/Server"
+      - "tracking"
+      summary: "Obtiene el listado de envios. Cada envio viene en su estado actual."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
       responses:
         201:
-          description: "Alta correcta"
+          description: "successful operation"
           schema:
-            properties:
-              metadata:
-                $ref: '#/definitions/EntityMetadata'
-              server:
-                $ref: '#/definitions/CreateServerResponse'
-        400:
-          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+            type: "array"
+            items:
+              $ref: "#/definitions/Tracking"
+        401:
+          description: "Unauthorized access. Code 0"
           schema:
             $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
-      summary: "Dar de un application server"
-  /servers/{serverId}:
+    post:
+      tags:
+      - "tracking"
+      summary: "Crea un nuevo envio para su seguimiento"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Tracking"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+  /tracking/{trackingId}:
     parameters:
-      - description: "Identificador del servidor"
+      - description: "Identificador del envío"
         in: path
-        name: serverId
+        name: trackingId
         required: true
         type: string
     get:
       tags:
-        - app server
-      security:
-        - BusinessToken: []
-      description: "Devuelve toda la información del servidor"
+        - tracking
+      description: "Devuelve toda la información del viaje. Por cada modificacion que tenga dicho envio se devolvera un objeto tracking."
       responses:
         200:
-          description: "Información del servidor"
+          description: "Información del envío"
           schema:
-            properties:
-              metadata:
-                $ref: "#/definitions/EntityMetadata"
-              server:
-                $ref: "#/definitions/Server"
-        401:
-          description: Unauthorized
-          schema:
-              $ref: '#/definitions/Error'
+            type: "array"
+            items:
+              $ref: "#/definitions/Tracking"
         404:
-          description: "Servidor inexistente"
+          description: "Viaje inexistente. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
           schema:
             $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
-      summary: "Obtener información de un servidor"
+      summary: "Obtener información de un viaje"
     put:
       tags:
-        - app server
-      security:
-        - BusinessToken: []
-      description: |
-        Modificación de los datos de un servidor. Se ignorarán los campos de `id`, `createdBy`, `createdTime` y `lastConnection`
+        - tracking
+      description: "Devuelve la informacion actualizada del envio."
       parameters:
-        - description: Datos para modificar a del servidor
+        - description: Nuevo estado del envio
           in: body
           name: body
           required: true
           schema:
-            $ref: "#/definitions/Server"
+            $ref: "#/definitions/NewTrackingStatus"
       responses:
         200:
-          description: "Modificación correcta"
+          description: "Información del envío"
           schema:
-            properties:
-              metadata:
-                $ref: '#/definitions/EntityMetadata'
-              server:
-                $ref: "#/definitions/Server"
+            type: "array"
+            items:
+              $ref: "#/definitions/Tracking"
         400:
-          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+          description: "Parametros faltantes. Code 2"
           schema:
             $ref: "#/definitions/Error"
         404:
-          description: "No existe el recurso solicitado"
+          description: "Viaje inexistente. Code 2"
           schema:
             $ref: "#/definitions/Error"
-        409:
-          description: Conflicto en el update (esta mal el valor de `_rev`)
-          schema:
-            $ref: "#/definitions/Error"
-        500:
-          description: "Unexpected error"
-          schema:
-            $ref: "#/definitions/Error"
-      summary: "Actualización de información de un servidor"
-    post:
-      tags:
-        - app server
-      security:
-        - BusinessToken: []
-      description: |
-        Endpoint para resetear el token. Debe invalidar el anterior.
-      responses:
-        201:
-          description: "Nuevo token"
-          schema:
-            properties:
-              metadata:
-                $ref: '#/definitions/EntityMetadata'
-              server:
-                $ref: '#/definitions/CreateServerResponse'
-        400:
-          description: "Incumplimiento de precondiciones (parámetros faltantes)"
-          schema:
-            $ref: "#/definitions/Error"
-        500:
-          description: "Unexpected error"
-          schema:
-            $ref: "#/definitions/Error"
-      summary: "Resetear un token de un servidor"
-    delete:
-      tags:
-        - app server
-      security:
-        - BusinessToken: []
-      description: "Endpoint para dar de baja un servidor"
-      responses:
-        204:
-          description: "Baja correcta"
         401:
-          description: Unauthorized
-          schema:
-              $ref: '#/definitions/Error'
-        404:
-          description: "No existe el recurso solicitado"
+          description: "Unauthorized access. Code 0"
           schema:
             $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
-      summary: "Eliminar un servidor"
+      summary: "Actualizar información de un viaje"
   /payments:
     get:
       tags:
@@ -261,9 +179,15 @@ paths:
         200:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/Payment"
+            $ref: "#/definitions/PaymentResponse"
         401:
-          description: "Invalid credentials"
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
     post:
       tags:
       - "payment"
@@ -280,14 +204,24 @@ paths:
         description: "Payment's information"
         required: true
         schema:
-          $ref: "#/definitions/Payment"
+          $ref: "#/definitions/PaymentRequest"
       responses:
         201:
           description: "successful operation"
           schema:
-            $ref: "#/definitions/Payment"
+            $ref: "#/definitions/PaymentResponse"
         401:
-          description: "Unauthorized"
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+        400:
+          description: "Parametros erroneos. Code 2"
+          schema:
+            $ref: "#/definitions/Error"
   /payments/methods:
     get:
       tags:
@@ -303,53 +237,48 @@ paths:
           schema:
             $ref: "#/definitions/Paymethod"
         401:
-          description: "Invalid credentials"
-  /deliveries/estimate:
-    post:
-      tags:
-        - delivery
-      security:
-        - ApplicationToken: []
-      description: Estimar el valor de un envío
-      parameters:
-        - in: body
-          name: body
-          required: true
+          description: "Unauthorized access. Code 0"
           schema:
-            $ref: "#/definitions/Trip"
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+  /payments/id/{paymentId}:
+    parameters:
+      - description: "Identificador del pago"
+        in: path
+        name: paymentId
+        required: true
+        type: string
+    get:
+      tags:
+        - payment
+      description: "Devuelve toda la información del pago."
       responses:
         200:
-          description: "Validación correcta"
+          description: "Información del pago"
           schema:
-            properties:
-              metadata:
-                $ref: '#/definitions/EntityMetadata'
-              cost:
-                $ref: '#/definitions/Cost'
-        400:
-          description: "Incumplimiento de precondiciones (parámetros faltantes)"
+            type: "array"
+            items:
+              $ref: '#/definitions/PaymentResponse'
+        404:
+          description: "Pago inexistente. Code 1"
           schema:
             $ref: "#/definitions/Error"
         401:
-          description: Unauthorized
-          schema:
-              $ref: '#/definitions/Error'
-        402:
-          description: |
-            El pasajero debe normalizar su situación de pago.
-            No se le debe permitir realizar el pago.
-          schema:
-            $ref: '#/definitions/Error'
-        500:
-          description: "Unexpected error"
+          description: "Unauthorized access. Code 0"
           schema:
             $ref: "#/definitions/Error"
-      summary: "Validar usuario de aplicación"
-  /tracking:
-    post:
+        500:
+          description: "Unexpected error. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Obtener información de un pago"
+    put:
       tags:
-      - "tracking"
-      summary: "Crea un nuevo envio para su seguimiento"
+        - payment
+      description: "Actualiza el estado de un pago."
       consumes:
       - "application/json"
       produces:
@@ -357,52 +286,241 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        description: "Información del envío"
+        description: "Nuevo estado"
         required: true
         schema:
-          $ref: "#/definitions/Tracking"
+          $ref: "#/definitions/NewPaymentStatus"
+      responses:
+        200:
+          description: "Información del pago"
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/PaymentResponse'
+        400:
+          description: "Parametros erroneos. Code 2"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "Pago inexistente. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Actualizar información de un pago"
+  /servers:
+    get:
+      tags:
+        - app server
+      description: |
+          Devuelve toda la información acerca de todos los application servers indicados.
+      responses:
+        200:
+          description: "Todos los application servers indicados"
+          schema:
+            properties:
+              metadata:
+                $ref: "#/definitions/CollectionMetadata"
+              servers:
+                items:
+                  $ref: '#/definitions/Server'
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Listado de application servers"
+    post:
+      tags:
+        - app server
+      description: |
+        Endpoint para dar de alta un servidor.
+      parameters:
+        - description: "Datos para dar de alta un servidor"
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/AddServerRequest"
       responses:
         201:
-          description: "successful operation"
+          description: "Alta correcta"
           schema:
-            $ref: "#/definitions/Tracking"
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              server:
+                $ref: '#/definitions/CreateServerResponse'
+        400:
+          description: "Parametros erroneos. Code 2"
+          schema:
+            $ref: "#/definitions/Error"
         401:
-          description: "Unauthorized"
-  /tracking/{trackingId}:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Dar de un application server"
+  /servers/{serverId}:
     parameters:
-      - description: "Identificador del envío"
+      - description: "Identificador del servidor"
         in: path
-        name: trackingId
+        name: serverId
         required: true
         type: string
     get:
       tags:
-        - tracking
-      security:
-        - ApplicationToken: []
-        - BusinessToken: []
-      description: "Devuelve toda la información del viaje"
+        - app server
+      description: "Devuelve toda la información del servidor"
       responses:
         200:
-          description: "Información del envío"
+          description: "Información del servidor"
           schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Tracking"
-        401:
-          description: Unauthorized
-          schema:
-              $ref: '#/definitions/Error'
+            properties:
+              metadata:
+                $ref: "#/definitions/EntityMetadata"
+              server:
+                $ref: "#/definitions/Server"
         404:
-          description: "Viaje inexistente"
+          description: "Servidor inexistente. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
           schema:
             $ref: "#/definitions/Error"
         500:
-          description: "Unexpected error"
+          description: "Unexpected error. Code 1"
           schema:
             $ref: "#/definitions/Error"
-      summary: "Obtener información de un viaje"
-
+      summary: "Obtener información de un servidor"
+    put:
+      tags:
+        - app server
+      description: |
+        Modificación de los datos de un servidor. Se ignorarán los campos de `id`, `createdBy`, `createdTime` y `lastConnection`
+      parameters:
+        - description: Datos para modificar a del servidor
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateServerRequest"
+      responses:
+        200:
+          description: "Modificación correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              server:
+                $ref: "#/definitions/Server"
+        400:
+          description: "Parámetros erroneos. Code 2"
+          schema:
+            $ref: "#/definitions/Error"
+        404:
+          description: "No existe el recurso solicitado. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Actualización de información de un servidor"
+    post:
+      tags:
+        - app server
+      description: |
+        Modificación de token de un servidor.
+      responses:
+        200:
+          description: "Modificación correcta"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              server:
+                $ref: "#/definitions/CreateServerResponse"
+        404:
+          description: "No existe el recurso solicitado. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Actualización de token de un servidor"
+    delete:
+      tags:
+        - app server
+      description: "Endpoint para dar de baja un servidor"
+      responses:
+        204:
+          description: "Baja correcta"
+        404:
+          description: "No existe el recurso solicitado. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+        401:
+          description: "Unauthorized access. Code 0"
+          schema:
+            $ref: "#/definitions/Error"
+        500:
+          description: "Unexpected error. Code 1"
+          schema:
+            $ref: "#/definitions/Error"
+      summary: "Eliminar un servidor"
+  /user/token:
+    post:
+      tags:
+        - user
+      description: "Endpoint para generar un token para utilizar en los servicios del sistema (login)"
+      parameters: 
+        - description: "Datos para generar token"
+          in: body
+          name: body
+          required: true
+          schema: 
+            $ref: '#/definitions/BusinessUserCredentials'
+      responses: 
+        201: 
+          description: "Token generado correctamente"
+          schema:
+            properties:
+              metadata:
+                $ref: '#/definitions/EntityMetadata'
+              token:
+                $ref: "#/definitions/Token"
+        400: 
+          description: "Parametros erroneos (Code 2)"
+          schema: 
+            $ref: "#/definitions/Error"
+        500: 
+          description: "Unexpected error (Code 0)"
+          schema: 
+            $ref: "#/definitions/Error"
+      summary: "Generar token de usuario de negocio"
 definitions:
   Version:
     type: string
@@ -412,10 +530,6 @@ definitions:
     description: |
       Se guarda como un string, pero podría ser un número
       es dependiente de la implementación.
-  Timestamp:
-    type: number
-    description: |
-      Tiempo en epoch
   Ref:
     type: string
     description: |
@@ -423,6 +537,10 @@ definitions:
       Cuando se crea un elemento, se debe pasar un valor de undefined (o no debe estar).
       Al actualizar, el servidor chequeará que este valor sea igual al guardado, de no coincidir,
       significa que otro actualizó el recurso, por ende, la actualización debe fallar.
+  Timestamp:
+    type: number
+    description: |
+      Tiempo en epoch
   Error:
     properties:
       code:
@@ -431,10 +549,86 @@ definitions:
       message:
         type: string
     type: object
-  EntityMetadata:
+  BusinessUserCredentials:
     properties:
-      version:
-        $ref: '#/definitions/Version'
+      username:
+        type: string
+      password:
+        type: string
+        format: password
+  Tracking:
+    properties:
+      id:
+        description: identificador del envío
+        type: string
+      status:
+        $ref: '#/definitions/TrackingStatus'
+      updateAt:
+        $ref: '#/definitions/Timestamp'
+  TrackingStatus:
+    type: string
+    description: Estados de tracking (PENDIENTE, EN_TRANSITO, ENTREGADO, CANCELADO)
+  NewTrackingStatus:
+    type: object
+    properties:
+      status:
+        $ref: '#/definitions/TrackingStatus'
+    description: Nuevo estado de tracking
+  Paymethod:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      description:
+        type: "string"
+  Payment_Paymethod:
+    type: "object"
+    properties:
+      expiration_date:
+        type: "string"
+      payment_method:
+        type: "string"
+      card_number:
+        type: "string"
+      security_code:
+        type: "string"
+      cardholder_name:
+        type: "string"
+  PaymentRequest:
+    type: "object"
+    properties:
+      transaction_id:
+        type: "string"
+      currency:
+        type: "string"
+      value:
+        type: "number"
+        format: "float"
+      paymentMethod:
+        $ref:  "#/definitions/Payment_Paymethod"
+  PaymentResponse:
+    type: "object"
+    properties:
+      transaction_id:
+        type: "string"
+      currency:
+        type: "string"
+      value:
+        type: "number"
+        format: "float"
+      paymentMethod:
+        $ref:  "#/definitions/Payment_Paymethod"
+      status:
+        $ref:  "#/definitions/PaymentStatus"
+  PaymentStatus:
+    type: string
+    description: Estados de Payment (PENDIENTE, CONFIRMADO, CANCELADO)
+  NewPaymentStatus:
+    type: object
+    properties:
+      status:
+        $ref: '#/definitions/PaymentStatus'
+    description: Nuevo estado de payment
   CollectionMetadata:
     properties:
       total:
@@ -443,12 +637,6 @@ definitions:
       version:
         $ref: '#/definitions/Version'
     type: object
-  CreateServerResponse:
-    properties:
-      server:
-        $ref: '#/definitions/Server'
-      token:
-        $ref: '#/definitions/Token'
   Server:
     properties:
       id:
@@ -464,13 +652,30 @@ definitions:
         description: Nombre del application server
       lastConnection:
         $ref: '#/definitions/Timestamp'
-  BusinessUserCredentials:
+  AddServerRequest:
     properties:
-      username:
+      createdBy:
+        $ref: '#/definitions/Id'
+      name:
         type: string
-      password:
+        description: Nombre del application server
+  UpdateServerRequest:
+    properties:
+      _rev:
+        $ref: '#/definitions/Ref'
+      name:
         type: string
-        format: password
+        description: Nombre del application server
+  EntityMetadata:
+    properties:
+      version:
+        $ref: '#/definitions/Version'
+  CreateServerResponse:
+    properties:
+      server:
+        $ref: '#/definitions/Server'
+      token:
+        $ref: '#/definitions/Token'
   Token:
     properties:
       expiresAt:
@@ -478,108 +683,34 @@ definitions:
       token:
         type: string
         description: Token de autenticación
-  Paymethod:
-    type: "object"
-    properties:
-      paymethod:
-        type: "string"
-      parameters:
-        type: "array"
-        items:
-          $ref: '#/definitions/PaymethodType'
-  PaymethodType:
-    type: "object"
-    properties:
-      method:
-        type: "string"
-  Payment_Paymethod:
-    type: "object"
-    properties:
-      epiration_month:
-        type: "string"
-      expiration_year:
-        type: "string"
-      method:
-        type: "string"
-      number:
-        type: "string"
-      type:
-        type: "string"
-  Payment:
-    type: "object"
-    properties:
-      transaction_id:
-        type: "string"
-      currency:
-        type: "string"
-      value:
-        type: "number"
-        format: "float"
-      paymentMethod:
-        $ref:  "#/definitions/Payment_Paymethod"
-  Cost:
-    properties:
-      currency:
-        type: string
-        description: Moneda de acuerdo a ISO 4217
-      value:
-        type: number
-        description: Valor
-  Location:
-    description: |
-      Las coordenadas utilizan la especificación de [GeoJSON](https://geojson.org/geojson-spec.html#coordinate-reference-system-objects)
-      donde `lon` es el primer número, mientras `lat` el segundo
-    properties:
-      lat:
-        type: number
-      lon:
-        type: number
-  Address:
-    properties:
-      street:
-        description: Dirección en texto (opcional)
-        type: string
-      location:
-        $ref: "#/definitions/Location"
-  Endpoint:
-    properties:
-      address:
-        $ref: '#/definitions/Address'
-      timestamp:
-        $ref: '#/definitions/Timestamp'
-  Step:
-    properties:
-      location:
-        $ref: '#/definitions/Location'
-      timestamp:
-        $ref: '#/definitions/Timestamp'
   Trip:
-    type: object
+    type: "object"
     properties:
-      id:
-        $ref: '#/definitions/Id'
-      applicationOwner:
-        $ref: '#/definitions/Id'
-      start:
-        $ref: "#/definitions/Endpoint"
-      end:
-        $ref: "#/definitions/Endpoint"
+      ammount:
+        type: "number"
       distance:
-        description: Distancia en metros (si esta disponible)
-        type: number
-      route:
-        items:
-          $ref: '#/definitions/Step'
-      cost:
-        $ref: '#/definitions/Cost'
-
-  Tracking:
+        type: "number"
+      user:
+        $ref: '#/definitions/TripUser'
+  TripUser:
+    type: "object"
     properties:
-      id:
-        description: identificador del envío
-        type: string
-      status:
-        description: estado en el que se encuentra el envío
-        type: string
-      updateAt:
-        $ref: '#/definitions/Timestamp'
+      email:
+        type: "string"
+      points:
+        type: "number"
+      deliveries:
+        type: "number"
+  TripWithCost:
+    type: "object"
+    properties:
+      ammount:
+        type: "number"
+      distance:
+        type: "number"
+      user:
+        $ref: '#/definitions/TripUser'
+      isAbleToDeliver:
+        type: "boolean"
+      cost:
+        type: "number"
