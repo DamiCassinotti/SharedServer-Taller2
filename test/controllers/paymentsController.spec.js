@@ -11,13 +11,15 @@ describe('Payment  Controller', () => {
 	let getPaymentStub = null;
 	let updatePaymentStub = null;
 	let getPaymentsMethodsStub = null;
+	let isPaymentMethodTarjetaStub= null;
 
 	beforeEach(() => {
-		addPaymentStub = sinon.stub(paymentsService, 'addPayment').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMocks.efectivo)}));
+		addPaymentStub = sinon.stub(paymentsService, 'addPayment').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMocks.credito)}));
 		getPaymentsStub = sinon.stub(paymentsService, 'getPayments').callsFake(() => new Promise((resolve, reject) => {resolve([paymentMocks.serviceResponseDebito, paymentMocks.serviceResponseEfectivo, paymentMocks.serviceResponseCredito])}));
 		getPaymentStub = sinon.stub(paymentsService, 'getPayment').callsFake(() => new Promise((resolve, reject) => {resolve([paymentMocks.serviceResponseEfectivo])}));
 		updatePaymentStub = sinon.stub(paymentsService, 'updatePayment').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMocks.serviceResponseEfectivo)}));
-		getPaymentsMethodsStub = sinon.stub(paymentsService, 'getPaymentsMethods').callsFake(() => paymentMethodsMock);
+		getPaymentsMethodsStub = sinon.stub(paymentsService, 'getPaymentsMethods').callsFake(() => new Promise((resolve, reject) => {resolve(paymentMethodsMock)}));
+		isPaymentMethodTarjetaStub = sinon.stub(paymentsService, 'isPaymentMethodTarjeta').callsFake(() => true);
 	});
 
 	afterEach(() => {
@@ -26,6 +28,7 @@ describe('Payment  Controller', () => {
 		getPaymentStub.restore();
 		updatePaymentStub.restore();
 		getPaymentsMethodsStub.restore();
+		isPaymentMethodTarjetaStub.restore();
 	});
 
 	it('Get Payments', (done) => {
@@ -44,7 +47,7 @@ describe('Payment  Controller', () => {
 			});
 	});
 
-	it('Add Payment with error', (done) => {
+	it('Get Payments with error', (done) => {
 		getPaymentsStub.restore();
 		getPaymentsStub = sinon.stub(paymentsService, 'getPayments').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
 		paymentsController.getPayments()
@@ -60,14 +63,13 @@ describe('Payment  Controller', () => {
 	});
 
 	it('Add Payment', (done) => {
-		var newPayment = JSON.parse(JSON.stringify(paymentMocks.efectivo));
-		newPayment.status = 'PENDIENTE';
-		paymentsController.addPayment(paymentMocks.efectivo)
+		paymentsController.addPayment(paymentMocks.credito)
 			.then(payment => {
-				expect(payment).to.deep.equal(newPayment);
+				expect(payment).to.deep.equal(paymentMocks.credito);
 				done();
 			})
 			.catch(err => {
+				console.log(err);
 				expect(true).to.equal(false);
 				done();
 			});
@@ -76,7 +78,7 @@ describe('Payment  Controller', () => {
 	it('Add Payment with error', (done) => {
 		addPaymentStub.restore();
 		addPaymentStub = sinon.stub(paymentsService, 'addPayment').callsFake(() => new Promise((resolve, reject) => {reject('test error')}));
-		paymentsController.addPayment(paymentMocks.efectivo)
+		paymentsController.addPayment(paymentMocks.credito)
 			.then(payment => {
 				expect(true).to.equal(false);
 				done();
@@ -84,6 +86,22 @@ describe('Payment  Controller', () => {
 			.catch(err => {
 				expect(err).not.to.be.undefined;
 				expect(err).to.deep.equal('test error');
+				done();
+			});
+	});
+
+	it('Add invalid Payment', (done) => {
+		var newPayment = JSON.parse(JSON.stringify(paymentMocks.credito));
+		newPayment.paymentMethod.card_number = undefined;
+		isPaymentMethodTarjetaStub.restore();
+		isPaymentMethodTarjetaStub = sinon.stub(paymentsService, 'isPaymentMethodTarjeta').callsFake(() => false);
+		paymentsController.addPayment(paymentMocks.efectivo)
+			.then(payment => {
+				expect(true).to.equal(false);
+				done();
+			})
+			.catch(err => {
+				expect(err).not.to.be.undefined;
 				done();
 			});
 	});

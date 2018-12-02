@@ -1,5 +1,3 @@
-const paymentMethods = require('../enums/paymentMethods');
-
 exports.convertPaymentsToModel = (payments) => {
 	return payments.map(convertPaymentToModel);
 }
@@ -11,15 +9,18 @@ var convertPaymentToModel = (payment) => {
 		currency: payment.currency,
 		value: payment.value,
 		paymentMethod: {
-			method: payment.payment_method
+			payment_method: payment.payment_method
 		},
 		status: payment.status
 	}
-	if (paymentMethods.isTarjeta(payment.payment_method)) {
-		convertedPayment.paymentMethod.expiration_month = payment.expiration_month;
-		convertedPayment.paymentMethod.expiration_year = payment.expiration_year;
-		convertedPayment.paymentMethod.number = payment.number;
-	}
+	if (payment.expiration_date)
+		convertedPayment.paymentMethod.expiration_date = payment.expiration_date;
+	if (payment.card_number)
+		convertedPayment.paymentMethod.card_number = payment.card_number;
+	if (payment.cardholder_name)
+		convertedPayment.paymentMethod.cardholder_name = payment.cardholder_name;
+	if (payment.security_code)
+		convertedPayment.paymentMethod.security_code = payment.security_code;
 	return convertedPayment;
 }
 
