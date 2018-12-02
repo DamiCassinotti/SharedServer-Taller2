@@ -4,7 +4,7 @@
   		"currency": "PESOS",
   		"value": 123,
   		"paymentMethod": {
-    		"payment_method": 1
+    		"payment_method": "Efectivo"
   		},
 		"status": "PENDIENTE"
 	},
@@ -13,7 +13,7 @@
   		"currency": "PESOS",
   		"value": 123,
   		"paymentMethod": {
-    		"payment_method": 3,
+    		"payment_method": "American Express",
 			"expiration_date": "10/2019",
     		"card_number": "1234123412341234",
 			"cardholder_name": "Damian Cassinotti",
@@ -26,7 +26,7 @@
   		"currency": "PESOS",
   		"value": 123,
   		"paymentMethod": {
-    		"payment_method": 2,
+    		"payment_method": "Visa",
 			"expiration_date": "10/2019",
     		"card_number": "1234123412341234",
 			"cardholder_name": "Damian Cassinotti",
@@ -38,7 +38,7 @@
 		"transaction_id": "123",
   		"currency": "PESOS",
   		"value": 123,
-		"payment_method": 2,
+		"payment_method": "Visa",
 		"expiration_date": "10/2019",
 		"card_number": "1234123412341234",
 		"status": "PENDIENTE",
@@ -51,7 +51,7 @@
   		"currency": "PESOS",
   		"value": 123,
 		"expiration_date": "10/2019",
-		"payment_method": 3,
+		"payment_method": "American Express",
 		"card_number": "1234123412341234",
 		"status": "PENDIENTE",
 		"cardholder_name": "Damian Cassinotti",
@@ -61,7 +61,7 @@
 		"transaction_id": "123",
   		"currency": "PESOS",
   		"value": 123,
-		"payment_method": 1,
+		"payment_method": "Efectivo",
 		"status": "PENDIENTE"
 	}
 }

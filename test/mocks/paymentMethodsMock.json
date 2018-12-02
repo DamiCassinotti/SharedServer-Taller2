@@ -1,21 +1,17 @@
 [{
-	"_id": 1,
 	"name": "Efectivo",
 	"type": 0,
-	"image": "http://icons.iconarchive.com/icons/custom-icon-design/flatastic-11/256/Cash-icon.png"
+	"image": "http://soloefectivo.com.ar/image.jpg"
 }, {
-	"_id": 2,
-	"name": "VISA Crédito",
+	"name": "Visa",
 	"type": 1,
-	"image": "https://cdn1.iconfinder.com/data/icons/credit-card-icons/512/visa.png"
+	"image": "https://firebasestorage.googleapis.com/v0/b/comprameli-49a1b.appspot.com/o/images%2Fpayments%2Fvisa.png?alt=media&token=fed5389f-a966-4f22-82e9-0181784667a7"
 }, {
-	"_id": 3,
-	"name": "VISA Débito",
+	"name": "American Express",
 	"type": 1,
-	"image": "http://downloadicons.net/sites/default/files/visa-icon-65187.png"
+	"image": "https://firebasestorage.googleapis.com/v0/b/comprameli-49a1b.appspot.com/o/images%2Fpayments%2Famex.png?alt=media&token=70c950b6-a60e-4bc3-85ee-fb8cb5d4b82b"
 }, {
-	"_id": 4,
-	"name": "AMEX",
+	"name": "Mastercard",
 	"type": 1,
-	"image": "https://cdn2.iconfinder.com/data/icons/credit-cards-6/156/american_express-512.png"
+	"image": "https://firebasestorage.googleapis.com/v0/b/comprameli-49a1b.appspot.com/o/images%2Fpayments%2Fmastercard.png?alt=media&token=0deb3fdc-db7b-464a-9f0a-f7c4126808f6"
 }]

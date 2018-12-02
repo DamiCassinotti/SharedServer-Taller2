@@ -81,7 +81,7 @@ var addPaymentMethodOfPayment = (payment) => {
 
 var isPaymentMethodTarjeta = async (paymentMethod) => {
 	var query = {
-		text: 'select type from payment_methods where _id = $1',
+		text: 'select type from payment_methods where name = $1',
 		values: [paymentMethod]
 	}
 	var data = await client.query(query);

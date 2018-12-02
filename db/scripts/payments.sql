@@ -5,7 +5,7 @@ create table if not exists payment (
 	status payment_status default 'PENDIENTE' not null,
 	currency text not null,
 	value integer not null,
-	payment_method integer references payment_methods(_id)
+	payment_method text references payment_methods(name)
 );
 
 create table if not exists payment_method (
