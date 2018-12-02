@@ -4,7 +4,7 @@
   		"currency": "PESOS",
   		"value": 123,
   		"paymentMethod": {
-    		"method": "EFECTIVO"
+    		"payment_method": 1
   		},
 		"status": "PENDIENTE"
 	},
@@ -13,10 +13,11 @@
   		"currency": "PESOS",
   		"value": 123,
   		"paymentMethod": {
-    		"expiration_month": "10",
-    		"expiration_year": "2018",
-    		"method": "T_DEBITO",
-    		"number": "1234123412341234"
+    		"payment_method": 3,
+			"expiration_date": "10/2019",
+    		"card_number": "1234123412341234",
+			"cardholder_name": "Damian Cassinotti",
+			"security_code": "123"
   		},
 		"status": "PENDIENTE"
 	},
@@ -25,10 +26,11 @@
   		"currency": "PESOS",
   		"value": 123,
   		"paymentMethod": {
-    		"expiration_month": "10",
-    		"expiration_year": "2018",
-    		"method": "T_CREDITO",
-    		"number": "1234123412341234"
+    		"payment_method": 2,
+			"expiration_date": "10/2019",
+    		"card_number": "1234123412341234",
+			"cardholder_name": "Damian Cassinotti",
+			"security_code": "123"
   		},
 		"status": "PENDIENTE"
 	},
@@ -36,27 +38,30 @@
 		"transaction_id": "123",
   		"currency": "PESOS",
   		"value": 123,
-		"payment_method": "T_CREDITO",
-		"expiration_month": "10",
-		"expiration_year": "2018",
-		"number": "1234123412341234",
-		"status": "PENDIENTE"
+		"payment_method": 2,
+		"expiration_date": "10/2019",
+		"card_number": "1234123412341234",
+		"status": "PENDIENTE",
+		"cardholder_name": "Damian Cassinotti",
+		"security_code": "123"
+
 	},
 	"serviceResponseDebito" : {
 		"transaction_id": "123",
   		"currency": "PESOS",
   		"value": 123,
-		"expiration_month": "10",
-		"expiration_year": "2018",
-		"payment_method": "T_DEBITO",
-		"number": "1234123412341234",
-		"status": "PENDIENTE"
+		"expiration_date": "10/2019",
+		"payment_method": 3,
+		"card_number": "1234123412341234",
+		"status": "PENDIENTE",
+		"cardholder_name": "Damian Cassinotti",
+		"security_code": "123"
 	},
 	"serviceResponseEfectivo" : {
 		"transaction_id": "123",
   		"currency": "PESOS",
   		"value": 123,
-		"payment_method": "EFECTIVO",
+		"payment_method": 1,
 		"status": "PENDIENTE"
 	}
 }

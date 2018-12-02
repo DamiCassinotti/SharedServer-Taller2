@@ -61,50 +61,36 @@ describe('Payment Validator', () => {
 
 	it('Error Validation without paymentMethod method', () => {
 		var payment = paymentMockCredito;
-		payment.paymentMethod.method = undefined;
+		payment.paymentMethod.payment_method = undefined;
 		expect(paymentValidator.isValidPayment(payment)).to.be.false;
 	});
 
-	it('Error Validation with random paymentMethod method', () => {
+	it('Error Validation without exp_date', () => {
 		var payment = paymentMockCredito;
-		payment.paymentMethod.method = 'undefined';
-		expect(paymentValidator.isValidPayment(payment)).to.be.false;
+		payment.paymentMethod.expiration_date = undefined;
+		expect(paymentValidator.isValidPayment(payment)).to.be.true;
+		expect(paymentValidator.isValidPaymentMethodTarjeta(payment)).to.be.false;
 	});
 
-	it('Error Validation without exp_month and CREDITO', () => {
-		var payment = paymentMockCredito;
-		payment.paymentMethod.expiration_month = undefined;
-		expect(paymentValidator.isValidPayment(payment)).to.be.false;
-	});
-
-	it('Error Validation without exp_month and DEBITO', () => {
-		var payment = paymentMockDebito;
-		payment.paymentMethod.expiration_month = undefined;
-		expect(paymentValidator.isValidPayment(payment)).to.be.false;
-	});
-
-	it('Error Validation without exp_year and CREDITO', () => {
-		var payment = paymentMockCredito;
-		payment.paymentMethod.expiration_year = undefined;
-		expect(paymentValidator.isValidPayment(payment)).to.be.false;
-	});
-
-	it('Error Validation without exp_year and DEBITO', () => {
-		var payment = paymentMockDebito;
-		payment.paymentMethod.expiration_year = undefined;
-		expect(paymentValidator.isValidPayment(payment)).to.be.false;
-	});
-
-	it('Error Validation without number and CREDITO', () => {
+	it('Error Validation without number', () => {
 		var payment = paymentMockCredito;
 		payment.paymentMethod.number = undefined;
-		expect(paymentValidator.isValidPayment(payment)).to.be.false;
+		expect(paymentValidator.isValidPayment(payment)).to.be.true;
+		expect(paymentValidator.isValidPaymentMethodTarjeta(payment)).to.be.false;
 	});
 
-	it('Error Validation without number and DEBITO', () => {
-		var payment = paymentMockDebito;
-		payment.paymentMethod.number = undefined;
-		expect(paymentValidator.isValidPayment(payment)).to.be.false;
+	it('Error Validation without cardholder_name', () => {
+		var payment = paymentMockCredito;
+		payment.paymentMethod.cardholder_name = undefined;
+		expect(paymentValidator.isValidPayment(payment)).to.be.true;
+		expect(paymentValidator.isValidPaymentMethodTarjeta(payment)).to.be.false;
+	});
+
+	it('Error Validation without secutiry_code', () => {
+		var payment = paymentMockCredito;
+		payment.paymentMethod.security_code = undefined;
+		expect(paymentValidator.isValidPayment(payment)).to.be.true;
+		expect(paymentValidator.isValidPaymentMethodTarjeta(payment)).to.be.false;
 	});
 
 });

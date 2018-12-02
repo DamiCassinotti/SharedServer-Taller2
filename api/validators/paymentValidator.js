@@ -1,17 +1,12 @@
-const paymentMethods = require('../enums/paymentMethods');
-
 exports.isValidPayment = (payment) => {
 	if (!payment || !payment.transaction_id || !payment.currency || !payment.value ||
-		isNaN(payment.value) || !payment.paymentMethod || !isValidPaymentMethod(payment.paymentMethod))
+		isNaN(payment.value) || !payment.paymentMethod || !payment.paymentMethod.payment_method)
 		return false;
 	return true;
 }
 
-function isValidPaymentMethod(paymentMethod) {
-	if (!paymentMethod.method || !paymentMethods.methods.isDefined(paymentMethod.method))
+exports.isValidPaymentMethodTarjeta = (paymentMethod) => {
+	if (!paymentMethod.expiration_date || !paymentMethod.cardholder_name || !paymentMethod.card_number || !paymentMethod.security_code)
 		return false;
-	if (paymentMethods.isTarjeta(paymentMethod.method))
-		if (!paymentMethod.expiration_year || !paymentMethod.expiration_month || !paymentMethod.number)
-			return false;
 	return true;
 }

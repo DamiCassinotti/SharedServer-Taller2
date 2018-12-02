@@ -1,5 +1,6 @@
 const paymentsService = require('../services/paymentsService');
 const paymentUtils = require('../utils/paymentUtils');
+const paymentValidator = require('../validators/paymentValidator');
 
 exports.getPayments = () => {
 	return new Promise((resolve, reject) => {
@@ -10,7 +11,10 @@ exports.getPayments = () => {
 }
 
 exports.addPayment = (payment) => {
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
+		var isTarjeta = await paymentsService.isPaymentMethodTarjeta(payment.paymentMethod.payment_method);
+		if (isTarjeta && !paymentValidator.isValidPaymentMethodTarjeta(payment.paymentMethod))
+			reject({name: "ParametersError"});
 		paymentsService.addPayment(payment)
 			.then(payment => {payment.status = 'PENDIENTE'; resolve(payment)})
 			.catch(error => reject(error));
