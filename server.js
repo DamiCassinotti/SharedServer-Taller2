@@ -36,6 +36,8 @@ bootstrapApp = () => {
 	app.use((req, res, next) => {
 		var startTime = Date.now();
 		res.on('finish', () => {
+			if (!res.req.route)
+				return;
 			requestsController.reportRequest(res.req.baseUrl + res.req.route.path, req.method, res.statusCode, Date.now() - startTime);
 		});
 		next();
