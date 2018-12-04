@@ -1,8 +1,6 @@
-'use strict'
-
 var rp = require('request-promise');
 
-exports.makeSimpleRequest = function(url, callback) {
+exports.makeSimpleRequest = (url) => {
 	var options = {
 		url: url,
 		headers: {
@@ -10,7 +8,5 @@ exports.makeSimpleRequest = function(url, callback) {
 	    },
 		json: true
 	}
-	rp(options)
-		.then(data => callback(data))
-		.catch(err => callback(err));
+	return rp(options);
 }
