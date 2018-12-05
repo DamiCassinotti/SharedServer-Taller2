@@ -20,6 +20,7 @@ before_script:
     - psql -U postgres -d shared_server_travis -a -f db/scripts/tracking.sql
     - psql -U postgres -d shared_server_travis -a -f db/scripts/payment_methods.sql
     - psql -U postgres -d shared_server_travis -a -f db/scripts/payments.sql
+    - psql -U postgres -d shared_server_travis -a -f db/scripts/payments2.sql
     - psql -U postgres -d shared_server_travis -a -f db/scripts/servers.sql
     - psql -U postgres -d shared_server_travis -a -f db/scripts/login.sql
     - psql -U postgres -d shared_server_travis -a -f db/scripts/requests.sql

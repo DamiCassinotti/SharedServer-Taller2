@@ -12,11 +12,12 @@ exports.getPayments = () => {
 exports.addPayment = (payment) => {
 	return new Promise((resolve, reject) => {
 		var query = {
-			text: 'INSERT INTO PAYMENT (transaction_id, currency, value, payment_method) VALUES ($1, $2, $3, $4);',
+			text: 'INSERT INTO PAYMENT (transaction_id, currency, value, payment_method) VALUES ($1, $2, $3, $4) returning updateat;',
 			values: [payment.transaction_id, payment.currency, payment.value, payment.paymentMethod.payment_method]
 		};
 		client.query(query)
 			.then(async (data) => {
+				payment.updateat = data.rows[0].updateat;
 				var isTarjeta = await isPaymentMethodTarjeta(payment.paymentMethod.payment_method);
 				if (isTarjeta)
 					await addPaymentMethodOfPayment(payment);

@@ -4,6 +4,7 @@ exports.convertPaymentsToModel = (payments) => {
 
 var convertPaymentToModel = (payment) => {
 	if (!payment) return;
+	console.log(payment.updateat);
 	var convertedPayment = {
 		transaction_id : payment.transaction_id,
 		currency: payment.currency,
@@ -11,7 +12,8 @@ var convertPaymentToModel = (payment) => {
 		paymentMethod: {
 			payment_method: payment.payment_method
 		},
-		status: payment.status
+		status: payment.status,
+		updateat: payment.updateat
 	}
 	if (payment.expiration_date)
 		convertedPayment.paymentMethod.expiration_date = payment.expiration_date;

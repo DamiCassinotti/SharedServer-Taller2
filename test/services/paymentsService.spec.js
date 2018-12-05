@@ -37,6 +37,8 @@ describe('Payment Service', () => {
 		var payment = await paymentsService.addPayment(paymentMocks.efectivo);
 
 		expect(payment).not.to.be.undefined;
+		expect(payment.updateat).to.be.a('date');
+		paymentMocks.efectivo.updateat = payment.updateat;
 		expect(payment).to.deep.equal(paymentMocks.efectivo);
 	});
 
@@ -44,6 +46,8 @@ describe('Payment Service', () => {
 		var payment = await paymentsService.addPayment(paymentMocks.credito);
 
 		expect(payment).not.to.be.undefined;
+		expect(payment.updateat).to.be.a('date');
+		paymentMocks.credito.updateat = payment.updateat;
 		expect(payment).to.deep.equal(paymentMocks.credito);
 	});
 
@@ -51,6 +55,8 @@ describe('Payment Service', () => {
 		var payment = await paymentsService.addPayment(paymentMocks.debito);
 
 		expect(payment).not.to.be.undefined;
+		expect(payment.updateat).to.be.a('date');
+		paymentMocks.debito.updateat = payment.updateat;
 		expect(payment).to.deep.equal(paymentMocks.debito);
 	});
 
@@ -69,6 +75,8 @@ describe('Payment Service', () => {
 		expect(payments).to.not.be.undefined;
 		expect(payments).to.be.an('array');
 		expect(payments.length).to.equal(1);
+		expect(payments[0].updateat).to.be.a('date');
+		paymentMocks.serviceResponseDebito.updateat = payments[0].updateat;
 		expect(payments[0]).to.deep.equal(paymentMocks.serviceResponseDebito);
 	});
 
@@ -80,6 +88,8 @@ describe('Payment Service', () => {
 		expect(samePayment).to.not.be.undefined;
 		expect(samePayment).to.be.an('array');
 		expect(samePayment.length).to.equal(1);
+		expect(samePayment[0].updateat).to.be.a('date');
+		paymentMocks.serviceResponseDebito.updateat = samePayment[0].updateat;
 		expect(samePayment[0]).to.deep.equal(paymentMocks.serviceResponseDebito);
 	});
 
@@ -110,6 +120,7 @@ describe('Payment Service', () => {
 		expect(updatedPayment).to.not.be.undefined;
 		expect(updatedPayment.transaction_id).to.equal(payment.transaction_id);
 		expect(updatedPayment.status).to.equal('CONFIRMADO');
+		expect(updatedPayment.updateat).to.be.a('date');
 	});
 
 	it('Update one payment without parameters throws error', (done) => {
