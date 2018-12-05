@@ -45,7 +45,7 @@ exports.getPayment = getPayment;
 exports.updatePayment = (idPayment, status) => {
 	return new Promise((resolve, reject) => {
 		var query = {
-			text: 'update payment set status = $2 where transaction_id = $1;',
+			text: 'update payment set status = $2, updateat = current_timestamp where transaction_id = $1;',
 			values: [idPayment, status]
 		}
 		client.query(query)
