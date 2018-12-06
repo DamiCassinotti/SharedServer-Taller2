@@ -2,13 +2,15 @@
 [![Build Status](https://travis-ci.com/DamiCassinotti/SharedServer-Taller2.svg?branch=master)](https://travis-ci.com/DamiCassinotti/SharedServer-Taller2)
 [![Coverage Status](https://coveralls.io/repos/github/DamiCassinotti/SharedServer-Taller2/badge.svg?branch=master)](https://coveralls.io/github/DamiCassinotti/SharedServer-Taller2?branch=master)
 
-**[API](https://github.com/DamiCassinotti/SharedServer-Taller2/blob/master/api/documentacion.yaml "Ir a la documentación")**
-
 ![](https://miro.medium.com/max/730/1*d2zLEjERsrs1Rzk_95QU9A.png)
 ![](https://www.vectorlogo.zone/logos/postgresql/postgresql-card.png)
 
 # Shared Server
 Servidor auxiliar para el sistema CompraMeli.
+
+#### Definición de API
+**https://github.com/DamiCassinotti/SharedServer-Taller2/blob/master/api/documentacion.yaml**
+
 
 ## Instalación
 Para poder instalar el servidor, primero debemos instalar Node. Una vez realizado, instalamos las dependencias del proyecto con el comando:
