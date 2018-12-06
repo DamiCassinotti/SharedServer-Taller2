@@ -8,8 +8,10 @@
 # Shared Server
 Servidor auxiliar para el sistema CompraMeli.
 
-#### Definición de API
-**https://github.com/DamiCassinotti/SharedServer-Taller2/blob/master/api/documentacion.yaml**
+#### Documentación
+**[Definición de la API](https://github.com/DamiCassinotti/SharedServer-Taller2/blob/master/api/documentacion.yaml)**
+
+**[Definición de arquitectura / Diseño de la aplicación](https://github.com/DamiCassinotti/SharedServer-Taller2/blob/master/api/documentacion.yaml)**
 
 
 ## Instalación
