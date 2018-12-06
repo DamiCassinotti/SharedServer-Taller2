@@ -1,0 +1,27 @@
+version: "2"
+
+services:
+  shared-server:
+    image: damicassinotti/sharedserver-taller2
+    ports:
+      - 80:3000
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; npm start'
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgres://postgres:password@db:5432/shared-server
+      - PORT=3000
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=shared-server
+    volumes:
+      - ./db/scripts/login.sql:/docker-entrypoint-initdb.d/01login.sql
+      - ./db/scripts/tracking.sql:/docker-entrypoint-initdb.d/02tracking.sql
+      - ./db/scripts/payment_methods.sql:/docker-entrypoint-initdb.d/03payment_methods.sql
+      - ./db/scripts/payments.sql:/docker-entrypoint-initdb.d/04payments.sql
+      - ./db/scripts/payments2.sql:/docker-entrypoint-initdb.d/05payments2.sql
+      - ./db/scripts/servers.sql:/docker-entrypoint-initdb.d/06servers.sql
+      - ./db/scripts/requests.sql:/docker-entrypoint-initdb.d/07requests.sql
