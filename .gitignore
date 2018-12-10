@@ -4,3 +4,13 @@ node_modules/
 coverage/
 
 zzCositas_de_sql\.txt
+
+docs/tp\.aux
+
+docs/tp\.log
+
+docs/tp\.out
+
+docs/tp\.synctex\.gz
+
+docs/tp\.toc
