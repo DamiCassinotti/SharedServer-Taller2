@@ -49,7 +49,7 @@ exports.estimate = (delivery) => {
 				if (result.cost < 0)
 					result.cost = 0;
 				delivery.isAbleToDeliver = result.isAbleToDeliver;
-				delivery.cost = result.cost;
+				delivery.cost = parseInt(result.cost * 100) / 100
 				resolve(delivery)
 			});
 	});

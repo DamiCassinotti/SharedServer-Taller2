@@ -152,4 +152,22 @@ describe('Login Controller', () => {
 			})
 	});
 
+	it('Costs round to 2 decimals', (done) => {
+		deliveryRequestMock.distance = 5.74; // Cost = 86.1
+		deliveryResponseMock.distance = deliveryRequestMock.distance;
+		deliveryRequestMock.user.deliveries = 10; // 5% off
+		deliveryResponseMock.user.deliveries = deliveryRequestMock.user.deliveries;
+		deliveryResponseMock.cost = 81.79; // 81.795
+		deliveriesController.estimate(deliveryRequestMock)
+			.then(delivery => {
+				expect(delivery).to.deep.equal(deliveryResponseMock);
+				done();
+			})
+			.catch(error => {
+				console.log(error);
+				expect(false).to.be.true;
+				done();
+			})
+	});
+
 });

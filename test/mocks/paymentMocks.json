@@ -2,7 +2,7 @@
 	"efectivo": {
   		"transaction_id": "123",
   		"currency": "PESOS",
-  		"value": 123,
+  		"value": 123.00,
   		"paymentMethod": {
     		"payment_method": "Efectivo"
   		},
@@ -12,7 +12,7 @@
 	"debito": {
   		"transaction_id": "123",
   		"currency": "PESOS",
-  		"value": 123,
+  		"value": 123.99,
   		"paymentMethod": {
     		"payment_method": "American Express",
 			"expiration_date": "10/2019",
@@ -53,7 +53,7 @@
 	"serviceResponseDebito" : {
 		"transaction_id": "123",
   		"currency": "PESOS",
-  		"value": 123,
+  		"value": 123.99,
 		"expiration_date": "10/2019",
 		"payment_method": "American Express",
 		"card_number": "1234123412341234",
@@ -65,7 +65,7 @@
 	"serviceResponseEfectivo" : {
 		"transaction_id": "123",
   		"currency": "PESOS",
-  		"value": 123,
+  		"value": 123.00,
 		"payment_method": "Efectivo",
 		"status": "PENDIENTE",
     	"updateat": "2018-12-05T01:35:44.661Z"
