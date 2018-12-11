@@ -1,7 +1,7 @@
 exports.getServers = () => {
 	return new Promise((resolve, reject) => {
 		var query = {
-			text: 'select * from server;'
+			text: 'select * from server order by id desc;'
 		}
 		client.query(query)
 			.then(data => resolve(data.rows))

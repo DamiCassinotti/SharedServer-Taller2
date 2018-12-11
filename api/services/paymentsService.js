@@ -1,7 +1,7 @@
 exports.getPayments = () => {
 	return new Promise((resolve, reject) => {
 		var query = {
-			text: 'select p.*, pm.expiration_date, pm.card_number, pm.cardholder_name, pm.security_code from payment p left join payment_method pm on p.transaction_id = pm.transaction_id;',
+			text: 'select p.*, pm.expiration_date, pm.card_number, pm.cardholder_name, pm.security_code from payment p left join payment_method pm on p.transaction_id = pm.transaction_id order by p.transaction_id desc;',
 		}
 		client.query(query)
 			.then(data => resolve(data.rows))
