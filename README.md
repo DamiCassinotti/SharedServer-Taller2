@@ -35,8 +35,8 @@ El mismo se encuentra definido en docker-compose.yml.
 
 Para configurar e inicializar la aplicación, primero se debe contar con el archivo docker-compose.xml y el directorio db, sin necesidad de contar con el resto de los archivos que conforman la aplicación. Luego, correr los siguientes comandos:
 ```
-$ docker-compose pull
-$ docker-compose up -d
+$ sudo docker-compose pull
+$ sudo docker-compose up -d
 ```
 
 
