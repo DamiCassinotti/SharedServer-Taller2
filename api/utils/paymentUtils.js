@@ -4,7 +4,6 @@ exports.convertPaymentsToModel = (payments) => {
 
 var convertPaymentToModel = (payment) => {
 	if (!payment) return;
-	console.log(payment.updateat);
 	var convertedPayment = {
 		transaction_id : payment.transaction_id,
 		currency: payment.currency,
