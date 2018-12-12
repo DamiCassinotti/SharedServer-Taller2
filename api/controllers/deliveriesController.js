@@ -25,6 +25,29 @@ var addCost = (facts, value) => {
 	facts.result.cost += value;
 }
 
+var factor = (facts, value) => {
+	facts.result.cost *= value;
+}
+
+var addRule = (flow, rule) => {
+	flow.rule(rule.description, [[Delivery, "delivery", rule.condition], [Result, "result"]], (facts) => {
+		switch(rule.type) {
+		case 'multiply':
+			multiply(facts, rule.property, rule.value);
+			break;
+		case 'qualification':
+			setQualification(facts, rule.value);
+			break;
+		case 'add':
+			addCost(facts, rule.value);
+			break;
+		case 'factor':
+			factor(facts, rule.value);
+			break;
+		}
+	});
+}
+
 exports.estimate = (delivery) => {
 	var rules = [
 		{
@@ -33,16 +56,31 @@ exports.estimate = (delivery) => {
 			type: 'multiply',
 			value: 15,
 			property: 'distance'
-		// }, {
-		// 	description: 'Esta habilitado segun compra minima de 50ARS',
-		// 	condition: "delivery.ammount < 50",
-		// 	type: 'qualification',
-		// 	value: false
-		// }, {
-		// 	description: 'Descuento de 100ARS en primer viaje',
-		// 	condition: 'delivery.deliveries == 0',
-		// 	type: 'add',
-			// value: -100
+		}, {
+			description: 'Esta habilitado segun compra minima de 50ARS',
+			condition: "delivery.ammount < 50",
+			type: 'qualification',
+			value: false
+		}, {
+			description: 'Descuento de 100ARS en primer viaje',
+			condition: 'delivery.deliveries == 0',
+			type: 'add',
+			value: -100
+		}, {
+			description: 'Envio gratis si email tiene dominio @comprame.com.ar',
+			condition: 'delivery.email =~ /.*@comprame.com.ar$/',
+			type: 'factor',
+			value: 0
+		}, {
+			description: 'No puede solicitar envio si tiene puntaje negativo',
+			condition: 'delivery.points < 0',
+			type: 'qualification',
+			value: false
+		}, {
+			description: 'Descuento de 5% a partir del 10mo viaje',
+			condition: 'delivery.deliveries >= 10',
+			type: 'factor',
+			value: 0.95
 		}
 	];
 
@@ -50,33 +88,8 @@ exports.estimate = (delivery) => {
 
 	for (var i = 0; i < rules.length; i++) {
 		var rule = rules[i];
-		flow.rule(rule.description, [[Delivery, "delivery", rule.condition], [Result, "result"]], (facts) => {
-			console.log(facts);
-			// switch(scope.rule.type) {
-			// case 'multiply':
-				multiply(facts, rule.property, rule.value);
-			// 	break;
-			// case 'qualification':
-			// 	setQualification(facts, rule.value);
-			// 	break;
-			// case 'add':
-			// 	addCost(facts, rule.value);
-			// 	break;
-			// }
-		});
+		addRule(flow, rule);
 	}
-
-	flow.rule("Envio gratis si email tiene dominio @comprame.com.ar", [[Delivery, "delivery", "delivery.email =~ /.*@comprame.com.ar$/"], [Result, "result"]], (facts) => {
-		facts.result.cost = 0;
-	});
-
-	flow.rule("No puede solicitar envio si tiene puntaje negativo", [[Delivery, "delivery", "delivery.points < 0"], [Result, "result"]], (facts) => {
-		facts.result.isAbleToDeliver = false;
-	});
-
-	flow.rule("Descuento de 5% a partir del 10mo viaje", [[Delivery, "delivery", "delivery.deliveries >= 10"], [Result, "result"]], (facts) => {
-		facts.result.cost *= 0.95;
-	});
 
 	var result = new Result();
 	var session = flow.getSession(new Delivery(delivery), result);
