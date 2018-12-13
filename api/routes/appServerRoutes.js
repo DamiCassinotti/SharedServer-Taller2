@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', (req, res, then) => {
 	appServerController.getServers()
 		.then(servers => res.status(200).json(servers))
-		.catch(error => then({name: 'UnexpectedError'}));
+		.catch(error => {console.log(error); then({name: 'UnexpectedError'});});
 });
 
 router.post('/', (req, res, then) => {
@@ -17,7 +17,7 @@ router.post('/', (req, res, then) => {
 		return then({name: 'ParametersError'});
 	appServerController.addServer(server)
 		.then(server => res.status(201).json(server))
-		.catch(error => then({name: 'UnexpectedError'}));
+		.catch(error => {console.log(error); then({name: 'UnexpectedError'});});
 });
 
 router.get('/:idServer', (req, res, then) => {
@@ -28,7 +28,7 @@ router.get('/:idServer', (req, res, then) => {
 				return res.status(404).json(errorModel.newError(1, "Server not found"));
 			res.status(200).json(server)
 		})
-		.catch(error => then({name: 'UnexpectedError'}));
+		.catch(error => {console.log(error); then({name: 'UnexpectedError'});});
 });
 
 router.put('/:idServer', (req, res, then) => {
@@ -43,9 +43,10 @@ router.put('/:idServer', (req, res, then) => {
 			res.status(200).json(server)
 		})
 		.catch(error => {
+			console.log(error);
 			if (error.name == 'BadRev')
 				return then(error);
-			then({name: 'UnexpectedError'})
+			then({name: 'UnexpectedError'});
 		});
 });
 
@@ -57,7 +58,7 @@ router.delete('/:idServer', (req, res, then) => {
 				return res.status(404).json(errorModel.newError(1, "Server not found"));
 			res.status(204).json();
 		})
-		.catch(error => then({name: 'UnexpectedError'}));
+		.catch(error => {console.log(error); then({name: 'UnexpectedError'});});
 });
 
 router.post('/:idServer', (req, res, then) => {
@@ -68,7 +69,7 @@ router.post('/:idServer', (req, res, then) => {
 				return res.status(404).json(errorModel.newError(1, "Server not found"));
 			res.status(201).json(server)
 		})
-		.catch(error => then({name: 'UnexpectedError'}));
+		.catch(error => {console.log(error); then({name: 'UnexpectedError'});});
 });
 
 module.exports = router;
