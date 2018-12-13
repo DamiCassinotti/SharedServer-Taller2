@@ -15,7 +15,7 @@ var Result = function(cost, isAbleToDeliver) {
 }
 
 var multiply = (facts, property, value) => {
-	facts.result.cost = facts.delivery[property] * value;
+	facts.result.cost += facts.delivery[property] * value;
 }
 
 var setQualification = (facts, value) => {
