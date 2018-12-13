@@ -69,7 +69,6 @@ describe('Payment  Controller', () => {
 				done();
 			})
 			.catch(err => {
-				console.log(err);
 				expect(true).to.equal(false);
 				done();
 			});
@@ -113,7 +112,6 @@ describe('Payment  Controller', () => {
 				done();
 			})
 			.catch(err => {
-				console.log(err);
 				expect(true).to.equal(false);
 				done();
 			});
@@ -140,7 +138,6 @@ describe('Payment  Controller', () => {
 				done();
 			})
 			.catch(err => {
-				console.log(err);
 				expect(true).to.equal(false);
 				done();
 			});

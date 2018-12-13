@@ -5,6 +5,7 @@ var express = require('express'),
 	appServerRoutes = require('./api/routes/appServerRoutes'),
 	deliveriesRoutes = require('./api/routes/deliveriesRoutes'),
 	reportsRoutes = require('./api/routes/reportsRoutes'),
+	rulesRoutes = require('./api/routes/rulesRoutes'),
 	requestsController = require('./api/controllers/requestsController'),
 	bodyParser = require('body-parser'),
 	port = process.env.PORT || 5004,
@@ -52,6 +53,7 @@ bootstrapApp = () => {
 	app.use('/servers', appServerRoutes);
 	app.use('/deliveries', deliveriesRoutes);
 	app.use('/report', reportsRoutes);
+	app.use('/rules', rulesRoutes);
 
 	app.use((err, req, res, next) => {
 		switch (err.name) {

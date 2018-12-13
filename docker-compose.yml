@@ -26,3 +26,4 @@ services:
       - ./db/scripts/payments3.sql:/docker-entrypoint-initdb.d/06payments3.sql
       - ./db/scripts/servers.sql:/docker-entrypoint-initdb.d/07servers.sql
       - ./db/scripts/requests.sql:/docker-entrypoint-initdb.d/08requests.sql
+      - ./db/scripts/rules.sql:/docker-entrypoint-initdb.d/09rules.sql

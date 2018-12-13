@@ -11,7 +11,7 @@ router.post('/estimate', (req, res, then) => {
 		return then({name: 'ParametersError'});
 	deliveriesController.estimate(delivery)
 		.then(delivery => res.status(201).json(delivery))
-		.catch(error => {then({name: 'UnexpectedError'})});
+		.catch(error => {console.log(error); then({name: 'UnexpectedError'});});
 });
 
 module.exports = router;

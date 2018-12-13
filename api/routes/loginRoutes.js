@@ -14,7 +14,7 @@ router.post('/token', (req, res, then) => {
 				return res.status(401).json(errorModel.newError(3, 'Invalid credentials'));
 			res.status(201).json(data);
 		})
-		.catch(error => then({name: 'UnexpectedError'}));
+		.catch(error => {console.log(error); then({name: 'UnexpectedError'});});
 });
 
 module.exports = router;
