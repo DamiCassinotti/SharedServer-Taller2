@@ -2,15 +2,39 @@ const expect = require('chai').expect;
 const sinon = require('sinon');
 const deliveriesController = require('../../api/controllers/deliveriesController');
 const deliveriesMocks = require('../mocks/deliveriesMocks');
+const pg = require('pg');
+const config = require('../../config.json');
 
 describe('Deliveries Controller', () => {
 
 	let deliveryRequestMock = null;
 	let deliveryResponseMock = null;
 
-	beforeEach(() => {
+	beforeEach((done) => {
+		client = new pg.Client(config.database.testing);
+		client.connect();
 		deliveryRequestMock = JSON.parse(JSON.stringify(deliveriesMocks.request));
 		deliveryResponseMock = JSON.parse(JSON.stringify(deliveriesMocks.response));
+		client.query('BEGIN;')
+			.then(data => {
+				done();
+			})
+			.catch(err => {
+				throw err;
+				done();
+			});
+	});
+
+	afterEach((done) => {
+		client.query('ROLLBACK;')
+			.then(data => {
+				client.end();
+				done();
+			})
+			.catch(err => {
+				client.end();
+				done();
+			});
 	});
 
 	it('10KM delivery costs 150 and is able to do it', (done) => {
@@ -20,6 +44,7 @@ describe('Deliveries Controller', () => {
 				done();
 			})
 			.catch(error => {
+				console.log(error);
 				expect(false).to.be.true;
 				done();
 			})
@@ -65,7 +90,6 @@ describe('Deliveries Controller', () => {
 				done();
 			})
 			.catch(error => {
-				console.log(error);
 				expect(false).to.be.true;
 				done();
 			})
@@ -81,7 +105,6 @@ describe('Deliveries Controller', () => {
 				done();
 			})
 			.catch(error => {
-				console.log(error);
 				expect(false).to.be.true;
 				done();
 			})
@@ -97,7 +120,6 @@ describe('Deliveries Controller', () => {
 				done();
 			})
 			.catch(error => {
-				console.log(error);
 				expect(false).to.be.true;
 				done();
 			})
@@ -112,7 +134,6 @@ describe('Deliveries Controller', () => {
 				done();
 			})
 			.catch(error => {
-				console.log(error);
 				expect(false).to.be.true;
 				done();
 			})
@@ -128,7 +149,6 @@ describe('Deliveries Controller', () => {
 				done();
 			})
 			.catch(error => {
-				console.log(error);
 				expect(false).to.be.true;
 				done();
 			})
@@ -146,7 +166,6 @@ describe('Deliveries Controller', () => {
 				done();
 			})
 			.catch(error => {
-				console.log(error);
 				expect(false).to.be.true;
 				done();
 			})
@@ -164,7 +183,6 @@ describe('Deliveries Controller', () => {
 				done();
 			})
 			.catch(error => {
-				console.log(error);
 				expect(false).to.be.true;
 				done();
 			})

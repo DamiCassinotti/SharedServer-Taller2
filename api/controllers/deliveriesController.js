@@ -1,4 +1,5 @@
 const nools = require("nools");
+const rulesService = require('../services/rulesService')
 
 var Delivery = function(delivery) {
 	this.ammount = delivery.ammount || 0;
@@ -18,7 +19,7 @@ var multiply = (facts, property, value) => {
 }
 
 var setQualification = (facts, value) => {
-	facts.result.isAbleToDeliver = value;
+	facts.result.isAbleToDeliver = value ? true : false;
 }
 
 var addCost = (facts, value) => {
@@ -48,41 +49,8 @@ var addRule = (flow, rule) => {
 	});
 }
 
-exports.estimate = (delivery) => {
-	var rules = [
-		{
-			description: 'Costo por KM',
-			condition: 'delivery.distance > 0',
-			type: 'multiply',
-			value: 15,
-			property: 'distance'
-		}, {
-			description: 'Esta habilitado segun compra minima de 50ARS',
-			condition: "delivery.ammount < 50",
-			type: 'qualification',
-			value: false
-		}, {
-			description: 'Descuento de 100ARS en primer viaje',
-			condition: 'delivery.deliveries == 0',
-			type: 'add',
-			value: -100
-		}, {
-			description: 'Envio gratis si email tiene dominio @comprame.com.ar',
-			condition: 'delivery.email =~ /.*@comprame.com.ar$/',
-			type: 'factor',
-			value: 0
-		}, {
-			description: 'No puede solicitar envio si tiene puntaje negativo',
-			condition: 'delivery.points < 0',
-			type: 'qualification',
-			value: false
-		}, {
-			description: 'Descuento de 5% a partir del 10mo viaje',
-			condition: 'delivery.deliveries >= 10',
-			type: 'factor',
-			value: 0.95
-		}
-	];
+exports.estimate = async (delivery) => {
+	var rules = await rulesService.getRules();
 
 	var flow = nools.flow("deliveryCostEstimation");
 
